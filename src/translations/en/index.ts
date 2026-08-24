@@ -9,6 +9,7 @@ const en = {
     articles: "Articles",
     impact: "Our Impact",
     collaborate: "Collaborations",
+    resources: "Resources",
   },
   hero: {
     badge: "[ ONLINE ] // Israel Cyber Community",
