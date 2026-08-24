@@ -169,6 +169,10 @@ const en = {
     no_results: 'No articles match the selected topics.',
     categories,
   },
+  resources: {
+    articles_title: "Read our articles in this webstie",
+    articles_cta: "Go to Articles",
+  },
   impact: {
     title: "Our Impact",
     subtitle: "Shaping the cyber landscape",

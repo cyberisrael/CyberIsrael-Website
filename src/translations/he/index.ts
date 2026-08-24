@@ -167,6 +167,10 @@ const he = {
     no_results: 'לא נמצאו מאמרים בנושאים שנבחרו.',
     categories,
   },
+  resources: {
+    articles_title: "קראו את המאמרים שלנו באתר הזה",
+    articles_cta: "עברו למאמרים",
+  },
   impact: {
     title: "האימפקט שלנו",
     subtitle: "מעצבים את נוף הסייבר",
