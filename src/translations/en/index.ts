@@ -174,6 +174,14 @@ const en = {
     articles_title: "Read our articles in this webstie",
     articles_cta: "Go to Articles",
     past_lectures_title: "Past Community Learning Sessions / Lectures",
+    sheets_title: "Roadmap for Gamma",
+    slides_title: "Presentations",
+    slides_presentations: [
+      {
+        title: "Recommended Weekly Videos",
+        url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p",
+      },
+    ],
   },
   impact: {
     title: "Our Impact",

@@ -172,6 +172,14 @@ const he = {
     articles_title: "קראו את המאמרים שלנו באתר הזה",
     articles_cta: "עברו למאמרים",
     past_lectures_title: "מפגשי למידה והרצאות קודמות לקהילה",
+    sheets_title: "מפת דרכים עבור גאמא",
+    slides_title: "מצגות",
+    slides_presentations: [
+      {
+        title: "סרטונים מומלצים לשבוע",
+        url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p"
+      }
+    ]
   },
   impact: {
     title: "האימפקט שלנו",
