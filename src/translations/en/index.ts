@@ -175,11 +175,16 @@ const en = {
     articles_cta: "Go to Articles",
     past_lectures_title: "Past Community Learning Sessions / Lectures",
     sheets_title: "Roadmap for Gamma",
+    docs_title: "Zero to Hero Roadmap",
     slides_title: "Presentations",
     slides_presentations: [
       {
         title: "Recommended Weekly Videos",
         url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p",
+      },
+      {
+        title: "Development Group",
+        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
       },
     ],
   },
