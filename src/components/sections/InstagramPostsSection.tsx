@@ -7,7 +7,28 @@ const InstagramPostsSection: React.FC = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
 
-   useEffect(() => {
+  const instagramPosts = [
+    {
+      url: "https://www.instagram.com/p/DXuiFBEiLtQ/",
+    },
+    {
+      url: "https://www.instagram.com/p/DabKNJWiCni/",
+    },
+    {
+      url: "https://www.instagram.com/p/DaQehYhCAYr/",
+    },
+    {
+      url: "https://www.instagram.com/p/DaGez2RiKyz/",
+    },
+    {
+      url: "https://www.instagram.com/p/DZQJoj5iNUG/",
+    },
+    {
+      url: "https://www.instagram.com/p/DZF2gHNCE9-/",
+    },
+  ];
+
+  useEffect(() => {
     // Load Instagram's embed script
     if (window.instgrm) {
       window.instgrm.Embeds.process();
@@ -40,17 +61,15 @@ const InstagramPostsSection: React.FC = () => {
         >
           {t("resources.instagram_title")}
         </h1>
-        <div className="flex gap-4">
-          <blockquote
-            className="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DYh2Uk_CEO1/"
-            data-instgrm-version="14"
-          />
-          <blockquote
-            className="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DXuiFBEiLtQ/"
-            data-instgrm-version="14"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
+          {instagramPosts.map((post, index) => (
+            <blockquote
+              key={index}
+              className="instagram-media justify-self-center"
+              data-instgrm-permalink={post.url}
+              data-instgrm-version="14"
+            />
+          ))}
         </div>
       </motion.div>
     </section>
