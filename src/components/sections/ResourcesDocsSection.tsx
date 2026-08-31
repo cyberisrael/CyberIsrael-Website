@@ -25,7 +25,7 @@ const ResourcesDocsSection: React.FC = () => {
         <div className="aspect-video max-w-full bg-black/10">
           <iframe
             className="w-full h-[600px] border-0"
-            src="https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/edit?gid=0#gid=0"
+            src="https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0"
             title={t("resources.video_title")}
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -49,7 +49,7 @@ const ResourcesDocsSection: React.FC = () => {
         <div className="aspect-video max-w-full bg-black/10">
           <iframe
             className="w-full h-[600px] border-0"
-            src="https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/edit?tab=t.0#heading=h.y2t8o8g8j8ax"
+            src="https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview?gid=0"
             title={t("resources.video_title")}
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

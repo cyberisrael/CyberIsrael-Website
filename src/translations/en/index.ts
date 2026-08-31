@@ -171,9 +171,15 @@ const en = {
   },
   resources: {
     title: "All of our Resources in one place",
-    articles_title: "Read our articles in this webstie",
+    articles_title: "Read our articles in this website",
     articles_cta: "Go to Articles",
     past_lectures_title: "Past Community Learning Sessions / Lectures",
+    past_lectures: [
+      {
+        title: "AI Malware full lecture",
+        url: "https://drive.google.com/file/d/1k4Yvrw6YjK9uht1GvGhZYUo4Dd7STKV1/preview",
+      },
+    ],
     sheets_title: "Roadmap for Gamma",
     docs_title: "Zero to Hero Roadmap",
     slides_title: "Presentations",
@@ -187,6 +193,7 @@ const en = {
         url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
       },
     ],
+    instagram_title: "Instagram Posts",
   },
   impact: {
     title: "Our Impact",

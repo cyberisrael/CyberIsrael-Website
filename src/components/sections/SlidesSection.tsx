@@ -79,7 +79,7 @@ const SlidesSection: React.FC = () => {
         </div>
 
         <div
-          className={`w-[50vw] h-[70vh] rounded-xl overflow-hidden border ${
+          className={`w-[90vw] h-[50vh] md:w-[50vw] md:h-[60vh] max-w-4xl max-h-96 rounded-xl overflow-hidden border ${
             theme === "dark"
               ? "border-cyber-border bg-cyber-card"
               : "border-light-border bg-light-card"

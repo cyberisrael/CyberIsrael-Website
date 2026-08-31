@@ -172,6 +172,12 @@ const he = {
     articles_title: "קראו את המאמרים שלנו באתר הזה",
     articles_cta: "עברו למאמרים",
     past_lectures_title: "מפגשי למידה והרצאות קודמות לקהילה",
+    past_lectures: [
+      {
+        title: "שיעור AI Malware מלא",
+        url: "https://drive.google.com/file/d/1k4Yvrw6YjK9uht1GvGhZYUo4Dd7STKV1/preview",
+      },
+    ],
     sheets_title: "מפת דרכים עבור גאמא",
     docs_title: "מפת דרכים מאפס למאה",
     slides_title: "מצגות",
@@ -185,6 +191,7 @@ const he = {
         url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
       },
     ],
+    instagram_title: "פוסטים באינסטגרם",
   },
 
   impact: {
