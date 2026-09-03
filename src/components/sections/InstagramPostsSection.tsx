@@ -17,15 +17,6 @@ const InstagramPostsSection: React.FC = () => {
     {
       url: "https://www.instagram.com/p/DaQehYhCAYr/",
     },
-    {
-      url: "https://www.instagram.com/p/DaGez2RiKyz/",
-    },
-    {
-      url: "https://www.instagram.com/p/DZQJoj5iNUG/",
-    },
-    {
-      url: "https://www.instagram.com/p/DZF2gHNCE9-/",
-    },
   ];
 
   useEffect(() => {

@@ -174,8 +174,8 @@ const he = {
     past_lectures_title: "מפגשי למידה והרצאות קודמות לקהילה",
     past_lectures: [
       {
-        title: "שיעור AI Malware מלא",
-        url: "https://drive.google.com/file/d/1k4Yvrw6YjK9uht1GvGhZYUo4Dd7STKV1/preview",
+        title: "AI Malware השיעור המלא",
+        url: "https://drive.google.com/file/d/17DsBY-YkzFSNeOiIlLp6sQcbN8lolGwB/preview",
       },
     ],
     sheets_title: "מפת דרכים עבור גאמא",

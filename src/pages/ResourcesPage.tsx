@@ -9,7 +9,7 @@ import InstagramPostsSection from "@/components/sections/InstagramPostsSection";
 
 const ResourcesPage: React.FC = () => {
   const { theme } = useTheme();
-  const divider = `border-t ${theme === "dark" ? "border-cyber-border/40" : "border-light-border"}`;
+  const divider = `border-t ${theme === "dark" ? "border-cyber-border/100" : "border-light-border"}`;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center pt-24 pb-20">
