@@ -3,15 +3,18 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/context/ThemeContext";
 import { useInView } from "framer-motion";
+import IframeSkeleton from "@/components/ui/IframeSkeleton";
 
 const SlidesSection: React.FC = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const [selected, setSelected] = useState(0);
+  const [iframeLoading, setIframeLoading] = useState(true);
 
   const ref = useRef<HTMLDivElement>(null);
 
   const isInView = useInView(ref, {
+    once: true,
     margin: "100px",
   });
 
@@ -69,7 +72,10 @@ const SlidesSection: React.FC = () => {
           {slidesPresentations.map((presentation, index) => (
             <button
               key={presentation.url}
-              onClick={() => setSelected(index)}
+              onClick={() => {
+                setSelected(index);
+                setIframeLoading(true);
+              }}
               className={`px-5 py-2.5 rounded-lg font-display text-sm transition-all duration-300 ${
                 selected === index
                   ? theme === "dark"
@@ -86,20 +92,27 @@ const SlidesSection: React.FC = () => {
         </div>
 
         <div
-          className={`w-[90vw] h-[50vh] md:w-[50vw] md:h-[60vh] max-w-4xl max-h-96 rounded-xl overflow-hidden border ${
+          className={`relative w-[90vw] h-[50vh] md:w-[50vw] md:h-[60vh] max-w-4xl max-h-96 rounded-xl overflow-hidden border ${
             theme === "dark"
               ? "border-cyber-border bg-cyber-card"
               : "border-light-border bg-light-card"
           }`}
         >
           {isInView && (
-            <iframe
-              key={selected}
-              src={slidesPresentations[selected].url.replace("/edit", "/embed")}
-              className="w-full h-full border-0"
-              allowFullScreen
-              title={t(slidesPresentations[selected].title)}
-            />
+            <>
+              {iframeLoading && <IframeSkeleton />}
+              <iframe
+                key={selected}
+                src={slidesPresentations[selected].url.replace(
+                  "/edit",
+                  "/embed",
+                )}
+                className="w-full h-full border-0"
+                allowFullScreen
+                title={t(slidesPresentations[selected].title)}
+                onLoad={() => setIframeLoading(false)}
+              />
+            </>
           )}
         </div>
       </motion.div>

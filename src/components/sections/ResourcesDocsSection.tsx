@@ -1,14 +1,18 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/context/ThemeContext";
+import IframeSkeleton from "@/components/ui/IframeSkeleton";
 
 const ResourcesDocsSection: React.FC = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const [sheetsLoading, setSheetsLoading] = useState(true);
+  const [docsLoading, setDocsLoading] = useState(true);
 
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, {
+    once: true,
     margin: "100px",
   });
 
@@ -30,16 +34,20 @@ const ResourcesDocsSection: React.FC = () => {
         >
           {t("resources.sheets_title")}
         </h1>
-        <div className="aspect-video max-w-full bg-black/10">
+        <div className="relative aspect-video max-w-full bg-black/10">
           {isInView && (
-            <iframe
-              className="w-full h-[600px] border-0"
-              src="https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0"
-              title={t("resources.video_title")}
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <>
+              {sheetsLoading && <IframeSkeleton />}
+              <iframe
+                className="w-full h-[600px] border-0"
+                src="https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0"
+                title={t("resources.video_title")}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                onLoad={() => setSheetsLoading(false)}
+              />
+            </>
           )}
         </div>
       </motion.div>
@@ -57,16 +65,20 @@ const ResourcesDocsSection: React.FC = () => {
           {t("resources.docs_title")}
         </h1>
 
-        <div className="aspect-video max-w-full bg-black/10">
+        <div className="relative aspect-video max-w-full bg-black/10">
           {isInView && (
-            <iframe
-              className="w-full h-[600px] border-0"
-              src="https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview?gid=0"
-              title={t("resources.video_title")}
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <>
+              {docsLoading && <IframeSkeleton />}
+              <iframe
+                className="w-full h-[600px] border-0"
+                src="https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview?gid=0"
+                title={t("resources.video_title")}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                onLoad={() => setDocsLoading(false)}
+              />
+            </>
           )}
         </div>
       </motion.div>
