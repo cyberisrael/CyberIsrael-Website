@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/context/ThemeContext";
 
 const InstagramPostsSection: React.FC = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
+
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, {
+    margin: "100px",
+  });
 
   const instagramPosts = [
     {
@@ -38,7 +43,7 @@ const InstagramPostsSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="m-20">
+    <section className="m-20" ref={ref}>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

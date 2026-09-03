@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/context/ThemeContext";
+import { useInView } from "framer-motion";
 
 const SlidesSection: React.FC = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const [selected, setSelected] = useState(0);
 
-  const safeTimelineContent = () => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const isInView = useInView(ref, {
+    margin: "100px",
+  });
+
+  const safeSlidesContent = () => {
     try {
       const value = t("resources.slides_presentations", {
         returnObjects: true,
@@ -41,10 +48,10 @@ const SlidesSection: React.FC = () => {
     }
   };
 
-  const slidesPresentations = safeTimelineContent();
+  const slidesPresentations = safeSlidesContent();
 
   return (
-    <section className="m-10">
+    <section className="m-10" ref={ref}>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -85,13 +92,15 @@ const SlidesSection: React.FC = () => {
               : "border-light-border bg-light-card"
           }`}
         >
-          <iframe
-            key={selected}
-            src={slidesPresentations[selected].url.replace("/edit", "/embed")}
-            className="w-full h-full border-0"
-            allowFullScreen
-            title={t(slidesPresentations[selected].title)}
-          />
+          {isInView && (
+            <iframe
+              key={selected}
+              src={slidesPresentations[selected].url.replace("/edit", "/embed")}
+              className="w-full h-full border-0"
+              allowFullScreen
+              title={t(slidesPresentations[selected].title)}
+            />
+          )}
         </div>
       </motion.div>
     </section>

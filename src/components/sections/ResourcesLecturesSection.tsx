@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -8,7 +8,12 @@ const LecturesSection: React.FC = () => {
   const { theme } = useTheme();
   const [selected, setSelected] = useState(0);
 
-  const safeTimelineContent = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, {
+    margin: "100px",
+  });
+
+  const safePastLecturesContent = () => {
     try {
       const value = t("resources.past_lectures", {
         returnObjects: true,
@@ -41,13 +46,13 @@ const LecturesSection: React.FC = () => {
     }
   };
 
-  const slidesPresentations = safeTimelineContent();
+  const pastLectures = safePastLecturesContent();
 
   return (
-    <section className="m-10">
+    <section className="m-10" ref={ref}>
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.7 }}
       >
         <h1
@@ -59,9 +64,9 @@ const LecturesSection: React.FC = () => {
         </h1>
 
         <div className="flex flex-wrap gap-3 mb-6">
-          {slidesPresentations.map((presentation, index) => (
+          {pastLectures.map((lecture, index) => (
             <button
-              key={presentation.url}
+              key={lecture.url}
               onClick={() => setSelected(index)}
               className={`px-5 py-2.5 rounded-lg font-display text-sm transition-all duration-300 ${
                 selected === index
@@ -73,7 +78,7 @@ const LecturesSection: React.FC = () => {
                     : "bg-light-card text-light-muted border border-light-border hover:border-light-blue/50 hover:text-light-text"
               }`}
             >
-              {t(presentation.title)}
+              {t(lecture.title)}
             </button>
           ))}
         </div>
@@ -85,13 +90,15 @@ const LecturesSection: React.FC = () => {
               : "border-light-border bg-light-card"
           }`}
         >
-          <iframe
-            key={selected}
-            src={slidesPresentations[selected].url.replace("/edit", "/embed")}
-            className="w-full h-full border-0"
-            allowFullScreen
-            title={t(slidesPresentations[selected].title)}
-          />
+          {isInView && (
+            <iframe
+              key={selected}
+              src={pastLectures[selected].url.replace("/edit", "/embed")}
+              className="w-full h-full border-0"
+              allowFullScreen
+              title={t(pastLectures[selected].title)}
+            />
+          )}
         </div>
       </motion.div>
     </section>

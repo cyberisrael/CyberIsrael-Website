@@ -310,7 +310,6 @@ const ImpactPage: React.FC = () => {
 
   const timelineRef = useRef<HTMLDivElement>(null);
   const timelineInView = useInView(timelineRef, {
-    once: true,
     margin: "-100px",
   });
 
