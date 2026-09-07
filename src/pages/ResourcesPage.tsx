@@ -6,6 +6,7 @@ import ResourcesDocsSection from "@/components/sections/ResourcesDocsSection";
 import SlidesSection from "@/components/sections/SlidesSection";
 import { useTheme } from "@/context/ThemeContext";
 import InstagramPostsSection from "@/components/sections/InstagramPostsSection";
+import SuggestionsSection from "@/components/sections/SuggestionsSection";
 
 const ResourcesPage: React.FC = () => {
   const { theme } = useTheme();
@@ -24,6 +25,8 @@ const ResourcesPage: React.FC = () => {
       <SlidesSection />
       <div className={`w-full max-w-4xl ${divider}`} />
       <InstagramPostsSection />
+      <div className={`w-full max-w-4xl ${divider}`} />
+      <SuggestionsSection />
     </div>
   );
 };
