@@ -193,6 +193,11 @@ const en = {
       },
     ],
     instagram_title: "Instagram Posts",
+    suggestions_title: "Suggestions",
+    suggestions_subtitle: "Share your ideas",
+    suggestions_description: "Have an idea or suggestion for more resources? We'd love to hear it!",
+    suggestions_placeholder: "Type your suggestion...",
+    suggestions_submit: "Submit",
   },
   impact: {
     title: "Our Impact",

@@ -191,6 +191,11 @@ const he = {
       },
     ],
     instagram_title: "פוסטים באינסטגרם",
+    suggestions_title: "הצעות",
+    suggestions_subtitle: "שתפו את הרעיונות שלכם",
+    suggestions_description: "יש לכם רעיון או הצעה לעוד משאבים? נשמח לשמוע!",
+    suggestions_placeholder: "כתבו את ההצעה שלכם...",
+    suggestions_submit: "שליחה",
   },
 
   impact: {
