@@ -176,7 +176,7 @@ const en = {
     past_lectures: [
       {
         title: "AI Malware full lecture",
-        url: "https://drive.google.com/file/d/17DsBY-YkzFSNeOiIlLp6sQcbN8lolGwB/preview",
+        url: "https://drive.google.com/file/d/1k4Yvrw6YjK9uht1GvGhZYUo4Dd7STKV1/preview",
       },
     ],
     sheets_title: "Roadmap for Gamma",
