@@ -174,7 +174,7 @@ const he = {
     past_lectures: [
       {
         title: "AI Malware השיעור המלא",
-        url: "https://drive.google.com/file/d/17DsBY-YkzFSNeOiIlLp6sQcbN8lolGwB/preview",
+        url: "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview",
       },
     ],
     sheets_title: "מפת דרכים עבור גאמא",
