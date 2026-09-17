@@ -34,12 +34,16 @@ const ResourcesDocsSection: React.FC = () => {
         >
           {t("resources.sheets_title")}
         </h1>
-        <div className="relative aspect-video max-w-full bg-black/10">
+        <div
+          className={`relative aspect-video max-w-full bg-black/10 border border-solid ${
+            theme === "dark" ? "border-cyber-border" : "border-light-border"
+          }`}
+        >
           {isInView && (
             <>
               {sheetsLoading && <IframeSkeleton />}
               <iframe
-                className="w-full h-[600px] border-0"
+                className="w-full h-[600px]"
                 src="https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0"
                 title={t("resources.video_title")}
                 loading="lazy"
@@ -65,7 +69,11 @@ const ResourcesDocsSection: React.FC = () => {
           {t("resources.docs_title")}
         </h1>
 
-        <div className="relative aspect-video max-w-full bg-black/10">
+        <div
+          className={`relative aspect-video max-w-full bg-black/10 border ${
+            theme === "dark" ? "border-cyber-border" : "border-light-border"
+          }`}
+        >
           {isInView && (
             <>
               {docsLoading && <IframeSkeleton />}
