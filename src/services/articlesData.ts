@@ -46,7 +46,7 @@ const NEUTRAL_COLOR: CategoryColor = {
   border: 'rgba(148,163,184,0.3)',
 }
 
-export const categoryColors: Record<string, CategoryColor> = Object.fromEntries(
+const categoryColors: Record<string, CategoryColor> = Object.fromEntries(
   categories.map(({ id, color }) => [
     id,
     { bg: `rgba(${toRgb(color)},0.1)`, text: color, border: `rgba(${toRgb(color)},0.3)` },
