@@ -135,8 +135,9 @@ broken card.
   `> [!TIP]` / `[!NOTE]` / `[!WARNING]` / `[!IMPORTANT]`. In the CMS you don't type
   that by hand: the editor's **+** menu has **טקסט צבעוני**, which renders an existing
   coloured paragraph as a card with a colour dropdown. The preview shows the site's real
-  colours because `/admin/article-styles.css` is **generated from `src/index.css`** at
-  build time — change the palette there and the CMS follows automatically.
+  colours because both it and the site load the same stylesheet,
+  [`public/article-content.css`](../public/article-content.css) — change the palette
+  there and the CMS follows automatically.
 - **The first CMS save of an existing article produces a large cosmetic diff.** Decap
   re-serialises the file: list markers become `*`, long frontmatter values wrap, and
   `[!TIP]` is written as `\[!TIP]`. All of it is Markdown-equivalent — a full save

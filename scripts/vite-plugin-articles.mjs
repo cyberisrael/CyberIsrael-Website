@@ -1,7 +1,6 @@
 import { join } from 'node:path'
 import { readArticles, ARTICLES_PATH } from './articles-index.mjs'
 import { buildAdminConfig } from './admin-config.mjs'
-import { readArticleStyles } from './article-styles.mjs'
 import { pruneOrphanArticleFolders } from './prune-articles.mjs'
 
 const VIRTUAL_ID = 'virtual:articles'
@@ -10,14 +9,12 @@ const RESOLVED_ID = '\0' + VIRTUAL_ID
 /** Files the CMS needs that are derived from the repo rather than written by hand. */
 const GENERATED = {
   'admin/config.yml': { type: 'text/yaml', build: buildAdminConfig },
-  'admin/article-styles.css': { type: 'text/css', build: readArticleStyles },
 }
 
 /**
  * Two jobs, both driven by files rather than hand-kept lists:
  * - exposes the article index (built from Markdown frontmatter) as `virtual:articles`
- * - generates the Decap CMS config and preview stylesheet from the taxonomy and
- *   the site's own stylesheet, so neither can drift from the site
+ * - generates the Decap CMS config from the taxonomy, so it cannot drift from the site
  */
 export default function articlesPlugin() {
   let root = process.cwd()

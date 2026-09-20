@@ -2,9 +2,9 @@
  * Makes the CMS preview pane look like the real article page, and gives authors a
  * way to insert coloured text without hand-writing HTML.
  *
- * The `.hl-*` and `.callout*` rules are not repeated here: /admin/article-styles.css
- * is generated from src/index.css at build time, so the preview always shows the
- * colours the site actually renders.
+ * The `.hl-*` and `.callout*` rules are not repeated here. The preview loads
+ * /article-content.css, the same stylesheet the site links from index.html, so it
+ * always shows the colours the site actually renders.
  */
 
 const HIGHLIGHT_LABELS = {
@@ -68,7 +68,7 @@ const decorateCallouts = node => {
 }
 
 CMS.registerPreviewStyle(layoutStyles, { raw: true })
-CMS.registerPreviewStyle('/admin/article-styles.css')
+CMS.registerPreviewStyle('/article-content.css')
 
 CMS.registerPreviewTemplate('articles', ({ entry, widgetFor, getAsset }) => {
   const data = entry.get('data')
