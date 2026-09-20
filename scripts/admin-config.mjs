@@ -7,6 +7,38 @@ const HEADER = `# GENERATED FILE — do not edit.
 # src/services/articleTaxonomy.json, the same file the site reads.
 `
 
+/**
+ * Decap compares the sign-in popup's `event.origin` against `base_url` as a plain string
+ * — see the Authenticator in decap-cms-lib-auth. Anything that is not a bare origin (a
+ * trailing slash, a path, the wrong port) therefore breaks the handshake *silently*: the
+ * popup sits on "Completing sign-in…" forever with nothing logged. The build is the only
+ * place that can catch it, so it fails here instead.
+ */
+function asOrigin(value) {
+  let url
+  try {
+    url = new URL(value)
+  } catch {
+    throw new Error(`CMS_BASE_URL must be an absolute URL, e.g. https://cyberisrael.net; got "${value}".`)
+  }
+
+  if (value !== url.origin) {
+    throw new Error(
+      `CMS_BASE_URL must be a bare origin with no path and no trailing slash; ` +
+      `got "${value}", expected "${url.origin}".`
+    )
+  }
+
+  return url.origin
+}
+
+/**
+ * The origin the CMS is served from, which is also the origin its Worker answers on.
+ * Override it to a `wrangler dev` origin (CMS_BASE_URL=http://127.0.0.1:8788) to exercise
+ * the real sign-in flow locally.
+ */
+const BASE_URL = asOrigin(process.env.CMS_BASE_URL || 'https://cyberisrael.net')
+
 /** Decap CMS configuration, served at /admin/config.yml. */
 export function buildAdminConfig(root = process.cwd()) {
   const taxonomy = readTaxonomy(root)
@@ -16,11 +48,23 @@ export function buildAdminConfig(root = process.cwd()) {
       name: 'github',
       repo: 'cyberisrael/CyberIsrael-Website',
       branch: 'dev',
+      // Sends the sign-in popup to this site's own Worker rather than to Decap's default,
+      // which is Netlify's OAuth service. Together these build the popup URL as
+      // `<base_url>/<auth_endpoint>`, and both sides of the handshake are pinned to
+      // base_url, so it must stay a bare origin — see asOrigin above.
+      base_url: BASE_URL,
+      auth_endpoint: 'oauth/auth',
+      // Without this Decap asks for `repo`, which would put write access to every private
+      // repository the editor can see into a browser. It is not the control, though: the
+      // Worker ignores the `?scope=` Decap appends and sends its own
+      // `public_repo,read:org` — `read:org` being what the membership check needs. This
+      // is here so the request Decap builds is honest about what the CMS needs.
+      auth_scope: 'public_repo',
     },
 
-    // The only supported way to run the CMS: `npm run cms` starts the local proxy and
-    // /admin on localhost writes straight to the working tree. There is no production
-    // sign-in yet, so the deployed /admin has no backend to reach.
+    // On localhost `npm run cms` takes over: Decap only honours local_backend when
+    // location.hostname is localhost/127.0.0.1, so the proxy writes straight to the
+    // working tree and the sign-in above is never exercised. Everywhere else it is.
     local_backend: true,
 
     // "Save" opens a pull request, "Publish" merges it — the review step the
