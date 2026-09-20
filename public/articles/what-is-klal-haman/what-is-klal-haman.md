@@ -1,3 +1,20 @@
+---
+title: מה זה כלל חמ"ן?
+slug: what-is-klal-haman
+excerpt: מסלול שמאגד תחתיו תפקידים רבים באגף המודיעין - מחקר ופענוח, שפות, מסלולים טכנולוגיים ואפילו לחימה. מה המיון בודק ולמה כמעט אי אפשר להתכונן אליו.
+language: Hebrew/עברית
+category: guides
+date: '2026-08-23'
+readTime: 2
+image: /articles/ArticleImage/WhatIsKlalHaman.webp
+tags:
+  - Military
+  - Klal Haman
+  - Intelligence
+  - Selections
+order: 7
+---
+
 ### הקדמה
 
 כלל חמ”ן הוא מסלול אשר מאגד תחתיו מסלולים רבים אשר מגיעים לאגף המודיעין בתחומים רבים ומגוונים כגון מחקר ופענוח, שפות, מסלולים טכנולוגיים ואף מסלול לחימה.

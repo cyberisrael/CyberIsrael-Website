@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { FaClock, FaArrowRight, FaGlobe } from 'react-icons/fa'
 import { useTheme } from '@/context/ThemeContext'
-import { categoryColors, type Article } from '@/services/articlesData'
+import { getCategoryColor, type Article } from '@/services/articlesData'
 
 interface ArticleCardProps {
   article: Article
@@ -16,7 +16,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, index, ignoreFeature
   const { theme } = useTheme()
   const { t } = useTranslation()
   const isDark = theme === 'dark'
-  const catColor = categoryColors[article.category] || categoryColors.ctf
+  const catColor = getCategoryColor(article.category)
   const isFeatured = Boolean(article.featured) && !ignoreFeatured
 
   const styles = {

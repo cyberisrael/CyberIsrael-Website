@@ -1,5 +1,12 @@
+import { articles as indexedArticles } from 'virtual:articles'
+import taxonomy from './articleTaxonomy.json'
+
+/**
+ * Article metadata lives in the YAML frontmatter of `public/articles/<slug>/<slug>.md`
+ * and is collected at build time (see scripts/articles-index.mjs). `href` is the
+ * folder name, so it can never drift from the file it points at.
+ */
 export interface Article {
-  id: string
   title: string
   language: string
   excerpt: string
@@ -9,142 +16,45 @@ export interface Article {
   image: string
   tags: string[]
   href: string
+  /** Position in the articles list; lower comes first. */
+  order?: number
   featured?: boolean
   homePreview?: boolean
 }
 
-export const articles: Article[] = [
-  {
-    id: '1',
-    title: 'מפת דרכים לעולם פיתוח התוכנה',
-    language: 'Hebrew/עברית',
-    excerpt: 'מפת דרכים עמוקה למפתחי תוכנה שאפתנים ולמקצוענים, המכסה שפות תכנות חיוניות. פריימוורקים, כלים, ושיטות עבודה נכונות על מנת לבנות קריירה מצליחה בפיתוח תוכנה.',
-    category: 'software_development',
-    date: '2026-05-21',
-    readTime: 13.5,
-    image: '/articles/ArticleImage/RoadMapForTheSoftwareDevelopmentWorld.webp',
-    tags: ['RoadMap', 'Software Development', 'Self-Learning', 'Project-Based Learning'],
-    href: 'software-development-roadmap',
-    featured: true,
-    homePreview: true,
-  },
-  {
-    id: '2',
-    title: 'איך להתקבל לתפקידים טכנולוגיים בצה"ל',
-    language: 'Hebrew/עברית',
-    excerpt: 'מדריך על איך להתכונן ולהצליח במיונים לתפקידים טכנולוגיים בצה"ל.',
-    category: 'guides',
-    date: '2026-05-21',
-    readTime: 6.5,
-    image: '/articles/ArticleImage/GetAcceptedForTechnologicalPositions.webp',
-    tags: ['Military', 'Technological Positions&Opportunities', 'Technological Units'],
-    href: 'get-accepted-for-technological-positions',
-    homePreview: true,
-  },
-  {
-    id: '3',
-    title: 'מה זה אבטחת סייבר? למה ללמוד את זה ואיך להתחיל',
-    language: 'Hebrew/עברית',
-    excerpt: 'כתבה המציגה ומסבירה את היסודות של אבטחת סייבר, החשיבות שלה בעולם הדיגיטלי של היום וצעדים פרקטיים למתחילים כדי להתחיל ללמוד ולבנות קריירה באבטחת סייבר. ',
-    category: 'cybersecurity',
-    date: '2026-05-21',
-    readTime: 8,
-    image: '/articles/ArticleImage/WhatIsCybersecurity.webp',
-    tags: ['Cybersecurity', 'Introduction', 'Career Paths', 'Getting Started'],
-    featured: true,
-    href: 'what-is-cyber-why-study-it-and-how',
-    homePreview: true,
-  },
-  {
-    id: '4',
-    title: 'איך להתכונן למיוני גאמ"א סייבר?',
-    language: 'Hebrew/עברית',
-    excerpt: 'מדריך מלא למיוני גאמ"א סייבר - מסלול המחשוב של אגף המודיעין. סקירה של כל שלבי המיון, מהשאלון המקוון ועד התחקיר הביטחוני, ואיך להתכונן לכל אחד מהם בצורה הטובה ביותר.',
-    category: 'guides',
-    date: '2026-08-23',
-    readTime: 15,
-    image: '/articles/ArticleImage/GammaCyberSelections.webp',
-    tags: ['Military', 'Gamma Cyber', 'Technological Units', 'Selections'],
-    href: 'gamma-cyber-selections',
-  },
-  {
-    id: '5',
-    title: 'מה זה שחקים?',
-    language: 'Hebrew/עברית',
-    excerpt: 'סקירה של מסלול שחקים - מסלול המודיעין של צה"ל, תתי המסלולים שהוא מאגד תחתיו, ולמה דווקא כאן כמעט ואי אפשר להתכונן למיונים מראש.',
-    category: 'guides',
-    date: '2026-08-23',
-    readTime: 2,
-    // TODO: placeholder cover, replace with a real image
-    image: '/articles/ArticleImage/WhatIsShchakim.webp',
-    tags: ['Military', 'Shchakim', 'Intelligence', 'Selections'],
-    href: 'what-is-shchakim',
-  },
-  {
-    id: '6',
-    title: 'מה זה תלפיות, חבצלות וארזים?',
-    language: 'Hebrew/עברית',
-    excerpt: 'שלושת מסלולי המצוינות שמשלבים תואר ושירות בצה"ל - מה ההבדל ביניהם, במה הם שונים מעתודה אקדמית, ואיך נראים המיונים לכל אחד מהם.',
-    category: 'guides',
-    date: '2026-08-23',
-    readTime: 11,
-    // TODO: placeholder cover, replace with a real image
-    image: '/articles/ArticleImage/TalpiotHavatzalotArazim.webp',
-    tags: ['Military', 'Talpiot', 'Havatzalot', 'Arazim', 'Academic Programs'],
-    href: 'talpiot-havatzalot-arazim',
-  },
-  {
-    id: '7',
-    title: 'מה זה כלל חמ"ן?',
-    language: 'Hebrew/עברית',
-    excerpt: 'מסלול שמאגד תחתיו תפקידים רבים באגף המודיעין - מחקר ופענוח, שפות, מסלולים טכנולוגיים ואפילו לחימה. מה המיון בודק ולמה כמעט אי אפשר להתכונן אליו.',
-    category: 'guides',
-    date: '2026-08-23',
-    readTime: 2,
-    // TODO: placeholder cover, replace with a real image
-    image: '/articles/ArticleImage/WhatIsKlalHaman.webp',
-    tags: ['Military', 'Klal Haman', 'Intelligence', 'Selections'],
-    href: 'what-is-klal-haman',
-  },
-  {
-    id: '8',
-    title: 'מה זה מיוני אשכול מקצועות המחשב?',
-    language: 'Hebrew/עברית',
-    excerpt: 'המיון שממיין ליעדי מפתח במערך התוכנה, בחטיבת ההגנה ובליבת הסייבר. לא דורש ידע קדום, אבל כן בודק יכולות אלגוריתמיות - ואיך מפתחים אותן מראש.',
-    category: 'guides',
-    date: '2026-08-23',
-    readTime: 2,
-    // TODO: placeholder cover, replace with a real image
-    image: '/articles/ArticleImage/ComputerProfessionsCluster.webp',
-    tags: ['Military', 'Computer Professions', 'Algorithms', 'Selections'],
-    href: 'what-is-computer-professions-cluster',
-  },
-  {
-    id: '9',
-    title: 'מה זה עתודה אקדמית?',
-    language: 'Hebrew/עברית',
-    excerpt: 'מסלול שבו עושים תואר לפני הצבא ומתגייסים כקצין אקדמאי. ההבדל בין עתודה רגילה לעתודה עילית, ואיך הפסיכומטרי קובע לאן אפשר להגיע.',
-    category: 'guides',
-    date: '2026-08-23',
-    readTime: 3,
-    // TODO: placeholder cover, replace with a real image
-    image: '/articles/ArticleImage/WhatIsAcademicReserve.webp',
-    tags: ['Military', 'Academic Reserve', 'Psychometric', 'Academic Programs'],
-    href: 'what-is-academic-reserve',
-  },
-]
+export const articles: Article[] = indexedArticles
 
-export const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  web: { bg: 'rgba(0,255,136,0.1)', text: '#00FF88', border: 'rgba(0,255,136,0.3)' },
-  pwn: { bg: 'rgba(255,0,80,0.1)', text: '#FF0050', border: 'rgba(255,0,80,0.3)' },
-  crypto: { bg: 'rgba(139,92,246,0.1)', text: '#8B5CF6', border: 'rgba(139,92,246,0.3)' },
-  forensics: { bg: 'rgba(0,212,255,0.1)', text: '#00D4FF', border: 'rgba(0,212,255,0.3)' },
-  malware: { bg: 'rgba(255,165,0,0.1)', text: '#FFA500', border: 'rgba(255,165,0,0.3)' },
-  osint: { bg: 'rgba(0,102,255,0.1)', text: '#0066FF', border: 'rgba(0,102,255,0.3)' },
-  ctf: { bg: 'rgba(255,215,0,0.1)', text: '#FFD700', border: 'rgba(255,215,0,0.3)' },
-  software_development: { bg: 'rgba(0,255,136,0.1)', text: '#00FF88', border: 'rgba(0,255,136,0.3)' },
-  guides: { bg: 'rgba(255,215,0,0.1)', text: '#FFD700', border: 'rgba(255,215,0,0.3)' },
-  cybersecurity: { bg: 'rgba(0,212,255,0.1)', text: '#00D4FF', border: 'rgba(0,212,255,0.3)' },
+const categories = taxonomy.categories
+
+interface CategoryColor {
+  bg: string
+  text: string
+  border: string
+}
+
+/** Accepts `#RGB`/`#RRGGBB`; the CMS colour picker always writes the long form. */
+const toRgb = (hex: string) => {
+  const digits = hex.replace('#', '').slice(0, 6)
+  const full = digits.length === 3 ? digits.replace(/./g, c => c + c) : digits
+  const value = parseInt(full, 16)
+  return `${(value >> 16) & 255},${(value >> 8) & 255},${value & 255}`
+}
+
+const NEUTRAL_COLOR: CategoryColor = {
+  bg: 'rgba(148,163,184,0.1)',
+  text: '#94A3B8',
+  border: 'rgba(148,163,184,0.3)',
+}
+
+export const categoryColors: Record<string, CategoryColor> = Object.fromEntries(
+  categories.map(({ id, color }) => [
+    id,
+    { bg: `rgba(${toRgb(color)},0.1)`, text: color, border: `rgba(${toRgb(color)},0.3)` },
+  ])
+)
+
+export function getCategoryColor(category: string): CategoryColor {
+  return categoryColors[category] ?? NEUTRAL_COLOR
 }
 
 export function getArticleBySlug(slug: string): Article | undefined {
