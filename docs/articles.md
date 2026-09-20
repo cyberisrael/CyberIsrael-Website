@@ -70,6 +70,44 @@ Setting it up takes two steps, once:
 For `npm run preview`, copy `.dev.vars.example` to `.dev.vars` and fill in the same
 values; `.dev.vars` is gitignored.
 
+### Verifying that the restriction works
+
+The worker only hands back a token when GitHub answers `200` with `state: "active"`.
+Everything else is refused, which covers every way a person can fail to be a member:
+
+| Who is signing in | GitHub's answer | Result |
+| --- | --- | --- |
+| Active member | `200` `state: active` | allowed in |
+| Not in the organisation | `404` | refused |
+| Invited but hasn't accepted | `200` `state: pending` | refused |
+| Expired or tampered token | `401` / `403` | refused |
+
+To see it for yourself, run the real flow locally:
+
+1. Create a second OAuth app for development with callback
+   `http://localhost:8788/oauth/callback`, and put its credentials in `.dev.vars`.
+2. Build with the CMS pointed at the local origin, then serve it:
+
+   ```bash
+   CMS_BASE_URL=http://localhost:8788 npm run build
+   npx wrangler dev --port 8788
+   ```
+
+   Make sure `npm run cms` is **not** running — the local proxy backend bypasses OAuth
+   entirely, so the sign-in button would never be exercised.
+3. Open `http://localhost:8788/admin/` and sign in. Your own account should get in.
+4. Now sign in from a GitHub account that isn't in the organisation (a throwaway
+   account works). It should be refused with "Only members of the cyberisrael
+   organisation can edit the site".
+
+If you'd rather not create a second account, temporarily change `ORGANISATION` in
+`src/worker/index.ts` to an organisation you are *not* a member of, rebuild, and sign
+in with your own account — the refusal is the same code path. **Change it back
+afterwards**; shipping the wrong organisation here would open the CMS to strangers.
+
+Use `http://localhost`, not a LAN IP: the CSRF state cookie is marked `Secure`, and
+browsers only treat `localhost` as a trustworthy origin over plain HTTP.
+
 > **Before deploying this**, the Cloudflare build's deploy command must be plain
 > `npx wrangler deploy`. The old `--assets=./dist` flag points at the wrong folder now
 > that the build emits `dist/client` plus a Worker, and would break the deployment.

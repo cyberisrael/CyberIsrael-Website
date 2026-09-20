@@ -2,6 +2,11 @@ import { dump } from 'js-yaml'
 import { readTaxonomy } from './taxonomy.mjs'
 import { ARTICLES_PATH, MEDIA_PATH, PUBLIC_MEDIA_PATH } from './articles-index.mjs'
 
+// Decap only accepts the OAuth popup's reply when it comes from exactly this origin, so
+// it has to be the site the CMS is served from. Override it to a `wrangler dev` origin
+// (e.g. CMS_BASE_URL=http://localhost:8788) to exercise the real sign-in flow locally.
+const BASE_URL = process.env.CMS_BASE_URL || 'https://cyberisrael.net'
+
 const HEADER = `# GENERATED FILE — do not edit.
 # Built by scripts/admin-config.mjs; categories and topics come from
 # src/services/articleTaxonomy.json, the same file the site reads.
@@ -18,7 +23,7 @@ export function buildAdminConfig(root = process.cwd()) {
       branch: 'dev',
       // The Worker in src/worker/index.ts completes the OAuth handshake and only
       // issues a token to members of the GitHub organisation.
-      base_url: 'https://cyberisrael.net',
+      base_url: BASE_URL,
       auth_endpoint: 'oauth/auth',
     },
 
