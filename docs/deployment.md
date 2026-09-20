@@ -29,7 +29,25 @@ The Cloudflare dashboard should hold only the four things that *cannot* live in 
 - the Git connection
 - the production branch (`main`)
 - the three build commands
+- the custom domain (see below)
 - secrets (see below)
+
+### The custom domain is the one setting still held only in the dashboard
+
+`cyberisrael.net` is attached to the Worker through Settings → Domains & Routes, so
+nothing in this repo records which Worker actually serves the site. That is worth
+fixing, because it is the exact gap that made the original incident confusing: a deploy
+can succeed on a duplicate Worker and change nothing on the live site.
+
+To move it into code, first confirm in the dashboard that `cyberisrael.net` (and `www`,
+if it is used) is attached to **`cyberisrael-website`**, then add:
+
+```jsonc
+"routes": [{ "pattern": "cyberisrael.net", "custom_domain": true }]
+```
+
+Do not add this from memory. If the pattern doesn't match what the dashboard actually
+has, the deploy will fail or move the domain — verify first, then commit.
 
 The commands must stay bare:
 
