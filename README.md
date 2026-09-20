@@ -161,12 +161,12 @@ Each article is a Markdown file in `public/articles/<slug>/`, with its own metad
 YAML frontmatter. The build reads those files and generates the article index, so
 `src/services/articlesData.ts` is derived rather than maintained by hand.
 
-Articles are written and edited through Decap CMS at `/admin`, which is limited to
-members of the CyberIsrael GitHub organisation. Saving opens a pull request rather than
-publishing straight to the site.
+Articles are written and edited through Decap CMS at `/admin`. It runs locally via
+`npm run cms`, which writes straight into your working tree; there is no sign-in on the
+deployed site yet, so production editing is not available.
 
 See **[docs/articles.md](./docs/articles.md)** for the authoring workflow, the taxonomy,
-and how to verify the access check.
+and how it fits together.
 
 ---
 
