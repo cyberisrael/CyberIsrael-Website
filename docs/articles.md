@@ -32,10 +32,19 @@ its own:
 3. The site only changes when someone opens and merges the usual **`dev` → `main`** pull
    request, because `main` is the Cloudflare production branch.
 
-Only people with write access to the repository can sign in: Decap authenticates through
-GitHub and acts as that user, so the CMS doesn't widen access beyond existing
-collaborators. (`local_backend` looks like a bypass but Decap only honours it on
-`localhost`/`127.0.0.1`, so it is ignored on the deployed site.)
+Two separate things decide who can do what here, and conflating them is easy:
+
+| Layer | What it decides | Where it lives |
+| --- | --- | --- |
+| The Worker's membership check | who may **sign in** — active members of the `cyberisrael` organisation | `src/worker/index.ts` |
+| GitHub's repository permissions | who may actually **commit** — Decap acts as the signed-in user, so a member without write access reaches the CMS but their save fails | repo settings on GitHub |
+
+Access is therefore "in the organisation **and** a collaborator on the repository". That
+is deliberate: it is checked where GitHub already tracks it, rather than duplicated into
+a list of names in this repo that would quietly go stale. Note that it is not the same
+as "organisation admins only" — any member with write access can publish. (`local_backend`
+looks like a bypass, but Decap only honours it on `localhost`/`127.0.0.1`, so it is
+ignored on the deployed site.)
 
 ### Deleting
 
