@@ -10,6 +10,21 @@ The folder name **is** the slug, so `/articles/<slug>` always matches the file i
 renders. The index the site reads (`virtual:articles`) is built from these files at
 build time by `scripts/articles-index.mjs` — there is no separate list to keep in sync.
 
+## What works today
+
+The CMS is finished as a **local** authoring tool and deliberately stops there:
+
+| | |
+| --- | --- |
+| The public site | production-ready — built and deployed from `main` as static assets |
+| Decap CMS | fully functional locally, through `npm run cms` |
+| CMS sign-in in production | intentionally not implemented |
+
+The third line is a decision, not an omission. Authentication, organisation
+authorisation and a production backend are one piece of work, and keeping them out of
+this baseline is what makes it possible to say exactly which code is here to author
+articles and which is here to guard them.
+
 ## Where the content lives
 
 There is no database: **an article is just files in this repository**.
@@ -61,6 +76,11 @@ npm run dev   # then open http://localhost:3000/admin/
 
 No GitHub login is needed in this mode; edits land in your working tree as normal file
 changes you can inspect with `git diff` before committing.
+
+`npm run cms` goes through [`scripts/cms.mjs`](../scripts/cms.mjs), which pins the proxy
+to `127.0.0.1`. That is on purpose: the proxy writes files anywhere under the repository
+and has no authentication, so it must not be reachable from the network. Open the CMS on
+the machine running it — another device on your Wi-Fi cannot, and should not, reach it.
 
 ### In production
 
