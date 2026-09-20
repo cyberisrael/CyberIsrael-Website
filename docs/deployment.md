@@ -18,6 +18,10 @@ That split is the whole answer to "keep building non-main branches, but only dep
 `main`". Branches still get built, so a broken build is caught before merge, but only
 the production branch can change the live site.
 
+The CMS is pointed at `dev` for exactly this reason: an editor publishing an article
+lands it on a preview build, and a maintainer still has to review and merge the
+`dev` → `main` pull request before it goes live. See [articles.md](./articles.md).
+
 ## Where configuration lives
 
 **`wrangler.jsonc` is the source of truth.** Worker name, entry point, compatibility

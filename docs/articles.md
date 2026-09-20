@@ -128,8 +128,9 @@ browsers only treat `localhost` as a trustworthy origin over plain HTTP.
 
 [Decap CMS](https://decapcms.org) is served at `/admin` and writes straight to this
 repository. `publish_mode: editorial_workflow` is on, so **"Save" opens a pull request**
-and **"Publish" merges it** — a non-developer can write an article and someone else
-reviews it, without anyone touching Git.
+and **"Publish" merges it into `dev`** — a non-developer can write an article and someone
+else reviews it, without anyone touching Git. Reaching cyberisrael.net still takes the
+`dev` → `main` pull request; see [In production](#in-production).
 
 ### Locally
 
@@ -141,16 +142,22 @@ npm run dev   # then open http://localhost:3000/admin/
 No GitHub login is needed in this mode; edits land in your working tree as normal file
 changes you can inspect with `git diff` before committing.
 
-### In production — one step still open
+### In production
 
-The GitHub backend needs a server to complete the OAuth handshake, so `/admin` on
-cyberisrael.net cannot log in yet. Pick one and set `backend.base_url` in
-`public/admin/config.yml`:
+Sign in with GitHub; only members of the organisation get through, see
+[Who can sign in](#who-can-sign-in). From there an article reaches the live site in two
+stages, and **the second one is a deliberate human gate**:
 
-- **Cloudflare Worker OAuth proxy** — we already deploy on Workers; costs nothing extra.
-- **[Decap Turbo](https://decapcms.org/turbo/)** — hosted, free for 1 site / 1 seat.
+| Step | Who does it | Where it lands |
+| --- | --- | --- |
+| Write the article, then **Save** | the editor, in the CMS | a branch and a pull request against `dev` |
+| **Publish** | the editor, in the CMS | merged into `dev`; Cloudflare builds it as a *preview* |
+| Open the **`dev` → `main`** pull request, review it, merge | a maintainer, on GitHub | `main`, which deploys to cyberisrael.net |
 
-Until then the CMS is usable locally, and articles can still be added by hand.
+So **"Publish" in the CMS is not the same as publishing to the site**: it only carries
+the article as far as `dev`. Nothing an editor does on their own changes
+cyberisrael.net — that is exactly why `backend.branch` is `dev` and not `main`. Someone
+has to review and approve the `dev` → `main` pull request before readers see anything.
 
 ## Categories and topics
 
