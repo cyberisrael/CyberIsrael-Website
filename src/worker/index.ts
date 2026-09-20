@@ -14,6 +14,8 @@
  *      npx wrangler secret put GITHUB_CLIENT_SECRET
  */
 
+import { ORGANISATION, isOrganisationMember } from './organisation'
+
 interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> }
   GITHUB_CLIENT_ID?: string
@@ -183,6 +185,12 @@ async function completeAuth(request: Request, env: Env) {
 
   const token = ((await tokenResponse.json()) as { access_token?: string }).access_token
   if (!token) return failure(origin, 'GitHub refused to issue a token.')
+
+  // Authenticated is not authorised. The token is real at this point, but it is only
+  // handed to the browser once GitHub confirms the person behind it is an active member.
+  if (!(await isOrganisationMember(token))) {
+    return failure(origin, `Only members of the ${ORGANISATION} organisation can edit the site.`)
+  }
 
   // `token` is the only field Decap's GitHub backend reads — it does `this.token =
   // state.token` and drops the rest — so there is no point sending more.
