@@ -58,13 +58,18 @@ export function readArticles(root = process.cwd()) {
     const slug = entry.name
     const file = join(dir, slug, `${slug}.md`)
 
-    // Deleting an article in the CMS removes its Markdown but leaves the images it
-    // uploaded, so a folder without an entry means leftovers nobody noticed.
     if (!existsSync(file)) {
       if (slug === MEDIA_FOLDER_NAME) continue
+
+      // Deleting an article in the CMS leaves an empty folder behind. Git does not track
+      // one and there is nothing in it to lose, so it is not worth failing a build over.
+      // Files without an article are different: those are images nobody will find again.
+      const leftovers = readdirSync(join(dir, slug))
+      if (leftovers.length === 0) continue
+
       throw new Error(
-        `"${ARTICLES_PATH}/${slug}" has no ${slug}.md. If the article was deleted, run ` +
-        `\`npm run articles:prune\` to remove what it left behind; shared images belong in ${MEDIA_PATH}.`
+        `"${ARTICLES_PATH}/${slug}" holds ${leftovers.length} file(s) but no ${slug}.md. ` +
+        `Add the article back, or delete the folder if it is gone; shared images belong in ${MEDIA_PATH}.`
       )
     }
 

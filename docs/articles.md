@@ -33,14 +33,14 @@ checkout, is the next piece of work and is deliberately not part of this baselin
 
 ### Deleting
 
-Decap deletes an entry's Markdown file but not the images uploaded with it, so the
-article's folder would be left behind. That is handled for you:
+Decap deletes an entry's Markdown file and leaves its folder behind, empty. Nothing
+needs to be done about that: Git does not track an empty directory, so it never
+reaches a commit, and the build ignores it.
 
-- while `npm run dev` is running, the folder is removed automatically as soon as the
-  article is deleted (the terminal logs `removed public/articles/<slug>`);
-- otherwise `npm run articles:prune` clears any leftovers;
-- and if one is ever missed, the build fails and names the folder, so it can't reach
-  `main` unnoticed.
+Uploads all go to the shared `public/articles/ArticleImage/` folder, so deleting an
+article never strands an image it uploaded. If a folder does end up holding files with
+no `<slug>.md` beside them — images placed there by hand, most likely — the build fails
+and names the folder rather than deleting anything.
 
 ## Editing through the CMS
 
@@ -147,10 +147,9 @@ broken card.
   ships a "check for deploy preview" button, which needs a deploy-preview integration
   we don't have — it could only ever spin, so it's turned off in the config and hidden
   in `public/admin/index.html`.
-- **Deleting an article in the CMS leaves its images behind.** Decap removes the entry's
-  Markdown file but not the media uploaded with it. The dev server prunes the folder
-  automatically, `npm run articles:prune` does it on demand, and the build fails on a
-  leftover so it can't slip into a commit unnoticed.
+- **Deleting an article in the CMS leaves an empty folder behind.** Git ignores it and
+  so does the build. A folder that still holds files without a `<slug>.md` fails the
+  build instead, because those are images nobody would find again.
 - **Don't change a published article's `slug`.** It renames the folder and breaks every
   existing link to it.
 - The Decap admin UI itself is left-to-right; text fields detect direction from their

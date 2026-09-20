@@ -17,15 +17,12 @@ Rules:
 ```bash
 npm run dev            # Vite dev server on http://localhost:3000
 npm run cms            # Decap CMS local proxy, so /admin writes to the working tree
-npm run articles:prune # remove folders left behind by articles deleted in the CMS
 npm run build          # tsc typecheck + vite production build -> dist/
 npm run preview        # Serve the production build locally
 npm run lint           # ESLint over src, .ts/.tsx, zero warnings allowed
 ```
 
 There is no test suite/runner configured in this repo. `npm run lint` uses `eslint.config.js`-style flat config resolution but **no eslint config file currently exists at the project root** — running `npm run lint` will fail until one is added.
-
-`scripts/extract-articles.mjs` dumps the article index (read from the Markdown frontmatter) to `dist-temp/articles.json`, used for sitemap generation during the build/deploy pipeline.
 
 Docker: `docker compose up --build -d` builds via the multi-stage `Dockerfile` (Node build stage -> nginx serve stage) and serves on port 80 using `nginx/nginx.conf`. The compose file has commented-out placeholders for a future Node backend + Postgres + Redis — not currently active. This is **not** how cyberisrael.net is served.
 
@@ -45,7 +42,7 @@ React 18 + TypeScript SPA built with Vite, using the `@/*` -> `src/*` path alias
 
 **Articles system** — this is the most involved subsystem and spans several files:
 - Each article is a single Markdown file at `public/articles/<slug>/<slug>.md` whose **YAML frontmatter carries its metadata** (title, excerpt, category, tags, image, order, `featured`, `homePreview`). The folder name is the slug — there is no hand-maintained list to keep in sync. See [docs/articles.md](docs/articles.md).
-- `scripts/articles-index.mjs` reads that frontmatter and is the single source of the index; `scripts/vite-plugin-articles.mjs` exposes it to the app as the virtual module `virtual:articles` (and reloads the dev server when an article changes), while `scripts/extract-articles.mjs` reuses it for sitemap generation. The build fails loudly on a missing required field, an unknown category/topic, a `slug` that doesn't match its folder, or a folder left behind by a deleted article. Deleting an article in the CMS leaves its uploaded images behind, so `scripts/prune-articles.mjs` removes such folders — automatically from the dev server's watcher, or on demand via `npm run articles:prune`.
+- `scripts/articles-index.mjs` reads that frontmatter and is the single source of the index; `scripts/vite-plugin-articles.mjs` exposes it to the app as the virtual module `virtual:articles` (and reloads the dev server when an article changes). The build fails loudly on a missing required field, an unknown category/topic, a `slug` that doesn't match its folder, or an article folder that holds files but no `<slug>.md`. CMS uploads all land in the shared `ArticleImage/` folder, so deleting an article strands nothing — it just leaves an empty directory, which Git and the build both ignore.
 - `src/services/articlesData.ts` re-exports that index plus the `Article` type and the `getCategoryColor()` / `getArticleBySlug()` / `getHomePreviewArticles()` lookups. Badge colours are built there from the taxonomy into a private `categoryColors` map that only `getCategoryColor()` reads — the categories and topics lists themselves are not re-exported; read them from `articleTaxonomy.json`. Two optional flags drive placement: `featured` (wider card + FEATURED badge in the articles page grid) and `homePreview` (include it in the home page preview section).
 - **`src/services/articleTaxonomy.json` is the single source of truth for categories and topics**, and is itself editable from the CMS (הגדרות → קטגוריות ונושאים, with a colour picker). Category badge colours (`categoryColors`, derived from one hex per category), the `articles.categories.*` i18n labels, the CMS dropdown options and the frontmatter validation are all built from it.
 - **Decap CMS** is served from `public/admin/index.html` at `/admin`. The `config.yml` it loads is **generated** by the Vite plugin (from `scripts/admin-config.mjs`, taking its category/topic options from the taxonomy and its folder paths from `articles-index.mjs`) so it can't drift from the site. The `.hl-*`/`.callout*` rules live in `public/article-content.css`, which the site links from `index.html` and the preview pane loads by the same URL — one file, two consumers, no generation step. `public/admin/preview.js` holds only preview-specific layout, the `[!TIP]` → callout conversion, and a **טקסט צבעוני** editor component so authors insert coloured text instead of typing `<span class="hl-…">`. `publish_mode: editorial_workflow` is configured but has no effect yet: the only supported way to run the CMS is `npm run cms`, whose local proxy writes straight to the working tree.

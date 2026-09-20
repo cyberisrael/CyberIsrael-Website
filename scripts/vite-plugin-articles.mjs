@@ -1,7 +1,6 @@
 import { join } from 'node:path'
 import { readArticles, ARTICLES_PATH } from './articles-index.mjs'
 import { buildAdminConfig } from './admin-config.mjs'
-import { pruneOrphanArticleFolders } from './prune-articles.mjs'
 
 const VIRTUAL_ID = 'virtual:articles'
 const RESOLVED_ID = '\0' + VIRTUAL_ID
@@ -53,12 +52,6 @@ export default function articlesPlugin() {
 
       const reload = file => {
         if (!file.startsWith(articlesPath) || !file.endsWith('.md')) return
-
-        // The CMS deletes an entry's Markdown but not the images it uploaded, so clear
-        // the folder out here rather than leaving it for someone to find in `git status`.
-        for (const folder of pruneOrphanArticleFolders(root)) {
-          server.config.logger.info(`removed ${folder} (article deleted)`, { timestamp: true })
-        }
 
         const module = server.moduleGraph.getModuleById(RESOLVED_ID)
         if (module) server.moduleGraph.invalidateModule(module)

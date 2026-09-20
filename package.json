@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "cms": "decap-server",
-    "articles:prune": "node scripts/prune-articles.mjs",
     "build": "tsc && vite build",
     "preview": "npm run build && wrangler dev",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
