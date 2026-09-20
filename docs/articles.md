@@ -12,18 +12,16 @@ build time by `scripts/articles-index.mjs` — there is no separate list to keep
 
 ## What works today
 
-The CMS is finished as a **local** authoring tool and deliberately stops there:
+The CMS is complete: it runs locally against your working tree, and on the live site
+behind a GitHub sign-in that only lets organisation members through.
 
 | | |
 | --- | --- |
-| The public site | production-ready — built and deployed from `main` as static assets |
-| Decap CMS | fully functional locally, through `npm run cms` |
-| CMS sign-in in production | intentionally not implemented |
-
-The third line is a decision, not an omission. Authentication, organisation
-authorisation and a production backend are one piece of work, and keeping them out of
-this baseline is what makes it possible to say exactly which code is here to author
-articles and which is here to guard them.
+| The public site | production-ready — built and deployed from `main` |
+| Decap CMS, locally | `npm run cms`, writing straight to your working tree |
+| Decap CMS, in production | `/admin`, behind GitHub sign-in |
+| Who gets in | active members of the `cyberisrael` organisation **and** collaborators on the repository |
+| Preview deployments | **not** a supported CMS environment — see below |
 
 ## Where the content lives
 
@@ -38,13 +36,15 @@ There is no database: **an article is just files in this repository**.
 **Locally** (`npm run cms` + `npm run dev`) the CMS writes straight into your working
 tree, so a new article shows up as normal file changes you commit yourself.
 
-**In production** the CMS is **not available yet**. `/admin` ships with no way to sign
-in, so the deployed copy has no backend to reach. Article authoring therefore happens
-locally for now, and an article reaches the site the same way any other change does:
-you commit what the CMS wrote and open the usual pull request.
+**In production** the CMS signs you in with GitHub and commits on your behalf. Nothing
+it does reaches the live site on its own:
 
-Adding GitHub sign-in, so that editors can use `/admin` on the live site without a
-checkout, is the next piece of work and is deliberately not part of this baseline.
+1. **Save** commits to a branch and opens a pull request against `dev`.
+2. **Publish** merges that pull request into `dev`, which Cloudflare builds as a
+   *preview* deployment, not as cyberisrael.net.
+3. The site changes only when someone opens and merges the usual **`dev` → `main`**
+   pull request, because `main` is the Cloudflare production branch.
+
 
 ### Deleting
 
@@ -63,9 +63,10 @@ and names the folder rather than deleting anything.
 (`npm run cms`) and it writes straight into your working tree, so everything it does is
 an ordinary file change you can read in `git diff` before committing.
 
-`publish_mode: editorial_workflow` is configured, so once GitHub sign-in exists "Save"
-will open a pull request against `dev` and "Publish" will merge it there. The local
-proxy bypasses that flow entirely — it edits files directly — so it has no effect today.
+`publish_mode: editorial_workflow` is on, so in production "Save" opens a pull request
+and "Publish" merges it into `dev` — a non-developer can write an article and someone
+else reviews it, without anyone touching Git. The local proxy bypasses that flow
+entirely and edits files directly, so it has no effect when you run `npm run cms`.
 
 ### Locally
 
@@ -84,9 +85,115 @@ the machine running it — another device on your Wi-Fi cannot, and should not, 
 
 ### In production
 
-Not supported yet. `/admin` is deployed as static files, but with no sign-in there is no
-backend behind it, so it cannot load or save anything on the live site. Use the local
-flow above and commit the result.
+Open `/admin` on the live site and press **Login with GitHub**. A popup completes the
+OAuth handshake against this site's own Worker, and the CMS loads only if you get through
+both gates below.
+
+### Who gets in
+
+Two separate checks, and conflating them is easy:
+
+| Gate | What it decides | Where it lives |
+| --- | --- | --- |
+| Organisation membership | whether a token is issued at all — active members of `cyberisrael` only | `src/worker/organisation.ts` |
+| Repository push access | whether the CMS will load, and whether a save succeeds | Decap reads `permissions.push`; GitHub enforces it on every write |
+
+Access is therefore "in the organisation **and** a collaborator on the repository". The
+Worker checks the first because it decides whether to hand over a token at all. It
+deliberately does **not** check the second: Decap already asks GitHub for it before it
+will load, and GitHub enforces it on every write regardless — a token without push access
+cannot commit whatever the Worker believes. A second check would cost a request and add
+no enforcement.
+
+The membership check fails closed. Only `200` carrying `state: "active"` is a yes; a
+pending invitation, a rejected token, a missing scope, an organisation that blocks the
+app, a GitHub outage and a timeout are all no. Being unable to verify membership is never
+treated as evidence of it.
+
+> [!NOTE]
+> A member **without** push access gets through the Worker and then hits a confusing
+> message from Decap: *Repo "…" not found. … If the repo is private, make sure you're
+> logged into a GitHub account with access.* That is Decap's wording for "you are not a
+> collaborator", not a broken sign-in.
+
+### Setting up the OAuth app
+
+Once, by an organisation owner:
+
+1. Create an OAuth app under the organisation (Settings → Developer settings → OAuth
+   Apps) with **Authorization callback URL** `https://cyberisrael.net/oauth/callback`.
+   One app is enough — GitHub allows up to 10 callback URLs, so the local one below goes
+   on the same app.
+2. Leave **"Expire user access tokens" OFF.** Decap's GitHub backend has no refresh path
+   at all: it reads `state.token` and drops everything else, so a `refresh_token` cannot
+   be handed to it. With expiring tokens an editor is thrown out mid-edit after eight
+   hours with an opaque API error.
+3. Store the credentials on the Worker:
+
+   ```bash
+   npx wrangler secret put GITHUB_CLIENT_ID
+   npx wrangler secret put GITHUB_CLIENT_SECRET
+   ```
+
+The token the CMS receives is scoped `public_repo,read:org`, pinned in the Worker.
+`public_repo` is all a public repository needs — the `repo` Decap would otherwise ask for
+would put write access to every private repository the editor can see into a browser —
+and `read:org` is what makes the membership check possible, including for members who
+keep their membership private. Decap appends its own `?scope=` when it opens the popup;
+the Worker ignores it, so no page can widen the request.
+
+> [!IMPORTANT]
+> If the organisation has **OAuth app access restrictions** turned on (Settings →
+> Third-party Access → OAuth app policy), the app has to be approved there as well. New
+> organisations have this on by default. Until it is approved GitHub answers the
+> membership check with `403` for *everyone*, members included, and every sign-in is
+> refused.
+
+### Testing the sign-in locally
+
+Add `http://127.0.0.1:8788/oauth/callback` as a second callback URL on the same OAuth
+app — for loopback addresses GitHub does not require the port to match, so one entry
+covers whichever port you use. Copy `.dev.vars.example` to `.dev.vars` (gitignored) and
+fill in the same credentials, then:
+
+```bash
+CMS_BASE_URL=http://127.0.0.1:8788 npm run build
+npx wrangler dev --port 8788
+```
+
+Open `http://127.0.0.1:8788/admin/` and sign in. Two things matter here:
+
+- **`npm run cms` must not be running.** The local proxy takes over on loopback and the
+  sign-in button would never be exercised.
+- **Use `127.0.0.1`, not `localhost`.** The state cookie is marked `Secure`, and the two
+  are different origins as far as Decap's `event.origin === base_url` comparison goes —
+  mixing them makes the popup hang with nothing logged.
+
+To see a refusal, temporarily change `ORGANISATION` in `src/worker/organisation.ts` to an
+organisation you are *not* a member of and rebuild. **Change it back afterwards** —
+shipping the wrong organisation here would open the CMS to strangers.
+
+### Preview deployments are not a CMS environment
+
+Cloudflare builds every non-`main` branch as a preview, and those URLs carry a version
+prefix that changes with each build. GitHub requires the `redirect_uri` to match a
+registered callback URL exactly, so sign-in on a preview URL is refused before the
+handshake even starts. Previews are for looking at the site, not for editing it — use
+production, or the local flow above.
+
+### When sign-in fails
+
+| What you see | What it means |
+| --- | --- |
+| "Sign-in was cancelled." | You pressed Cancel on GitHub's consent screen |
+| "The sign-in request expired. Please try again." | The single-use state cookie was missing, stale or already spent — start again from `/admin` |
+| "Only members of the cyberisrael organisation can edit the site." | Not an active member, a pending invitation, or the organisation blocks the app |
+| "The CMS is missing its GitHub credentials." | The Worker secrets are not set |
+| "The CMS sign-in is misconfigured: GitHub rejected the callback URL." | The OAuth app's callback URL does not match the origin you opened `/admin` from |
+| The popup hangs on "Completing sign-in…" | `base_url` does not equal the origin serving `/admin`. The build guards against this, so it means the site is served from an origin the build did not expect |
+
+Every one of these fails closed: no token reaches the browser.
+
 
 ## Categories and topics
 
