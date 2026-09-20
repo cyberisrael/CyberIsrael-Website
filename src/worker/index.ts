@@ -21,9 +21,16 @@ interface Env {
 
 const ORGANISATION = 'cyberisrael'
 const PROVIDER = 'github'
-/** `repo` lets the CMS commit; `read:org` is what makes the membership check possible. */
-const SCOPE = 'repo,read:org'
+/**
+ * `public_repo` lets the CMS commit to this repository — it is public, so the broader
+ * `repo` scope would hand the browser write access to every private repo the editor can
+ * see, for nothing. `read:org` is what makes the membership check possible.
+ */
+const SCOPE = 'public_repo,read:org'
 const STATE_COOKIE = 'cms_oauth_state'
+const STATE_COOKIE_PATH = 'Path=/oauth; HttpOnly; Secure; SameSite=Lax'
+/** The state cookie is single-use: once the callback has read it, it is spent. */
+const CLEAR_STATE_COOKIE = `${STATE_COOKIE}=; ${STATE_COOKIE_PATH}; Max-Age=0`
 
 const escapeForScript = (value: string) => JSON.stringify(value).replace(/</g, '\\u003c')
 
@@ -31,18 +38,25 @@ const escapeForScript = (value: string) => JSON.stringify(value).replace(/</g, '
  * Decap listens for a handshake before it accepts the token — see the Authenticator in
  * decap-cms-lib-auth: it waits for `authorizing:<provider>`, echoes it back, and only
  * then reads `authorization:<provider>:success:<json>`.
+ *
+ * Both sides of that exchange are pinned to `origin`, the origin this Worker is serving,
+ * which is also where /admin is served from. A page on any other origin that opens this
+ * popup hoping to be handed the token never receives one: the browser drops a
+ * `postMessage` whose target origin doesn't match the opener.
  */
-const handshakePage = (status: 'success' | 'error', payload: unknown) => `<!doctype html>
+const handshakePage = (origin: string, status: 'success' | 'error', payload: unknown) => `<!doctype html>
 <html lang="en">
   <head><meta charset="utf-8" /><title>Signing in…</title></head>
   <body>
     <p>Completing sign-in…</p>
     <script>
       (function () {
+        var origin = ${escapeForScript(origin)};
         var message = 'authorization:${PROVIDER}:${status}:' + ${escapeForScript(JSON.stringify(payload))};
 
         function send(event) {
-          window.opener.postMessage(message, event.origin);
+          if (event.origin !== origin) return;
+          window.opener.postMessage(message, origin);
           window.removeEventListener('message', send, false);
         }
 
@@ -52,19 +66,29 @@ const handshakePage = (status: 'success' | 'error', payload: unknown) => `<!doct
         }
 
         window.addEventListener('message', send, false);
-        window.opener.postMessage('authorizing:${PROVIDER}', '*');
+        window.opener.postMessage('authorizing:${PROVIDER}', origin);
       })();
     </script>
   </body>
 </html>`
 
 const htmlResponse = (body: string, status = 200) =>
-  new Response(body, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+  new Response(body, {
+    status,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      // The success page carries the token in its body, so it must not be stored.
+      'Cache-Control': 'no-store',
+    },
+  })
 
-const failure = (message: string) => htmlResponse(handshakePage('error', { message }))
+const failure = (origin: string, message: string) =>
+  htmlResponse(handshakePage(origin, 'error', { message }))
 
 function startAuth(request: Request, env: Env) {
-  if (!env.GITHUB_CLIENT_ID) return failure('The CMS is missing its GitHub client id.')
+  const { origin } = new URL(request.url)
+
+  if (!env.GITHUB_CLIENT_ID) return failure(origin, 'The CMS is missing its GitHub client id.')
 
   const state = crypto.randomUUID()
   const redirectUri = new URL('/oauth/callback', request.url).toString()
@@ -79,8 +103,9 @@ function startAuth(request: Request, env: Env) {
     status: 302,
     headers: {
       Location: authorize.toString(),
+      'Cache-Control': 'no-store',
       // Ties the callback to this browser so a stray callback URL can't be replayed.
-      'Set-Cookie': `${STATE_COOKIE}=${state}; Path=/oauth; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
+      'Set-Cookie': `${STATE_COOKIE}=${state}; ${STATE_COOKIE_PATH}; Max-Age=600`,
     },
   })
 }
@@ -108,17 +133,19 @@ async function isOrganisationMember(token: string) {
 }
 
 async function completeAuth(request: Request, env: Env) {
+  const url = new URL(request.url)
+  const { origin } = url
+
   if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) {
-    return failure('The CMS is missing its GitHub credentials.')
+    return failure(origin, 'The CMS is missing its GitHub credentials.')
   }
 
-  const url = new URL(request.url)
   const code = url.searchParams.get('code')
   const state = url.searchParams.get('state')
 
-  if (!code) return failure('GitHub did not return an authorisation code.')
+  if (!code) return failure(origin, 'GitHub did not return an authorisation code.')
   if (!state || state !== readStateCookie(request)) {
-    return failure('The sign-in request expired. Please try again.')
+    return failure(origin, 'The sign-in request expired. Please try again.')
   }
 
   const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
@@ -133,21 +160,27 @@ async function completeAuth(request: Request, env: Env) {
   })
 
   const token = ((await tokenResponse.json()) as { access_token?: string }).access_token
-  if (!token) return failure('GitHub refused to issue a token.')
+  if (!token) return failure(origin, 'GitHub refused to issue a token.')
 
   if (!(await isOrganisationMember(token))) {
-    return failure(`Only members of the ${ORGANISATION} organisation can edit the site.`)
+    return failure(origin, `Only members of the ${ORGANISATION} organisation can edit the site.`)
   }
 
-  return htmlResponse(handshakePage('success', { token, provider: PROVIDER }))
+  return htmlResponse(handshakePage(origin, 'success', { token, provider: PROVIDER }))
 }
 
 export default {
-  fetch(request: Request, env: Env) {
+  async fetch(request: Request, env: Env) {
     const { pathname } = new URL(request.url)
 
     if (pathname === '/oauth/auth') return startAuth(request, env)
-    if (pathname === '/oauth/callback') return completeAuth(request, env)
+
+    if (pathname === '/oauth/callback') {
+      const response = await completeAuth(request, env)
+      // However it went, the state cookie has been consumed — don't leave it behind.
+      response.headers.append('Set-Cookie', CLEAR_STATE_COOKIE)
+      return response
+    }
 
     // Everything else is the site itself; ASSETS keeps the SPA fallback behaviour.
     return env.ASSETS.fetch(request)

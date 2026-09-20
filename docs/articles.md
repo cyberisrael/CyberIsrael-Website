@@ -70,6 +70,18 @@ Setting it up takes two steps, once:
 For `npm run preview`, copy `.dev.vars.example` to `.dev.vars` and fill in the same
 values; `.dev.vars` is gitignored.
 
+> [!IMPORTANT]
+> If the organisation has **OAuth App access restrictions** turned on
+> (Settings → Third-party Access), the app has to be approved there as well. Until it
+> is, GitHub answers the membership check with `403` for *everyone*, members included,
+> and the CMS refuses all sign-ins.
+
+The token the CMS receives is scoped `public_repo,read:org`. Decap keeps it in the
+browser, so it is deliberately no wider than this repository needs: `public_repo` cannot
+touch a private repository, and `read:org` is only there to make the membership check
+possible. If this repository ever becomes private, that scope has to widen to `repo` —
+and the token in every editor's browser widens with it.
+
 ### Verifying that the restriction works
 
 The worker only hands back a token when GitHub answers `200` with `state: "active"`.
