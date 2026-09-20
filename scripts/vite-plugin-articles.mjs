@@ -35,6 +35,9 @@ export default function articlesPlugin() {
     },
 
     generateBundle() {
+      // The build runs once per environment. Only the client bundle is served, so
+      // emitting into the Worker bundle as well would just write files nothing reads.
+      if (this.environment && this.environment.name !== 'client') return
       for (const [fileName, { build }] of Object.entries(GENERATED)) {
         this.emitFile({ type: 'asset', fileName, source: build(root) })
       }
