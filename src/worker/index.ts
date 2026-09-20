@@ -31,6 +31,20 @@ const PROVIDER = 'github'
  */
 const SCOPE = 'public_repo,read:org'
 
+/**
+ * GitHub reports a refused authorisation by redirecting back with `?error=`, not by
+ * failing the request. The messages are looked up here rather than taken from GitHub's
+ * `error_description`, which is attacker-controllable: anyone can open
+ * /oauth/callback?error=…&error_description=… and, if it were echoed, choose the text
+ * the editor reads. Codes outside this map fall back to a fixed sentence.
+ */
+const OAUTH_ERRORS: Record<string, string> = {
+  access_denied: 'Sign-in was cancelled.',
+  application_suspended: 'This GitHub app has been suspended.',
+  redirect_uri_mismatch: 'The CMS sign-in is misconfigured: GitHub rejected the callback URL.',
+  incorrect_client_credentials: 'The CMS sign-in is misconfigured: GitHub rejected the client credentials.',
+}
+
 const STATE_COOKIE = 'cms_oauth_state'
 const STATE_COOKIE_ATTRS = 'Path=/oauth; HttpOnly; Secure; SameSite=Lax'
 /** The state cookie is single-use: once the callback has read it, it is spent. */
@@ -138,6 +152,14 @@ async function completeAuth(request: Request, env: Env) {
 
   if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) {
     return failure(origin, 'The CMS is missing its GitHub credentials.')
+  }
+
+  // Checked before the code, because a refusal arrives with an error and no code — and
+  // "GitHub did not return an authorisation code" is a confusing way to say "you pressed
+  // Cancel".
+  const error = url.searchParams.get('error')
+  if (error) {
+    return failure(origin, OAUTH_ERRORS[error] ?? 'GitHub refused the sign-in request.')
   }
 
   const code = url.searchParams.get('code')
