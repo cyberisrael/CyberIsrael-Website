@@ -32,6 +32,28 @@ The Cloudflare dashboard should hold only the four things that *cannot* live in 
 - the custom domain (see below)
 - secrets (see below)
 
+### The SPA fallback runs before the Worker
+
+`not_found_handling: "single-page-application"` is handled by Cloudflare's asset layer,
+which sits *in front of* the Worker. Any browser navigation to a path that isn't a real
+file gets `index.html` back and the Worker is never invoked — so a Worker route like
+`/oauth/auth` silently disappears.
+
+`assets.run_worker_first` lists the paths that must reach the Worker anyway:
+
+```jsonc
+"run_worker_first": ["/oauth/*"]
+```
+
+This is easy to miss because `curl` does **not** reproduce it: without a browser's
+`Sec-Fetch-Mode: navigate` header the asset layer skips the SPA fallback and the request
+falls through to the Worker, so the route appears to work. Always verify Worker routes
+with a real browser navigation, or at least with those headers set:
+
+```bash
+curl -H 'Accept: text/html' -H 'Sec-Fetch-Mode: navigate' http://localhost:8788/oauth/auth
+```
+
 ### The custom domain is the one setting still held only in the dashboard
 
 `cyberisrael.net` is attached to the Worker through Settings → Domains & Routes, so

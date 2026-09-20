@@ -8,6 +8,10 @@
   },
   "assets": {
     "not_found_handling": "single-page-application",
+    // The SPA fallback answers browser navigations before the Worker ever runs, so the
+    // OAuth routes have to opt out of it explicitly or the CMS sign-in popup just gets
+    // index.html back. Everything else is served straight from the asset layer.
+    "run_worker_first": ["/oauth/*"],
     // The Worker gates /oauth/* for the CMS and serves everything else from here.
     "binding": "ASSETS"
   },
