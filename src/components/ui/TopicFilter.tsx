@@ -63,7 +63,6 @@ const TopicFilter: React.FC<TopicFilterProps> = ({ topics, selected, onToggle, o
         onClick={() => (isOpen ? close() : setIsOpen(true))}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        aria-haspopup="dialog"
         className={`${chipShape} ${isOpen || selected.length > 0 ? chipActive : chipIdle} flex items-center gap-2 px-4 py-2`}
       >
         <FaSearch size={11} />
