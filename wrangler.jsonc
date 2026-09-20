@@ -1,12 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cyberisrael-website",
+  "main": "src/worker/index.ts",
   "compatibility_date": "2026-09-18",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    // The Worker gates /oauth/* for the CMS and serves everything else from here.
+    "binding": "ASSETS"
   },
   "compatibility_flags": [
     "nodejs_compat"
