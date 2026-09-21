@@ -4,7 +4,7 @@ const he = {
     articles: "מאמרים",
     impact: "האימפקט שלנו",
     collaborate: "שיתופי פעולה",
-    resources: "משאבים",
+    resources: "תיבת הידע",
   },
   hero: {
     badge: "[ אונליין ] // קהילת הסייבר של ישראל",

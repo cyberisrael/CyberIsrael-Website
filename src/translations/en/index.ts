@@ -4,7 +4,7 @@ const en = {
     articles: "Articles",
     impact: "Our Impact",
     collaborate: "Collaborations",
-    resources: "Resources",
+    resources: "Knowledge Vault",
   },
   hero: {
     badge: "[ ONLINE ] // Israel Cyber Community",
@@ -169,7 +169,7 @@ const en = {
     },
   },
   resources: {
-    title: "All of our Resources in one place",
+    title: "All of our Knowledge in one place",
     subtitle: "Learn · Explore · Level up",
     articles_title: "Read our articles in this website",
     articles_desc:
