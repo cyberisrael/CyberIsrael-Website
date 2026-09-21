@@ -1,12 +1,16 @@
 import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useInView } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@/context/ThemeContext";
+import { FaChalkboardTeacher } from "react-icons/fa";
 import IframeSkeleton from "@/components/ui/IframeSkeleton";
+import {
+  ResourceFrame,
+  ResourceSection,
+  ResourceTabs,
+} from "@/components/ui/ResourceBlocks";
 
 const LecturesSection: React.FC = () => {
   const { t } = useTranslation();
-  const { theme } = useTheme();
   const [selected, setSelected] = useState(0);
   const [iframeLoading, setIframeLoading] = useState(true);
 
@@ -52,66 +56,49 @@ const LecturesSection: React.FC = () => {
   const pastLectures = safePastLecturesContent();
 
   return (
-    <section className="m-10" ref={ref}>
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.7 }}
-      >
-        <h1
-          className={`font-display text-3xl font-bold mb-8 ${
-            theme === "dark" ? "text-white" : "text-light-text"
-          }`}
-        >
-          {t("resources.past_lectures_title")}
-        </h1>
+    <ResourceSection
+      index={2}
+      icon={FaChalkboardTeacher}
+      accent="teal"
+      title={t("resources.past_lectures_title")}
+    >
+      <div ref={ref}>
+        {pastLectures.length > 1 && (
+          <ResourceTabs
+            accent="teal"
+            items={pastLectures.map((lecture) => t(lecture.title))}
+            selected={selected}
+            onSelect={(index) => {
+              setSelected(index);
+              setIframeLoading(true);
+            }}
+          />
+        )}
 
-        <div className="flex flex-wrap gap-3 mb-6">
-          {pastLectures.map((lecture, index) => (
-            <button
-              key={lecture.url}
-              onClick={() => {
-                setSelected(index);
-                setIframeLoading(true);
-              }}
-              className={`px-5 py-2.5 rounded-lg font-display text-sm transition-all duration-300 ${
-                selected === index
-                  ? theme === "dark"
-                    ? "bg-cyber-green text-cyber-black shadow-neon-green"
-                    : "bg-light-blue text-white shadow-glass-light"
-                  : theme === "dark"
-                    ? "bg-cyber-card text-gray-400 border border-cyber-border hover:border-cyber-green/50 hover:text-white"
-                    : "bg-light-card text-light-muted border border-light-border hover:border-light-blue/50 hover:text-light-text"
-              }`}
-            >
-              {t(lecture.title)}
-            </button>
-          ))}
-        </div>
-
-        <div
-          className={`relative w-[90vw] h-[50vh] md:w-[50vw] md:h-[60vh] max-w-4xl max-h-96 rounded-xl overflow-hidden border ${
-            theme === "dark"
-              ? "border-cyber-border bg-cyber-card"
-              : "border-light-border bg-light-card"
-          }`}
-        >
-          {isInView && (
-            <>
-              {iframeLoading && <IframeSkeleton />}
-              <iframe
-                key={selected}
-                src={pastLectures[selected].url.replace("/edit", "/embed")}
-                className="w-full h-full border-0"
-                allowFullScreen
-                title={t(pastLectures[selected].title)}
-                onLoad={() => setIframeLoading(false)}
-              />
-            </>
-          )}
-        </div>
-      </motion.div>
-    </section>
+        {pastLectures[selected] && (
+          <ResourceFrame
+            accent="teal"
+            label={t(pastLectures[selected].title)}
+            bodyClassName="aspect-video"
+            className="max-w-4xl mx-auto"
+          >
+            {isInView && (
+              <>
+                {iframeLoading && <IframeSkeleton />}
+                <iframe
+                  key={selected}
+                  src={pastLectures[selected].url.replace("/edit", "/embed")}
+                  className="absolute inset-0 w-full h-full border-0"
+                  allowFullScreen
+                  title={t(pastLectures[selected].title)}
+                  onLoad={() => setIframeLoading(false)}
+                />
+              </>
+            )}
+          </ResourceFrame>
+        )}
+      </div>
+    </ResourceSection>
   );
 };
 

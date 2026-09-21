@@ -168,7 +168,10 @@ const he = {
   },
   resources: {
     title: "כל המשאבים שלנו במקום אחד",
+    subtitle: "למדו · חקרו · התפתחו",
     articles_title: "קראו את המאמרים שלנו באתר הזה",
+    articles_desc:
+      "מדריכים, פתרונות CTF וצלילות עומק שנכתבו על ידי חברי הקהילה.",
     articles_cta: "עברו למאמרים",
     past_lectures_title: "מפגשי למידה והרצאות קודמות לקהילה",
     past_lectures: [

@@ -9,21 +9,30 @@ import InstagramPostsSection from "@/components/sections/InstagramPostsSection";
 
 const ResourcesPage: React.FC = () => {
   const { theme } = useTheme();
-  const divider = `border-t ${theme === "dark" ? "border-cyber-border/100" : "border-light-border"}`;
+
+  const Divider = () => (
+    <div
+      className={`w-full h-px bg-gradient-to-r from-transparent to-transparent ${
+        theme === "dark" ? "via-cyber-green/40" : "via-light-blue/40"
+      }`}
+    />
+  );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center pt-24 pb-20">
-      <ResourcesHeroSection />
-      <div className={`w-full max-w-4xl ${divider}`} />
-      <ResourcesArticlesSection />
-      <div className={`w-full max-w-4xl ${divider}`} />
-      <ResourcesLecturesSection />
-      <div className={`w-full max-w-4xl ${divider}`} />
-      <ResourcesDocsSection />
-      <div className={`w-full max-w-4xl ${divider}`} />
-      <SlidesSection />
-      <div className={`w-full max-w-4xl ${divider}`} />
-      <InstagramPostsSection />
+    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        <ResourcesHeroSection />
+        <Divider />
+        <ResourcesArticlesSection />
+        <Divider />
+        <ResourcesLecturesSection />
+        <Divider />
+        <ResourcesDocsSection />
+        <Divider />
+        <SlidesSection />
+        <Divider />
+        <InstagramPostsSection />
+      </div>
     </div>
   );
 };

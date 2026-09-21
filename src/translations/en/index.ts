@@ -170,7 +170,10 @@ const en = {
   },
   resources: {
     title: "All of our Resources in one place",
+    subtitle: "Learn · Explore · Level up",
     articles_title: "Read our articles in this website",
+    articles_desc:
+      "Guides, CTF writeups and deep dives written by community members.",
     articles_cta: "Go to Articles",
     past_lectures_title: "Past Community Learning Sessions / Lectures",
     past_lectures: [
