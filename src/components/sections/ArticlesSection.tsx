@@ -50,7 +50,7 @@ const ArticlesSection: React.FC = () => {
         {/* Article previews */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {previewArticles.map((article, i) => (
-            <ArticleCard key={article.id} article={article} index={i} ignoreFeatured />
+            <ArticleCard key={article.href} article={article} index={i} ignoreFeatured />
           ))}
         </div>
 

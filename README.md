@@ -82,6 +82,9 @@ npm run preview
 
 ## 🐳 Docker Deployment
 
+> The live site is **not** deployed this way — see [Deployment](#-deployment) above.
+> The Docker setup is for running the site standalone (local or self-hosted).
+
 ### Quick start
 
 ```bash
@@ -154,21 +157,28 @@ The logo is a standalone SVG at `public/logo.svg`. To replace it:
 
 ## 📰 Articles
 
-Mock data lives in `src/services/articlesData.ts`.
+Each article is a Markdown file in `public/articles/<slug>/`, with its own metadata in
+YAML frontmatter. The build reads those files and generates the article index, so
+`src/services/articlesData.ts` is derived rather than maintained by hand.
 
-### Future CMS integration
+Articles are written and edited through Decap CMS at `/admin`. In production it signs
+you in with GitHub and only active members of the CyberIsrael organisation get through;
+saving opens a pull request against `dev` rather than publishing straight to the site.
+Locally, `npm run cms` writes into your working tree with no sign-in at all.
 
-Replace the static `articles` array with an API call:
+See **[docs/articles.md](./docs/articles.md)** for the authoring workflow, the taxonomy,
+the OAuth app setup and how to verify the access check.
 
-```ts
-// src/services/api.ts
-export const fetchArticles = async () => {
-  const res = await fetch('/api/articles')
-  return res.json()
-}
-```
+---
 
-The `ArticlesPage` component is already structured to accept any data source.
+## 🚢 Deployment
+
+Cloudflare builds and deploys this repository automatically: `main` goes live,
+every other branch only uploads a preview version. All deployment configuration lives
+in `wrangler.jsonc` — **not** in the Cloudflare dashboard.
+
+See **[docs/deployment.md](./docs/deployment.md)** before changing anything about the
+build or deploy setup.
 
 ---
 

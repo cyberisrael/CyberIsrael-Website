@@ -22,7 +22,7 @@ const ArticleSidebar: React.FC<Props> = ({ currentSlug }) => {
 
                         return (
                             <Link
-                                key={a.id}
+                                key={a.href}
                                 to={`/articles/${slug}`}
                                 className={`
                                     block px-3 py-2 rounded-xl text-sm transition

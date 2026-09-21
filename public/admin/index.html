@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="he">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- The CMS is a private editing surface, not content to index. -->
+  <meta name="robots" content="noindex" />
+  <title>CyberIsrael · ניהול תוכן</title>
+  <style>
+    /*
+      Decap's own chrome is left-to-right, so instead of forcing the whole admin to
+      RTL we let every text input pick its direction from the text inside it:
+      Hebrew fields read right-to-left, the English slug field stays left-to-right.
+    */
+    input[type='text'],
+    textarea,
+    [data-slate-editor='true'] {
+      unicode-bidi: plaintext;
+      text-align: start;
+    }
+
+    /*
+      "בדיקת תצוגה מקדימה" links to a deploy preview from the backend, which this
+      setup has no way to produce, so the button can never resolve — it just spins.
+      `show_preview_links: false` stops the request but Decap still renders the
+      control (EditorToolbar only checks for a status in its store), so hide it.
+      The real preview is the eye toggle above the editor.
+    */
+    [class*='PreviewButtonContainer'] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://unpkg.com/decap-cms@^3.16.2/dist/decap-cms.js"></script>
+  <script src="/admin/preview.js"></script>
+</body>
+
+</html>

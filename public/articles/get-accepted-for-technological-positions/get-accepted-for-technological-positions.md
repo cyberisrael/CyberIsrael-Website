@@ -1,3 +1,20 @@
+---
+title: איך להתקבל לתפקידים טכנולוגיים בצה"ל
+slug: get-accepted-for-technological-positions
+excerpt: מדריך על איך להתכונן ולהצליח במיונים לתפקידים טכנולוגיים בצה"ל.
+language: Hebrew/עברית
+category: guides
+date: '2026-05-21'
+readTime: 6.5
+image: /articles/ArticleImage/GetAcceptedForTechnologicalPositions.webp
+tags:
+  - Military
+  - Technological Positions&Opportunities
+  - Technological Units
+order: 2
+homePreview: true
+---
+
 # איך להתקבל לתפקידים טכנולוגיים בצה”ל?
 
 ### הקדמה
