@@ -39,13 +39,17 @@ const SCOPE = 'public_repo,read:org'
  * `error_description`, which is attacker-controllable: anyone can open
  * /oauth/callback?error=…&error_description=… and, if it were echoed, choose the text
  * the editor reads. Codes outside this map fall back to a fixed sentence.
+ *
+ * A Map rather than an object because the key is that untrusted parameter: a plain
+ * object answers `__proto__`, `constructor` and `toString` from its prototype, so those
+ * lookups return something truthy that is not a message and slip past the fallback.
  */
-const OAUTH_ERRORS: Record<string, string> = {
-  access_denied: 'Sign-in was cancelled.',
-  application_suspended: 'This GitHub app has been suspended.',
-  redirect_uri_mismatch: 'The CMS sign-in is misconfigured: GitHub rejected the callback URL.',
-  incorrect_client_credentials: 'The CMS sign-in is misconfigured: GitHub rejected the client credentials.',
-}
+const OAUTH_ERRORS = new Map([
+  ['access_denied', 'Sign-in was cancelled.'],
+  ['application_suspended', 'This GitHub app has been suspended.'],
+  ['redirect_uri_mismatch', 'The CMS sign-in is misconfigured: GitHub rejected the callback URL.'],
+  ['incorrect_client_credentials', 'The CMS sign-in is misconfigured: GitHub rejected the client credentials.'],
+])
 
 const STATE_COOKIE = 'cms_oauth_state'
 const STATE_COOKIE_ATTRS = 'Path=/oauth; HttpOnly; Secure; SameSite=Lax'
@@ -161,7 +165,7 @@ async function completeAuth(request: Request, env: Env) {
   // Cancel".
   const error = url.searchParams.get('error')
   if (error) {
-    return failure(origin, OAUTH_ERRORS[error] ?? 'GitHub refused the sign-in request.')
+    return failure(origin, OAUTH_ERRORS.get(error) ?? 'GitHub refused the sign-in request.')
   }
 
   const code = url.searchParams.get('code')
@@ -183,7 +187,16 @@ async function completeAuth(request: Request, env: Env) {
     }),
   })
 
-  const token = ((await tokenResponse.json()) as { access_token?: string }).access_token
+  const token = await tokenResponse
+    .json()
+    .then(body => (body as { access_token?: string }).access_token)
+    // GitHub does not always answer with JSON — an edge error page or a maintenance
+    // response would otherwise reject here, and an unhandled rejection means the runtime
+    // returns its own error page: Decap never receives a postMessage, and the state
+    // cookie below is never cleared. The body itself is deliberately not reported any
+    // further; it is GitHub's, and it is not ours to hand to a browser.
+    .catch(() => undefined)
+
   if (!token) return failure(origin, 'GitHub refused to issue a token.')
 
   // Authenticated is not authorised. The token is real at this point, but it is only
