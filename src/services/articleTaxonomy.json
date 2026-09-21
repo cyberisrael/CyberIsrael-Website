@@ -1,0 +1,33 @@
+{
+  "categories": [
+    { "id": "guides", "color": "#FFD700", "he": "מדריכים", "en": "Guides" },
+    { "id": "software_development", "color": "#00FF88", "he": "פיתוח תוכנה", "en": "Software Development" },
+    { "id": "cybersecurity", "color": "#00D4FF", "he": "אבטחת סייבר", "en": "Cybersecurity" }
+  ],
+  "topics": [
+    "Academic Programs",
+    "Academic Reserve",
+    "Algorithms",
+    "Arazim",
+    "Career Paths",
+    "Computer Professions",
+    "Cybersecurity",
+    "Gamma Cyber",
+    "Getting Started",
+    "Havatzalot",
+    "Intelligence",
+    "Introduction",
+    "Klal Haman",
+    "Military",
+    "Project-Based Learning",
+    "Psychometric",
+    "RoadMap",
+    "Selections",
+    "Self-Learning",
+    "Shchakim",
+    "Software Development",
+    "Talpiot",
+    "Technological Positions&Opportunities",
+    "Technological Units"
+  ]
+}

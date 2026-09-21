@@ -1,3 +1,21 @@
+---
+title: מה זה תלפיות, חבצלות וארזים?
+slug: talpiot-havatzalot-arazim
+excerpt: שלושת מסלולי המצוינות שמשלבים תואר ושירות בצה"ל - מה ההבדל ביניהם, במה הם שונים מעתודה אקדמית, ואיך נראים המיונים לכל אחד מהם.
+language: Hebrew/עברית
+category: guides
+date: '2026-08-23'
+readTime: 11
+image: /articles/ArticleImage/TalpiotHavatzalotArazim.webp
+tags:
+  - Military
+  - Talpiot
+  - Havatzalot
+  - Arazim
+  - Academic Programs
+order: 6
+---
+
 תלפיות, חבצלות וארזים הם שלושה מסלולים ייחודיים בצה”ל אשר משלבים תואר, לימודים על מדים, ומיונים ייחודיים. על אף שעושים תואר במסלולים אלה, מיונים למסלולים אלה קורים בצורה שונה מעט ממיונים למסלולי [עתודה אקדמית](/articles/what-is-academic-reserve). נפרט על שלושת המסלולים בהרחבה
 
 # תלפיות

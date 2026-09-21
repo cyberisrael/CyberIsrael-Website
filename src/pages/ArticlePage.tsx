@@ -46,6 +46,9 @@ function remarkGithubAlerts() {
 
 type ArticleType = 'md' | null
 
+/** Article metadata is read from the index, so the page renders the body only. */
+const stripFrontmatter = (raw: string) => raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
+
 const ArticlePage: React.FC = () => {
     const { slug } = useParams()
 
@@ -98,7 +101,7 @@ const ArticlePage: React.FC = () => {
 
                 if (cancelled) return
 
-                setMarkdown(text)
+                setMarkdown(stripFrontmatter(text))
                 setReady(true)
 
             } catch (err) {

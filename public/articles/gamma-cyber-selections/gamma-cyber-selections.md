@@ -1,3 +1,20 @@
+---
+title: איך להתכונן למיוני גאמ"א סייבר?
+slug: gamma-cyber-selections
+excerpt: מדריך מלא למיוני גאמ"א סייבר - מסלול המחשוב של אגף המודיעין. סקירה של כל שלבי המיון, מהשאלון המקוון ועד התחקיר הביטחוני, ואיך להתכונן לכל אחד מהם בצורה הטובה ביותר.
+language: Hebrew/עברית
+category: guides
+date: '2026-08-23'
+readTime: 15
+image: /articles/ArticleImage/GammaCyberSelections.webp
+tags:
+  - Military
+  - Gamma Cyber
+  - Technological Units
+  - Selections
+order: 4
+---
+
 ### הקדמה
 
 “גאמ”א סייבר הוא מסלול המחשוב של אגף המודיעין שמגייס את אנשי החומרה והתוכנה בצה”ל אשר מנהלים את המערכה ויוצרים את שדה הקרב הוירטואלי.” (מתוך אתר מתגייסים)

@@ -1,3 +1,20 @@
+---
+title: מה זה שחקים?
+slug: what-is-shchakim
+excerpt: סקירה של מסלול שחקים - מסלול המודיעין של צה"ל, תתי המסלולים שהוא מאגד תחתיו, ולמה דווקא כאן כמעט ואי אפשר להתכונן למיונים מראש.
+language: Hebrew/עברית
+category: guides
+date: '2026-08-23'
+readTime: 2
+image: /articles/ArticleImage/WhatIsShchakim.webp
+tags:
+  - Military
+  - Shchakim
+  - Intelligence
+  - Selections
+order: 5
+---
+
 ### הקדמה
 
 **“בוגרי המסלול משתלבים בהפקה, עיבוד ומחקר של מידע מודיעיני ובמסגרת תפקידם נדרשים לעבודה עם אתגרים מודיעיניים, אינטלקטואליים וטכנולוגיים.”** (מתוך אתר מתגייסים)
