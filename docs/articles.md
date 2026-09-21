@@ -40,8 +40,8 @@ tree, so a new article shows up as normal file changes you commit yourself.
 it does reaches the live site on its own:
 
 1. **Save** commits to a branch and opens a pull request against `dev`.
-2. **Publish** merges that pull request into `dev`, which Cloudflare builds as a
-   *preview* deployment, not as cyberisrael.net.
+2. **Publish** squash-merges that pull request into `dev` as a single commit, which
+   Cloudflare builds as a *preview* deployment, not as cyberisrael.net.
 3. The site changes only when someone opens and merges the usual **`dev` → `main`**
    pull request, because `main` is the Cloudflare production branch.
 
@@ -64,7 +64,7 @@ and names the folder rather than deleting anything.
 an ordinary file change you can read in `git diff` before committing.
 
 `publish_mode: editorial_workflow` is on, so in production "Save" opens a pull request
-and "Publish" merges it into `dev` — a non-developer can write an article and someone
+and "Publish" squash-merges it into `dev` — a non-developer can write an article and someone
 else reviews it, without anyone touching Git. The local proxy bypasses that flow
 entirely and edits files directly, so it has no effect when you run `npm run cms`.
 

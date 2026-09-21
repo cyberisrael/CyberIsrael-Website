@@ -60,6 +60,10 @@ export function buildAdminConfig(root = process.cwd()) {
       // `public_repo,read:org` — `read:org` being what the membership check needs. This
       // is here so the request Decap builds is honest about what the CMS needs.
       auth_scope: 'public_repo',
+      // "Publish" squash-merges the entry's pull request instead of adding a merge commit,
+      // so every published edit lands on dev as a single commit. That keeps dev a straight
+      // line main can fast-forward to — a merge commit here would put a bump in main.
+      squash_merges: true,
     },
 
     // On localhost `npm run cms` takes over: Decap only honours local_backend when
