@@ -5,6 +5,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import ParticleBackground from '@/components/particles/ParticleBackground'
 import PageLoader from '@/components/ui/PageLoader'
+import AccessibilityMenu from '@/components/ui/AccessibilityMenu'
 import { useTheme } from '@/context/ThemeContext'
 
 const RootLayout: React.FC = () => {
@@ -46,6 +47,9 @@ const RootLayout: React.FC = () => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Accessibility widget */}
+      <AccessibilityMenu />
     </div>
   )
 }
