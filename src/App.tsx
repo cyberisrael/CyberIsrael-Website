@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { LangProvider } from '@/context/LangContext'
+import { AccessibilityProvider } from '@/context/AccessibilityContext'
 import RootLayout from '@/components/layout/RootLayout'
 import PageLoader from '@/components/ui/PageLoader'
 import ComingSoonPage from './pages/ComingSoonPage'
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <LangProvider>
+        <AccessibilityProvider>
         <BrowserRouter>
           <Suspense fallback={<PageLoader />}>
             <Routes>
@@ -34,6 +36,7 @@ const App: React.FC = () => {
             </Routes>
           </Suspense>
         </BrowserRouter>
+        </AccessibilityProvider>
       </LangProvider>
     </ThemeProvider>
   )
