@@ -31,7 +31,7 @@ import {
   FaLink,
 } from 'react-icons/fa'
 import { useTheme } from '@/context/ThemeContext'
-import { articles, categoryColors, type Article } from '@/services/articlesData'
+import { articles, getCategoryColor, type Article } from '@/services/articlesData'
 
 interface ArticleLayoutProps {
   article: Article
@@ -87,7 +87,7 @@ const ShareBar: React.FC<{ title: string }> = ({ title }) => {
 const RelatedArticles: React.FC<{ current: Article }> = ({ current }) => {
   const { theme } = useTheme()
   const related = articles
-    .filter(a => a.id !== current.id && (a.category === current.category || a.tags.some(t => current.tags.includes(t))))
+    .filter(a => a.href !== current.href && (a.category === current.category || a.tags.some(t => current.tags.includes(t))))
     .slice(0, 3)
 
   if (related.length === 0) return null
@@ -100,10 +100,10 @@ const RelatedArticles: React.FC<{ current: Article }> = ({ current }) => {
       </h3>
       <div className="space-y-3">
         {related.map(a => {
-          const cat = categoryColors[a.category] || categoryColors.ctf
+          const cat = getCategoryColor(a.category)
           return (
             <Link
-              key={a.id}
+              key={a.href}
               to={`/articles/${a.href}`}
               className={`group flex gap-3 p-3 rounded-xl border transition-all duration-200 ${theme === 'dark'
                 ? 'border-cyber-border/40 hover:border-cyber-teal/30 bg-cyber-card/60'
@@ -142,7 +142,7 @@ const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, children }) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const cat = categoryColors[article.category] || categoryColors.ctf
+  const cat = getCategoryColor(article.category)
 
   // Inject SEO meta tags
   useEffect(() => {

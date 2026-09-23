@@ -1,3 +1,8 @@
+import taxonomy from '@/services/articleTaxonomy.json'
+
+/** Category labels come from the shared taxonomy so they can't drift from the CMS. */
+const categories = Object.fromEntries(taxonomy.categories.map(({ id, en }) => [id, en]))
+
 const en = {
   nav: {
     home: "Home",
@@ -148,25 +153,16 @@ const en = {
     feature4: "Be part of Israel's growing cyber community",
   },
   articles: {
-    title: "Articles",
-    subtitle: "Knowledge from the community",
-    read_more: "Read More",
-    min_read: "min read",
-    by: "By",
-    featured: "Featured",
-    categories: {
-      all: "All",
-      web: "Web Security",
-      pwn: "Pwn & Exploit",
-      crypto: "Cryptography",
-      forensics: "Forensics",
-      malware: "Malware Analysis",
-      osint: "OSINT",
-      ctf: "CTF Writeup",
-      software_development: "Software Development",
-      cybersecurity: "Cybersecurity",
-      guides: "Guides",
-    },
+    title: 'Articles',
+    subtitle: 'Knowledge from the community',
+    home_title: 'Featured Articles',
+    home_subtitle: 'Knowledge from the community',
+    view_all: 'View All Articles',
+    read_more: 'Read More',
+    min_read: 'min read',
+    featured: 'Featured',
+    by: 'By',
+    categories,
   },
   resources: {
     title: "All of our Knowledge in one place",

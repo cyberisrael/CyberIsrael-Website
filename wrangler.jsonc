@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cyberisrael-website",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-09-18",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "not_found_handling": "single-page-application",
+    // The SPA fallback is answered by the asset layer, which sits in front of the Worker,
+    // so a browser navigation to a Worker route gets index.html back and the Worker never
+    // runs. Paths listed here opt out of that and reach the Worker first.
+    "run_worker_first": ["/oauth/*"],
+    // Whatever the Worker does not handle itself goes back to the asset layer through
+    // this binding, which is what keeps the SPA fallback working.
+    "binding": "ASSETS"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

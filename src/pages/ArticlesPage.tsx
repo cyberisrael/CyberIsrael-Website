@@ -1,125 +1,12 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { FaClock, FaArrowRight, FaBookOpen, FaGlobe } from 'react-icons/fa'
+import { FaBookOpen } from 'react-icons/fa'
 import { useTheme } from '@/context/ThemeContext'
-import { articles, categoryColors, type Article } from '@/services/articlesData'
-import { useNavigate } from "react-router-dom"
+import { articles } from '@/services/articlesData'
+import ArticleCard from '@/components/ui/ArticleCard'
 
 // const categories = ['all', 'web', 'pwn', 'crypto', 'forensics', 'malware', 'osint', 'ctf']
-
-const ArticleCard: React.FC<{ article: Article; index: number }> = ({ article, index }) => {
-  const { theme } = useTheme()
-  const { t } = useTranslation()
-  const catColor = categoryColors[article.category] || categoryColors.ctf
-  const navigate = useNavigate()
-
-  return (
-    <motion.div
-      onClick={() => {
-        navigate(article.href)
-      }}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ delay: index * 0.08, duration: 0.5 }}
-      whileHover={{ y: -6 }}
-      className={`group rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer ${theme === 'dark'
-        ? 'bg-cyber-card border-cyber-border/40 hover:border-cyber-teal/30 hover:shadow-neon-teal'
-        : 'bg-white border-light-border shadow-sm hover:shadow-lg hover:border-light-teal/40'
-        } ${article.featured ? 'md:col-span-2' : ''}`}
-    >
-      {/* Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={article.image}
-          alt={article.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-        {/* Category badge */}
-        <div className="absolute top-3 left-3">
-          <span
-            className="px-2.5 py-1 rounded-full text-xs font-display tracking-widest uppercase"
-            style={{ background: catColor.bg, color: catColor.text, border: `1px solid ${catColor.border}` }}
-          >
-            {t(`articles.categories.${article.category}`)}
-          </span>
-        </div>
-
-        {article.featured && (
-          <div className="absolute top-3 right-3">
-            <span className={`px-2.5 py-1 rounded-full text-xs font-display tracking-widest uppercase ${theme === 'dark'
-              ? 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30'
-              : 'bg-light-blue/10 text-light-blue border border-light-blue/30'
-              }`}>
-              {t('articles.featured')}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-5">
-        {/* Meta */}
-        <div className={`flex items-center gap-4 text-xs mb-3 font-display ${theme === 'dark' ? 'text-slate-500' : 'text-light-muted'
-          }`}>
-          <span className="flex items-center gap-1.5">
-            <FaClock size={10} />
-            {article.readTime} {t('articles.min_read')}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <FaGlobe size={13} />
-            {article.language}
-          </span>
-          <span>{new Date(article.date).toLocaleDateString()}</span>
-        </div>
-
-        {/* Title */}
-        <h3 className={`font-display font-bold text-base mb-2 leading-snug group-hover:transition-colors duration-200 ${theme === 'dark'
-          ? 'text-white group-hover:text-cyber-teal'
-          : 'text-light-text group-hover:text-light-blue'
-          }`}>
-          {article.title}
-        </h3>
-
-        {/* Excerpt */}
-        <p className={`text-sm leading-relaxed mb-4 line-clamp-2 ${theme === 'dark' ? 'text-slate-400' : 'text-light-muted'
-          }`}>
-          {article.excerpt}
-        </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {article.tags.slice(0, 3).map(tag => (
-            <span
-              key={tag}
-              className={`text-xs px-2 py-0.5 rounded-full font-display ${theme === 'dark'
-                ? 'bg-slate-800 text-slate-400 border border-slate-700'
-                : 'bg-slate-100 text-light-muted border border-slate-200'
-                }`}
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Read more */}
-        <a
-          href={article.href}
-          className={`flex items-center gap-2 text-xs font-display tracking-widest uppercase transition-all duration-200 ${theme === 'dark'
-            ? 'text-cyber-green hover:text-cyber-teal'
-            : 'text-light-blue hover:text-light-teal'
-            }`}
-        >
-          {t('articles.read_more')}
-          <FaArrowRight size={10} className="group-hover:translate-x-1 transition-transform duration-200" />
-        </a>
-      </div>
-    </motion.div>
-  )
-}
 
 const ArticlesPage: React.FC = () => {
   const { t } = useTranslation()
@@ -197,7 +84,7 @@ const ArticlesPage: React.FC = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {filtered.map((article, i) => (
-              <ArticleCard key={article.id} article={article} index={i} />
+              <ArticleCard key={article.href} article={article} index={i} />
             ))}
           </motion.div>
         </AnimatePresence>

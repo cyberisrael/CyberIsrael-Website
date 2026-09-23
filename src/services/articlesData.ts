@@ -1,5 +1,12 @@
+import { articles as indexedArticles } from 'virtual:articles'
+import taxonomy from './articleTaxonomy.json'
+
+/**
+ * Article metadata lives in the YAML frontmatter of `public/articles/<slug>/<slug>.md`
+ * and is collected at build time (see scripts/articles-index.mjs). `href` is the
+ * folder name, so it can never drift from the file it points at.
+ */
 export interface Article {
-  id: string
   title: string
   language: string
   excerpt: string
@@ -9,60 +16,51 @@ export interface Article {
   image: string
   tags: string[]
   href: string
+  /** Position in the articles list; lower comes first. */
+  order?: number
   featured?: boolean
+  homePreview?: boolean
 }
 
-export const articles: Article[] = [
-  {
-    id: '1',
-    title: 'מפת דרכים לעולם פיתוח התוכנה',
-    language: 'Hebrew/עברית',
-    excerpt: 'מפת דרכים עמוקה למפתחי תוכנה שאפתנים ולמקצוענים, המכסה שפות תכנות חיוניות. פריימוורקים, כלים, ושיטות עבודה נכונות על מנת לבנות קריירה מצליחה בפיתוח תוכנה.',
-    category: 'software_development',
-    date: '2026-05-21',
-    readTime: 13.5,
-    image: '/articles/ArticleImage/RoadMapForTheSoftwareDevelopmentWorld.webp',
-    tags: ['RoadMap', 'Software Development', 'Self-Learning', 'Project-Based Learning'],
-    href: 'software-development-roadmap',
-    featured: true,
-  },
-  {
-    id: '2',
-    title: 'איך להתקבל לתפקידים טכנולוגיים בצה"ל',
-    language: 'Hebrew/עברית',
-    excerpt: 'מדריך על איך להתכונן ולהצליח במיונים לתפקידים טכנולוגיים בצה"ל.',
-    category: 'guides',
-    date: '2026-05-21',
-    readTime: 6.5,
-    image: '/articles/ArticleImage/GetAcceptedForTechnologicalPositions.webp',
-    tags: ['Military', 'Technological Positions&Opportunities', 'Technological Units'],
-    href: 'get-accepted-for-technological-positions',
-  },
-  {
-    id: '3',
-    title: 'מה זה אבטחת סייבר? למה ללמוד את זה ואיך להתחיל',
-    language: 'Hebrew/עברית',
-    excerpt: 'כתבה המציגה ומסבירה את היסודות של אבטחת סייבר, החשיבות שלה בעולם הדיגיטלי של היום וצעדים פרקטיים למתחילים כדי להתחיל ללמוד ולבנות קריירה באבטחת סייבר. ',
-    category: 'cybersecurity',
-    date: '2026-05-21',
-    readTime: 8,
-    image: '/articles/ArticleImage/WhatIsCybersecurity.webp',
-    tags: ['Cybersecurity', 'Introduction', 'Career Paths', 'Getting Started'],
-    featured: true,
-    href: 'what-is-cyber-why-study-it-and-how',
-  },
-]
+export const articles: Article[] = indexedArticles
 
-export const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  web: { bg: 'rgba(0,255,136,0.1)', text: '#00FF88', border: 'rgba(0,255,136,0.3)' },
-  pwn: { bg: 'rgba(255,0,80,0.1)', text: '#FF0050', border: 'rgba(255,0,80,0.3)' },
-  crypto: { bg: 'rgba(139,92,246,0.1)', text: '#8B5CF6', border: 'rgba(139,92,246,0.3)' },
-  forensics: { bg: 'rgba(0,212,255,0.1)', text: '#00D4FF', border: 'rgba(0,212,255,0.3)' },
-  malware: { bg: 'rgba(255,165,0,0.1)', text: '#FFA500', border: 'rgba(255,165,0,0.3)' },
-  osint: { bg: 'rgba(0,102,255,0.1)', text: '#0066FF', border: 'rgba(0,102,255,0.3)' },
-  ctf: { bg: 'rgba(255,215,0,0.1)', text: '#FFD700', border: 'rgba(255,215,0,0.3)' },
+const categories = taxonomy.categories
+
+interface CategoryColor {
+  bg: string
+  text: string
+  border: string
+}
+
+/** Accepts `#RGB`/`#RRGGBB`; the CMS colour picker always writes the long form. */
+const toRgb = (hex: string) => {
+  const digits = hex.replace('#', '').slice(0, 6)
+  const full = digits.length === 3 ? digits.replace(/./g, c => c + c) : digits
+  const value = parseInt(full, 16)
+  return `${(value >> 16) & 255},${(value >> 8) & 255},${value & 255}`
+}
+
+const NEUTRAL_COLOR: CategoryColor = {
+  bg: 'rgba(148,163,184,0.1)',
+  text: '#94A3B8',
+  border: 'rgba(148,163,184,0.3)',
+}
+
+const categoryColors: Record<string, CategoryColor> = Object.fromEntries(
+  categories.map(({ id, color }) => [
+    id,
+    { bg: `rgba(${toRgb(color)},0.1)`, text: color, border: `rgba(${toRgb(color)},0.3)` },
+  ])
+)
+
+export function getCategoryColor(category: string): CategoryColor {
+  return categoryColors[category] ?? NEUTRAL_COLOR
 }
 
 export function getArticleBySlug(slug: string): Article | undefined {
   return articles.find(a => a.href === slug)
+}
+
+export function getHomePreviewArticles(): Article[] {
+  return articles.filter(article => article.homePreview)
 }

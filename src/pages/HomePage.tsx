@@ -4,7 +4,7 @@ import AboutSection from '@/components/sections/AboutSection'
 import EventsSection from '@/components/sections/EventsSection'
 import SocialSection from '@/components/sections/SocialSection'
 import JoinSection from '@/components/sections/JoinSection'
-import CultureSection from '@/components/sections/CultureSection'
+import ArticlesSection from '@/components/sections/ArticlesSection'
 import ValuesSection from '@/components/sections/ValuesSection'
 
 const HomePage: React.FC = () => {
@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
       <HeroSection />
       <AboutSection />
       <ValuesSection />
-      <CultureSection />
+      <ArticlesSection />
       <EventsSection />
       <SocialSection />
       <JoinSection />

@@ -1,3 +1,8 @@
+import taxonomy from '@/services/articleTaxonomy.json'
+
+/** Category labels come from the shared taxonomy so they can't drift from the CMS. */
+const categories = Object.fromEntries(taxonomy.categories.map(({ id, he }) => [id, he]))
+
 const he = {
   nav: {
     home: "בית",
@@ -146,25 +151,16 @@ const he = {
     feature4: "חלק מקהילת הסייבר הצומחת של ישראל",
   },
   articles: {
-    title: "מאמרים",
-    subtitle: "ידע מהקהילה",
-    read_more: "קראו עוד",
-    min_read: "דקות קריאה",
-    featured: "מומלץ",
-    by: "מאת",
-    categories: {
-      all: "הכל",
-      web: "אבטחת וב (Web)",
-      pwn: "Pwn ואקספלויטציה",
-      crypto: "קריפטוגרפיה",
-      forensics: "פורנזיקה",
-      malware: "ניתוח נוזקות",
-      osint: "מודיעין גלוי (OSINT)",
-      ctf: "פתרונות CTF (Writeups)",
-      software_development: "פיתוח תוכנה",
-      cybersecurity: "אבטחת סייבר",
-      guides: "מדריכים",
-    },
+    title: 'מאמרים',
+    subtitle: 'ידע מהקהילה',
+    home_title: 'מאמרים נבחרים',
+    home_subtitle: 'ידע מהקהילה',
+    view_all: 'לכל המאמרים',
+    read_more: 'קראו עוד',
+    min_read: 'דקות קריאה',
+    featured: 'מומלץ',
+    by: 'מאת',
+    categories,
   },
   resources: {
     title: "כל המשאבים שלנו במקום אחד",
