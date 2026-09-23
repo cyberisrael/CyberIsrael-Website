@@ -1,9 +1,15 @@
+import taxonomy from '@/services/articleTaxonomy.json'
+
+/** Category labels come from the shared taxonomy so they can't drift from the CMS. */
+const categories = Object.fromEntries(taxonomy.categories.map(({ id, he }) => [id, he]))
+
 const he = {
   nav: {
     home: "בית",
     articles: "מאמרים",
     impact: "האימפקט שלנו",
     collaborate: "שיתופי פעולה",
+    resources: "תיבת הידע",
   },
   hero: {
     badge: "[ אונליין ] // קהילת הסייבר של ישראל",
@@ -159,20 +165,43 @@ const he = {
     filter_search_placeholder: 'חיפוש נושא…',
     filter_no_topics: 'לא נמצאו נושאים מתאימים',
     no_results: 'לא נמצאו מאמרים בנושאים שנבחרו.',
-    categories: {
-      all: "הכל",
-      web: "אבטחת וב (Web)",
-      pwn: "Pwn ואקספלויטציה",
-      crypto: "קריפטוגרפיה",
-      forensics: "פורנזיקה",
-      malware: "ניתוח נוזקות",
-      osint: "מודיעין גלוי (OSINT)",
-      ctf: "פתרונות CTF (Writeups)",
-      software_development: "פיתוח תוכנה",
-      cybersecurity: "אבטחת סייבר",
-      guides: "מדריכים",
-    },
+    categories,
   },
+  resources: {
+    title: "כל המשאבים שלנו במקום אחד",
+    subtitle: "למדו · חקרו · התפתחו",
+    articles_title: "קראו את המאמרים שלנו באתר הזה",
+    articles_desc:
+      "מדריכים, פתרונות CTF וצלילות עומק שנכתבו על ידי חברי הקהילה.",
+    articles_cta: "עברו למאמרים",
+    past_lectures_title: "מפגשי למידה והרצאות קודמות לקהילה",
+    past_lectures: [
+      {
+        title: "AI Malware השיעור המלא",
+        url: "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview",
+      },
+    ],
+    sheets_title: "מפת דרכים עבור גאמא",
+    docs_title: "מפת דרכים מאפס למאה",
+    slides_title: "מצגות",
+    slides_presentations: [
+      {
+        title: "סרטונים מומלצים לשבוע",
+        url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p",
+      },
+      {
+        title: "קבוצת פיתוח",
+        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
+      },
+    ],
+    instagram_title: "פוסטים באינסטגרם",
+    suggestions_title: "הצעות",
+    suggestions_subtitle: "שתפו את הרעיונות שלכם",
+    suggestions_description: "יש לכם רעיון או הצעה לעוד משאבים? נשמח לשמוע!",
+    suggestions_placeholder: "כתבו את ההצעה שלכם...",
+    suggestions_submit: "שליחה",
+  },
+
   impact: {
     title: "האימפקט שלנו",
     subtitle: "מעצבים את נוף הסייבר",

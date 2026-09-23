@@ -1,0 +1,5 @@
+# Credentials for the CMS OAuth Worker during `npm run preview` / `wrangler dev`.
+# Copy to .dev.vars (gitignored) and fill in from the organisation's GitHub OAuth app.
+# In production these are set with `npx wrangler secret put <NAME>` instead.
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=

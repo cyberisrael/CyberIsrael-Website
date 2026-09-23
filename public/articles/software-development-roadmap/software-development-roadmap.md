@@ -1,3 +1,22 @@
+---
+title: מפת דרכים לעולם פיתוח התוכנה
+slug: software-development-roadmap
+excerpt: מפת דרכים עמוקה למפתחי תוכנה שאפתנים ולמקצוענים, המכסה שפות תכנות חיוניות. פריימוורקים, כלים, ושיטות עבודה נכונות על מנת לבנות קריירה מצליחה בפיתוח תוכנה.
+language: Hebrew/עברית
+category: software_development
+date: '2026-05-21'
+readTime: 13.5
+image: /articles/ArticleImage/RoadMapForTheSoftwareDevelopmentWorld.webp
+tags:
+  - RoadMap
+  - Software Development
+  - Self-Learning
+  - Project-Based Learning
+order: 1
+featured: true
+homePreview: true
+---
+
 # RoadMap כללי לעולם הפיתוח
 ## **ברוכים הבאים ל-RoadMap לעולם הפיתוח**
 

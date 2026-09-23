@@ -71,7 +71,7 @@ const ArticlesPage: React.FC = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {filtered.map((article, i) => (
-            <ArticleCard key={article.id} article={article} index={i} />
+            <ArticleCard key={article.href} article={article} index={i} />
           ))}
         </motion.div>
 

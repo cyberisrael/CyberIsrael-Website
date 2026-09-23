@@ -1,9 +1,15 @@
+import taxonomy from '@/services/articleTaxonomy.json'
+
+/** Category labels come from the shared taxonomy so they can't drift from the CMS. */
+const categories = Object.fromEntries(taxonomy.categories.map(({ id, en }) => [id, en]))
+
 const en = {
   nav: {
     home: "Home",
     articles: "Articles",
     impact: "Our Impact",
     collaborate: "Collaborations",
+    resources: "Knowledge Vault",
   },
   hero: {
     badge: "[ ONLINE ] // Israel Cyber Community",
@@ -161,19 +167,41 @@ const en = {
     filter_search_placeholder: 'Search topics…',
     filter_no_topics: 'No matching topics',
     no_results: 'No articles match the selected topics.',
-    categories: {
-      all: "All",
-      web: "Web Security",
-      pwn: "Pwn & Exploit",
-      crypto: "Cryptography",
-      forensics: "Forensics",
-      malware: "Malware Analysis",
-      osint: "OSINT",
-      ctf: "CTF Writeup",
-      software_development: "Software Development",
-      cybersecurity: "Cybersecurity",
-      guides: "Guides",
-    },
+    categories,
+  },
+  resources: {
+    title: "All of our Knowledge in one place",
+    subtitle: "Learn · Explore · Level up",
+    articles_title: "Read our articles in this website",
+    articles_desc:
+      "Guides, CTF writeups and deep dives written by community members.",
+    articles_cta: "Go to Articles",
+    past_lectures_title: "Past Community Learning Sessions / Lectures",
+    past_lectures: [
+      {
+        title: "AI Malware full lecture",
+        url: "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview ",
+      },
+    ],
+    sheets_title: "Roadmap for Gamma",
+    docs_title: "Zero to Hero Roadmap",
+    slides_title: "Presentations",
+    slides_presentations: [
+      {
+        title: "Recommended Weekly Videos",
+        url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p",
+      },
+      {
+        title: "Development Group",
+        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
+      },
+    ],
+    instagram_title: "Instagram Posts",
+    suggestions_title: "Suggestions",
+    suggestions_subtitle: "Share your ideas",
+    suggestions_description: "Have an idea or suggestion for more resources? We'd love to hear it!",
+    suggestions_placeholder: "Type your suggestion...",
+    suggestions_submit: "Submit",
   },
   impact: {
     title: "Our Impact",

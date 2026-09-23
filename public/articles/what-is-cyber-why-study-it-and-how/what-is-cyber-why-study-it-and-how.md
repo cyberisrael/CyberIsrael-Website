@@ -1,3 +1,22 @@
+---
+title: מה זה אבטחת סייבר? למה ללמוד את זה ואיך להתחיל
+slug: what-is-cyber-why-study-it-and-how
+excerpt: כתבה המציגה ומסבירה את היסודות של אבטחת סייבר, החשיבות שלה בעולם הדיגיטלי של היום וצעדים פרקטיים למתחילים כדי להתחיל ללמוד ולבנות קריירה באבטחת סייבר.
+language: Hebrew/עברית
+category: cybersecurity
+date: '2026-05-21'
+readTime: 8
+image: /articles/ArticleImage/WhatIsCybersecurity.webp
+tags:
+  - Cybersecurity
+  - Introduction
+  - Career Paths
+  - Getting Started
+order: 3
+featured: true
+homePreview: true
+---
+
 # מה זה סייבר, למה ללמוד אותו? ואיך בכלל?!
 
 # **מה זה סייבר?**
