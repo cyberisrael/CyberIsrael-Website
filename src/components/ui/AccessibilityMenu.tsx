@@ -7,7 +7,6 @@ import {
   FiType,
   FiEye,
   FiLink,
-  FiZapOff,
   FiBookOpen,
   FiRotateCcw,
 } from "react-icons/fi";
