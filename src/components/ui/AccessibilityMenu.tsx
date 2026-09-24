@@ -26,8 +26,6 @@ const AccessibilityMenu: React.FC = () => {
     setContrast,
     highlightLinks,
     toggleHighlightLinks,
-    reduceMotion,
-    toggleReduceMotion,
     readableFont,
     toggleReadableFont,
     reset,
@@ -62,12 +60,6 @@ const AccessibilityMenu: React.FC = () => {
       label: t("accessibility.highlight_links"),
       active: highlightLinks,
       onToggle: toggleHighlightLinks,
-    },
-    {
-      icon: FiZapOff,
-      label: t("accessibility.reduce_motion"),
-      active: reduceMotion,
-      onToggle: toggleReduceMotion,
     },
     {
       icon: FiBookOpen,
@@ -131,7 +123,9 @@ const AccessibilityMenu: React.FC = () => {
               <div className="flex items-center justify-between px-5 py-4 border-b border-cyber-border/30">
                 <div className="flex items-center gap-2">
                   <FaUniversalAccess
-                    className={theme === "dark" ? "text-cyber-green" : "text-light-blue"}
+                    className={
+                      theme === "dark" ? "text-cyber-green" : "text-light-blue"
+                    }
                     size={18}
                   />
                   <h2 className="font-display text-sm tracking-widest uppercase">
@@ -157,7 +151,9 @@ const AccessibilityMenu: React.FC = () => {
                   <div className="flex items-center gap-2 mb-2">
                     <FiType
                       size={14}
-                      className={theme === "dark" ? "text-cyber-teal" : "text-light-teal"}
+                      className={
+                        theme === "dark" ? "text-cyber-teal" : "text-light-teal"
+                      }
                     />
                     <span className="font-display text-xs tracking-widest uppercase text-slate-400">
                       {t("accessibility.text_size")}
@@ -184,7 +180,9 @@ const AccessibilityMenu: React.FC = () => {
                   <div className="flex items-center gap-2 mb-2">
                     <FiEye
                       size={14}
-                      className={theme === "dark" ? "text-cyber-teal" : "text-light-teal"}
+                      className={
+                        theme === "dark" ? "text-cyber-teal" : "text-light-teal"
+                      }
                     />
                     <span className="font-display text-xs tracking-widest uppercase text-slate-400">
                       {t("accessibility.contrast")}

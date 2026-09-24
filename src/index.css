@@ -270,12 +270,6 @@ html[data-a11y-contrast="high"] .card-cyber {
   border-color: #ffffff !important;
 }
 
-html[data-a11y-contrast="high"] * {
-  text-shadow: none !important;
-  box-shadow: none !important;
-  background-image: none !important;
-}
-
 html[data-a11y-contrast="high"] a {
   color: #ffd700 !important;
 }
@@ -283,19 +277,6 @@ html[data-a11y-contrast="high"] a {
 html[data-a11y-links="on"] a {
   text-decoration: underline !important;
   text-underline-offset: 3px;
-}
-
-html[data-a11y-motion="reduce"] *,
-html[data-a11y-motion="reduce"] *::before,
-html[data-a11y-motion="reduce"] *::after {
-  animation-play-state: paused !important;
-  animation-duration: 0.001ms !important;
-  transition-duration: 0.001ms !important;
-}
-
-html[data-a11y-motion="reduce"] #particle-canvas,
-html[data-a11y-motion="reduce"] .scan-lines::before {
-  display: none !important;
 }
 
 html[data-a11y-font="readable"] body,
