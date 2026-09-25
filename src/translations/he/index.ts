@@ -160,6 +160,11 @@ const he = {
     min_read: 'דקות קריאה',
     featured: 'מומלץ',
     by: 'מאת',
+    filter_title: 'סינון לפי נושא',
+    filter_clear: 'ניקוי סינון',
+    filter_search_placeholder: 'חיפוש נושא…',
+    filter_no_topics: 'לא נמצאו נושאים מתאימים',
+    no_results: 'לא נמצאו מאמרים בנושאים שנבחרו.',
     categories,
   },
   resources: {
