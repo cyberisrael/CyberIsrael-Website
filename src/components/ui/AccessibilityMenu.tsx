@@ -2,33 +2,21 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaUniversalAccess } from "react-icons/fa";
-import {
-  FiX,
-  FiType,
-  FiEye,
-  FiLink,
-  FiBookOpen,
-  FiRotateCcw,
-} from "react-icons/fi";
+import { FiX, FiRotateCcw } from "react-icons/fi";
 import { useTheme } from "@/context/ThemeContext";
 import { useLang } from "@/context/LangContext";
 import { useAccessibility } from "@/context/AccessibilityContext";
+import FontSizeSelector from "./accessibility/FontSizeSelector";
+import ContrastSelector from "./accessibility/ContrastSelector";
+import AdditionalAdjustmentsSelector from "./accessibility/AdditionalAdjustmentsSelector";
+import { useOptionClasses } from "./accessibility/useOptionClasses";
 
 const AccessibilityMenu: React.FC = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { isRTL } = useLang();
-  const {
-    fontSize,
-    setFontSize,
-    contrast,
-    setContrast,
-    highlightLinks,
-    toggleHighlightLinks,
-    readableFont,
-    toggleReadableFont,
-    reset,
-  } = useAccessibility();
+  const { reset } = useAccessibility();
+  const { idleClasses } = useOptionClasses();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -39,44 +27,6 @@ const AccessibilityMenu: React.FC = () => {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
-
-  const sizeOptions: { value: typeof fontSize; label: string }[] = [
-    { value: "small", label: t("accessibility.size_small") },
-    { value: "normal", label: t("accessibility.size_normal") },
-    { value: "large", label: t("accessibility.size_large") },
-    { value: "xlarge", label: t("accessibility.size_xlarge") },
-  ];
-
-  const contrastOptions: { value: typeof contrast; label: string }[] = [
-    { value: "default", label: t("accessibility.contrast_default") },
-    { value: "grayscale", label: t("accessibility.contrast_grayscale") },
-    { value: "high", label: t("accessibility.contrast_high") },
-  ];
-
-  const toggles = [
-    {
-      icon: FiLink,
-      label: t("accessibility.highlight_links"),
-      active: highlightLinks,
-      onToggle: toggleHighlightLinks,
-    },
-    {
-      icon: FiBookOpen,
-      label: t("accessibility.readable_font"),
-      active: readableFont,
-      onToggle: toggleReadableFont,
-    },
-  ];
-
-  const activeClasses =
-    theme === "dark"
-      ? "bg-cyber-green/10 border-cyber-green/50 text-cyber-green"
-      : "bg-light-blue/10 border-light-blue/50 text-light-blue";
-
-  const idleClasses =
-    theme === "dark"
-      ? "border-cyber-border text-slate-400 hover:text-cyber-teal hover:border-cyber-teal/40"
-      : "border-light-border text-light-muted hover:text-light-blue hover:border-light-blue/40";
 
   return (
     <>
@@ -145,108 +95,9 @@ const AccessibilityMenu: React.FC = () => {
               </div>
 
               <div className="px-5 py-4 flex flex-col gap-5">
-                {/* Text size */}
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <FiType
-                      size={14}
-                      className={
-                        theme === "dark" ? "text-cyber-teal" : "text-light-teal"
-                      }
-                    />
-                    <span className="font-display text-xs tracking-widest uppercase text-slate-400">
-                      {t("accessibility.text_size")}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-4 gap-2">
-                    {sizeOptions.map((opt) => (
-                      <button
-                        key={opt.value}
-                        onClick={() => setFontSize(opt.value)}
-                        aria-pressed={fontSize === opt.value}
-                        className={`px-2 py-2 rounded-lg border text-xs font-display transition-all duration-200 ${
-                          fontSize === opt.value ? activeClasses : idleClasses
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Contrast */}
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <FiEye
-                      size={14}
-                      className={
-                        theme === "dark" ? "text-cyber-teal" : "text-light-teal"
-                      }
-                    />
-                    <span className="font-display text-xs tracking-widest uppercase text-slate-400">
-                      {t("accessibility.contrast")}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {contrastOptions.map((opt) => (
-                      <button
-                        key={opt.value}
-                        onClick={() => setContrast(opt.value)}
-                        aria-pressed={contrast === opt.value}
-                        className={`px-3 py-2 rounded-lg border text-xs font-display transition-all duration-200 ${
-                          contrast === opt.value ? activeClasses : idleClasses
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Toggles */}
-                <div>
-                  <span className="font-display text-xs tracking-widest uppercase text-slate-400 mb-2 block">
-                    {t("accessibility.adjustments")}
-                  </span>
-                  <div className="flex flex-col gap-2">
-                    {toggles.map(({ icon: Icon, label, active, onToggle }) => (
-                      <button
-                        key={label}
-                        onClick={onToggle}
-                        aria-pressed={active}
-                        className={`flex items-center justify-between px-3 py-2.5 rounded-lg border text-xs font-display transition-all duration-200 ${
-                          active ? activeClasses : idleClasses
-                        }`}
-                      >
-                        <span className="flex items-center gap-2">
-                          <Icon size={14} />
-                          {label}
-                        </span>
-                        <span
-                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${
-                            active
-                              ? theme === "dark"
-                                ? "bg-cyber-green"
-                                : "bg-light-blue"
-                              : theme === "dark"
-                                ? "bg-cyber-border"
-                                : "bg-light-border"
-                          }`}
-                        >
-                          <span
-                            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 ${
-                              active
-                                ? isRTL
-                                  ? "-translate-x-4"
-                                  : "translate-x-4"
-                                : "translate-x-1"
-                            }`}
-                          />
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <FontSizeSelector />
+                <ContrastSelector />
+                <AdditionalAdjustmentsSelector />
 
                 <button
                   onClick={reset}
