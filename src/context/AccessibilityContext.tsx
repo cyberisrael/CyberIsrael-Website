@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-type FontSize = 'small' | 'normal' | 'large' | 'xlarge'
-type Contrast = 'default' | 'grayscale' | 'high'
+const FONT_SIZES = ['small', 'normal', 'large', 'xlarge'] as const
+const CONTRASTS = ['default', 'grayscale', 'high'] as const
+
+type FontSize = (typeof FONT_SIZES)[number]
+type Contrast = (typeof CONTRASTS)[number]
 
 interface AccessibilitySettings {
   fontSize: FontSize
@@ -19,6 +22,17 @@ const DEFAULT_SETTINGS: AccessibilitySettings = {
 
 const STORAGE_KEY = 'cyberisrael-accessibility'
 
+const isValidSettings = (value: unknown): value is AccessibilitySettings => {
+  if (typeof value !== 'object' || value === null) return false
+  const v = value as Record<string, unknown>
+  return (
+    (FONT_SIZES as readonly unknown[]).includes(v.fontSize) &&
+    (CONTRASTS as readonly unknown[]).includes(v.contrast) &&
+    typeof v.highlightLinks === 'boolean' &&
+    typeof v.readableFont === 'boolean'
+  )
+}
+
 interface AccessibilityContextType extends AccessibilitySettings {
   setFontSize: (size: FontSize) => void
   setContrast: (contrast: Contrast) => void
@@ -33,7 +47,12 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [settings, setSettings] = useState<AccessibilitySettings>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
-      return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : DEFAULT_SETTINGS
+      if (!saved) return DEFAULT_SETTINGS
+      const parsed: unknown = JSON.parse(saved)
+      if (typeof parsed !== 'object' || parsed === null) return DEFAULT_SETTINGS
+      const { fontSize, contrast, highlightLinks, readableFont } = { ...DEFAULT_SETTINGS, ...parsed }
+      const merged = { fontSize, contrast, highlightLinks, readableFont }
+      return isValidSettings(merged) ? merged : DEFAULT_SETTINGS
     } catch {
       return DEFAULT_SETTINGS
     }
