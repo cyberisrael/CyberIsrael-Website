@@ -318,6 +318,25 @@ const he = {
     en: "English",
     he: "עברית",
   },
+  accessibility: {
+    open: "אפשרויות נגישות",
+    title: "הגדרות נגישות",
+    close: "סגור",
+    text_size: "גודל טקסט",
+    size_small: "קטן",
+    size_normal: "רגיל",
+    size_large: "גדול",
+    size_xlarge: "ענק",
+    contrast: "ניגודיות וצבע",
+    contrast_default: "ברירת מחדל",
+    contrast_grayscale: "גווני אפור",
+    contrast_high: "ניגודיות גבוהה",
+    adjustments: "התאמות נוספות",
+    highlight_links: "הדגשת קישורים",
+    reduce_motion: "עצירת אנימציות",
+    readable_font: "גופן קריא",
+    reset: "איפוס הגדרות",
+  },
 };
 
 export default he;

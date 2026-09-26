@@ -322,6 +322,25 @@ const en = {
     en: "English",
     he: "עברית",
   },
+  accessibility: {
+    open: "Accessibility options",
+    title: "Accessibility Settings",
+    close: "Close",
+    text_size: "Text Size",
+    size_small: "Small",
+    size_normal: "Normal",
+    size_large: "Large",
+    size_xlarge: "Huge",
+    contrast: "Contrast & Colors",
+    contrast_default: "Default",
+    contrast_grayscale: "Grayscale",
+    contrast_high: "High Contrast",
+    adjustments: "Additional Adjustments",
+    highlight_links: "Highlight Links",
+    reduce_motion: "Stop Animations",
+    readable_font: "Readable Font",
+    reset: "Reset Settings",
+  },
 };
 
 export default en;
