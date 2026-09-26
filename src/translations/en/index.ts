@@ -161,6 +161,11 @@ const en = {
     min_read: 'min read',
     featured: 'Featured',
     by: 'By',
+    filter_title: 'Filter by topic',
+    filter_clear: 'Clear filters',
+    filter_search_placeholder: 'Search topics…',
+    filter_no_topics: 'No matching topics',
+    no_results: 'No articles match the selected topics.',
     categories,
   },
   impact: {
