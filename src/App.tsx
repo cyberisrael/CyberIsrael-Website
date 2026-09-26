@@ -7,13 +7,12 @@ import PageLoader from '@/components/ui/PageLoader'
 import ComingSoonPage from './pages/ComingSoonPage'
 
 // Lazy load pages for code splitting
-const HomePage = lazy(() => import("@/pages/HomePage"));
-const ArticlesPage = lazy(() => import("@/pages/ArticlesPage"));
-const ArticlePage = lazy(() => import("@/pages/ArticlePage"));
-const ImpactPage = lazy(() => import("@/pages/ImpactPage"));
-const CollaboratePage = lazy(() => import("@/pages/CollaboratePage"));
-const ResourcesPage = lazy(() => import("@/pages/ResourcesPage"));
-const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+const HomePage = lazy(() => import('@/pages/HomePage'))
+const ArticlesPage = lazy(() => import('@/pages/ArticlesPage'))
+const ArticlePage = lazy(() => import('@/pages/ArticlePage'))
+const ImpactPage = lazy(() => import('@/pages/ImpactPage'))
+const CollaboratePage = lazy(() => import('@/pages/CollaboratePage'))
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 const App: React.FC = () => {
   return (
@@ -30,7 +29,6 @@ const App: React.FC = () => {
                 <Route path="/coming-soon/:name" element={<ComingSoonPage />} />
                 <Route path="impact" element={<ImpactPage />} />
                 <Route path="collaborate" element={<CollaboratePage />} />
-                <Route path="resources" element={<ResourcesPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
@@ -38,7 +36,7 @@ const App: React.FC = () => {
         </BrowserRouter>
       </LangProvider>
     </ThemeProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App
