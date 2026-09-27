@@ -1,19 +1,22 @@
 import { join } from 'node:path'
 import { readArticles, ARTICLES_PATH } from './articles-index.mjs'
 import { buildAdminConfig } from './admin-config.mjs'
+import { buildSitemap } from './generate-sitemap.mjs'
 
 const VIRTUAL_ID = 'virtual:articles'
 const RESOLVED_ID = '\0' + VIRTUAL_ID
 
-/** Files the CMS needs that are derived from the repo rather than written by hand. */
+/** Served files derived from the repo rather than written by hand. `build` may be async. */
 const GENERATED = {
   'admin/config.yml': { type: 'text/yaml', build: buildAdminConfig },
+  'sitemap.xml': { type: 'application/xml', build: buildSitemap },
 }
 
 /**
- * Two jobs, both driven by files rather than hand-kept lists:
+ * Three jobs, all driven by files rather than hand-kept lists:
  * - exposes the article index (built from Markdown frontmatter) as `virtual:articles`
  * - generates the Decap CMS config from the taxonomy, so it cannot drift from the site
+ * - generates sitemap.xml from the routes and the article index
  */
 export default function articlesPlugin() {
   let root = process.cwd()
@@ -34,20 +37,25 @@ export default function articlesPlugin() {
       return `export const articles = ${JSON.stringify(readArticles(root))}`
     },
 
-    generateBundle() {
+    async generateBundle() {
       // The build runs once per environment. Only the client bundle is served, so
       // emitting into the Worker bundle as well would just write files nothing reads.
       if (this.environment && this.environment.name !== 'client') return
       for (const [fileName, { build }] of Object.entries(GENERATED)) {
-        this.emitFile({ type: 'asset', fileName, source: build(root) })
+        this.emitFile({ type: 'asset', fileName, source: await build(root) })
       }
     },
 
     configureServer(server) {
       for (const [fileName, { type, build }] of Object.entries(GENERATED)) {
-        server.middlewares.use(`/${fileName}`, (_request, response) => {
-          response.setHeader('Content-Type', `${type}; charset=utf-8`)
-          response.end(build(root))
+        server.middlewares.use(`/${fileName}`, async (_request, response, next) => {
+          try {
+            const body = await build(root)
+            response.setHeader('Content-Type', `${type}; charset=utf-8`)
+            response.end(body)
+          } catch (error) {
+            next(error)
+          }
         })
       }
 

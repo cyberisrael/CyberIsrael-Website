@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Decap CMS editor and its GitHub sign-in handshake
+Disallow: /admin/
+Disallow: /oauth/
+
+# Placeholder pages with no content yet
+Disallow: /coming-soon
+
+Sitemap: https://cyberisrael.net/sitemap.xml
