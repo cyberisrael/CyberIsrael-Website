@@ -2,6 +2,7 @@ import { join } from 'node:path'
 import { readArticles, ARTICLES_PATH } from './articles-index.mjs'
 import { buildAdminConfig } from './admin-config.mjs'
 import { buildSitemap } from './generate-sitemap.mjs'
+import { buildAgentsTxt } from './generate-agents.mjs'
 
 const VIRTUAL_ID = 'virtual:articles'
 const RESOLVED_ID = '\0' + VIRTUAL_ID
@@ -10,13 +11,14 @@ const RESOLVED_ID = '\0' + VIRTUAL_ID
 const GENERATED = {
   'admin/config.yml': { type: 'text/yaml', build: buildAdminConfig },
   'sitemap.xml': { type: 'application/xml', build: buildSitemap },
+  'agents.txt': { type: 'text/markdown', build: buildAgentsTxt },
 }
 
 /**
  * Three jobs, all driven by files rather than hand-kept lists:
  * - exposes the article index (built from Markdown frontmatter) as `virtual:articles`
  * - generates the Decap CMS config from the taxonomy, so it cannot drift from the site
- * - generates sitemap.xml from the routes and the article index
+ * - generates sitemap.xml and agents.txt from the routes and the article index
  */
 export default function articlesPlugin() {
   let root = process.cwd()
