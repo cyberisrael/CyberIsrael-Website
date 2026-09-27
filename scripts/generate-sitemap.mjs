@@ -13,7 +13,7 @@ import { readArticles } from './articles-index.mjs'
  * Always the production origin: search engines should only ever be pointed at the
  * live site, even when CMS_BASE_URL is overridden for local Worker testing.
  */
-const SITE_URL = 'https://cyberisrael.net'
+export const SITE_URL ='https://cyberisrael.net'
 
 /** Indexable routes from src/App.tsx; /coming-soon is left out, as in robots.txt. */
 const STATIC_ROUTES = [
