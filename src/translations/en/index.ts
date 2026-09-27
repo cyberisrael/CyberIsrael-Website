@@ -167,11 +167,37 @@ const en = {
   resources: {
     title: "All of our Knowledge in one place",
     subtitle: "Learn · Explore · Level up",
-    articles_title: "Read our articles in this website",
-    articles_desc:
-      "Guides, CTF writeups and deep dives written by community members.",
-    articles_cta: "Go to Articles",
-    past_lectures_title: "Past Community Learning Sessions / Lectures",
+    articles_cta: "Read the full article",
+    vault: {
+      folders: {
+        articles: "Articles",
+        lectures: "Lectures",
+        roadmaps: "Roadmaps",
+        slides: "Presentations",
+        instagram: "Instagram",
+      },
+      tag: {
+        article: "article",
+        lecture: "lecture",
+        roadmap: "roadmap",
+        slides: "slides",
+        instagram: "instagram",
+      },
+      from: "From",
+      search: "Search the vault...",
+      no_results: "No matching resources.",
+      open_external: "Open in a new tab",
+      summary: "Summary",
+      category: "Category:",
+      read_time: "Reading time:",
+      tags: "Tags:",
+      instagram_post: "Instagram post #{{number}}",
+      open_sidebar: "Show sidebar",
+      close_sidebar: "Hide sidebar",
+      close_tab: "Close tab",
+      empty_title: "No resource is open",
+      empty_hint: "Pick something from the sidebar to open it here.",
+    },
     past_lectures: [
       {
         title: "AI Malware full lecture",
@@ -180,7 +206,6 @@ const en = {
     ],
     sheets_title: "Roadmap for Gamma",
     docs_title: "Zero to Hero Roadmap",
-    slides_title: "Presentations",
     slides_presentations: [
       {
         title: "Recommended Weekly Videos",
@@ -188,10 +213,9 @@ const en = {
       },
       {
         title: "Development Group",
-        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
+        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.p",
       },
     ],
-    instagram_title: "Instagram Posts",
     suggestions_title: "Suggestions",
     suggestions_subtitle: "Share your ideas",
     suggestions_description: "Have an idea or suggestion for more resources? We'd love to hear it!",

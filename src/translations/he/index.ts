@@ -165,11 +165,37 @@ const he = {
   resources: {
     title: "כל המשאבים שלנו במקום אחד",
     subtitle: "למדו · חקרו · התפתחו",
-    articles_title: "קראו את המאמרים שלנו באתר הזה",
-    articles_desc:
-      "מדריכים, פתרונות CTF וצלילות עומק שנכתבו על ידי חברי הקהילה.",
-    articles_cta: "עברו למאמרים",
-    past_lectures_title: "מפגשי למידה והרצאות קודמות לקהילה",
+    articles_cta: "לקריאת המאמר המלא",
+    vault: {
+      folders: {
+        articles: "מאמרים",
+        lectures: "הרצאות",
+        roadmaps: "מפות דרכים",
+        slides: "מצגות",
+        instagram: "אינסטגרם",
+      },
+      tag: {
+        article: "מאמר",
+        lecture: "הרצאה",
+        roadmap: "מפת_דרכים",
+        slides: "מצגת",
+        instagram: "אינסטגרם",
+      },
+      from: "מתוך",
+      search: "חיפוש בתיבת הידע...",
+      no_results: "לא נמצאו משאבים מתאימים.",
+      open_external: "פתיחה בכרטיסייה חדשה",
+      summary: "תקציר",
+      category: "קטגוריה:",
+      read_time: "זמן קריאה:",
+      tags: "תגיות:",
+      instagram_post: "פוסט אינסטגרם #{{number}}",
+      open_sidebar: "הצגת סרגל הצד",
+      close_sidebar: "הסתרת סרגל הצד",
+      close_tab: "סגירת כרטיסייה",
+      empty_title: "אין משאב פתוח",
+      empty_hint: "בחרו משהו מסרגל הצד כדי לפתוח אותו כאן.",
+    },
     past_lectures: [
       {
         title: "AI Malware השיעור המלא",
@@ -178,7 +204,6 @@ const he = {
     ],
     sheets_title: "מפת דרכים עבור גאמא",
     docs_title: "מפת דרכים מאפס למאה",
-    slides_title: "מצגות",
     slides_presentations: [
       {
         title: "סרטונים מומלצים לשבוע",
@@ -186,10 +211,9 @@ const he = {
       },
       {
         title: "קבוצת פיתוח",
-        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.phttps://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.g1f3e7b6c4a_0_0#slide=id.g1f3e7b6c4a_0_0",
+        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.p",
       },
     ],
-    instagram_title: "פוסטים באינסטגרם",
     suggestions_title: "הצעות",
     suggestions_subtitle: "שתפו את הרעיונות שלכם",
     suggestions_description: "יש לכם רעיון או הצעה לעוד משאבים? נשמח לשמוע!",
