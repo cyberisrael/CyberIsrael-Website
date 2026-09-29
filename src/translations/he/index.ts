@@ -195,6 +195,13 @@ const he = {
       close_tab: "סגירת כרטיסייה",
       empty_title: "אין משאב פתוח",
       empty_hint: "בחרו משהו מסרגל הצד כדי לפתוח אותו כאן.",
+      graph_title: "תצוגת גרף",
+      open_graph: "הצגת תצוגת הגרף",
+      close_graph: "הסתרת תצוגת הגרף",
+      graph_open_hint: "לחצו לפתיחה",
+      zoom_in: "הגדלה",
+      zoom_out: "הקטנה",
+      fit_view: "התאמה לתצוגה",
     },
     past_lectures: [
       {

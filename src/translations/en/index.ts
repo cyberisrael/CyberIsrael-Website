@@ -197,6 +197,13 @@ const en = {
       close_tab: "Close tab",
       empty_title: "No resource is open",
       empty_hint: "Pick something from the sidebar to open it here.",
+      graph_title: "Graph view",
+      open_graph: "Show graph view",
+      close_graph: "Hide graph view",
+      graph_open_hint: "Click to open",
+      zoom_in: "Zoom in",
+      zoom_out: "Zoom out",
+      fit_view: "Fit to view",
     },
     past_lectures: [
       {

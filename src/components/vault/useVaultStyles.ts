@@ -19,6 +19,18 @@ const darkStyles = {
   guide: "border-cyber-border/60",
   accentText: "text-cyber-green",
   accentBar: "bg-cyber-green",
+  graphEdge: "stroke-cyber-border",
+  graphEdgeActive: "stroke-cyber-green",
+  graphNode:
+    "bg-cyber-card border-cyber-border text-slate-300 hover:border-cyber-green hover:text-cyber-green",
+  graphNodeActive:
+    "bg-cyber-card border-cyber-green text-cyber-green shadow-[0_0_14px_rgba(0,255,136,0.45)]",
+  graphHub:
+    "bg-cyber-dark border-cyber-green/60 text-cyber-green shadow-[0_0_18px_rgba(0,255,136,0.18)]",
+  tooltip: "bg-cyber-dark/95 border-cyber-border text-slate-300",
+  tagPill: "bg-cyber-purple/20 text-violet-300",
+  graphControl:
+    "bg-cyber-card/80 border-cyber-border/60 text-slate-400 hover:text-white hover:border-cyber-green/60",
 };
 
 const lightStyles: typeof darkStyles = {
@@ -39,6 +51,17 @@ const lightStyles: typeof darkStyles = {
   guide: "border-light-border",
   accentText: "text-light-blue",
   accentBar: "bg-light-blue",
+  graphEdge: "stroke-light-border",
+  graphEdgeActive: "stroke-light-blue",
+  graphNode:
+    "bg-white border-light-border text-light-muted hover:border-light-blue hover:text-light-blue",
+  graphNodeActive:
+    "bg-white border-light-blue text-light-blue shadow-[0_0_12px_rgba(37,99,235,0.35)]",
+  graphHub: "bg-light-bg border-light-blue/60 text-light-blue shadow-sm",
+  tooltip: "bg-white/95 border-light-border text-light-text shadow-glass-light",
+  tagPill: "bg-violet-100 text-violet-700",
+  graphControl:
+    "bg-white/80 border-light-border text-light-muted hover:text-light-text hover:border-light-blue/60",
 };
 
 export type VaultStyles = typeof darkStyles;
