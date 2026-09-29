@@ -5,7 +5,8 @@
  * metadata in YAML frontmatter, so the folder name is the single source of truth
  * for the slug and nothing has to be kept in sync by hand.
  *
- * Used by the Vite plugin (to build `virtual:articles`) and by the sitemap script.
+ * Used by `vite-plugin-articles.mjs` (to build `virtual:articles`) and by the
+ * generated files (CMS config, sitemap, agents.txt).
  */
 import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'

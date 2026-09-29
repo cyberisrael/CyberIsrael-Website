@@ -2,8 +2,8 @@
  * Builds `sitemap.xml` from the site's static routes plus every article.
  *
  * Articles come from `readArticles()`, so a new Markdown file shows up here with
- * no list to update. The Vite plugin emits the result into the client build and
- * serves it in dev, the same way it handles the generated CMS config.
+ * no list to update. `vite-plugin-generated-files.mjs` emits the result into the
+ * client build and serves it in dev, the same way it handles the generated CMS config.
  */
 import { Readable } from 'node:stream'
 import { SitemapStream, streamToPromise } from 'sitemap'
