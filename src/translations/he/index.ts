@@ -202,6 +202,8 @@ const he = {
       zoom_in: "הגדלה",
       zoom_out: "הקטנה",
       fit_view: "התאמה לתצוגה",
+      close_note_view: "סגירת תצוגת המשאב",
+      show_note_view: "הצגת המשאב",
     },
     past_lectures: [
       {

@@ -7,8 +7,11 @@ export interface VaultEntry {
   folder: VaultFolder;
 }
 
-/** Open tabs and the focused note, with the focused note mirrored to `?note=`. */
-export const useVaultTabs = (folders: VaultFolder[]) => {
+/**
+ * Open tabs and the focused note. While `shown` (the note view is open) the focused note is
+ * mirrored to `?note=`; otherwise the param is dropped, so the URL matches what's on screen.
+ */
+export const useVaultTabs = (folders: VaultFolder[], shown: boolean) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const notesById = useMemo(() => {
@@ -19,11 +22,10 @@ export const useVaultTabs = (folders: VaultFolder[]) => {
     return map;
   }, [folders]);
 
-  const firstNoteId =
-    folders.find((f) => f.notes.length > 0)?.notes[0]?.id ?? null;
+  // Only a linked note starts open; otherwise the vault opens on the graph with no tabs.
   const requestedId = searchParams.get("note");
   const initialId =
-    requestedId && notesById.has(requestedId) ? requestedId : firstNoteId;
+    requestedId && notesById.has(requestedId) ? requestedId : null;
 
   const [openIds, setOpenIds] = useState<string[]>(
     initialId ? [initialId] : [],
@@ -32,12 +34,13 @@ export const useVaultTabs = (folders: VaultFolder[]) => {
 
   // Keep the focused note in the URL so a note can be linked to directly.
   useEffect(() => {
-    if (activeId === searchParams.get("note")) return;
+    const linkedId = shown ? activeId : null;
+    if (linkedId === searchParams.get("note")) return;
     const next = new URLSearchParams(searchParams);
-    if (activeId) next.set("note", activeId);
+    if (linkedId) next.set("note", linkedId);
     else next.delete("note");
     setSearchParams(next, { replace: true });
-  }, [activeId, searchParams, setSearchParams]);
+  }, [shown, activeId, searchParams, setSearchParams]);
 
   const openNote = (id: string) => {
     setOpenIds((ids) => (ids.includes(id) ? ids : [...ids, id]));

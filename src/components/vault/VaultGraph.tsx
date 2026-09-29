@@ -1,7 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { LuMaximize, LuMinus, LuPlus, LuWaypoints, LuX } from "react-icons/lu";
+import {
+  LuFileText,
+  LuMaximize,
+  LuMinus,
+  LuPlus,
+  LuWaypoints,
+  LuX,
+} from "react-icons/lu";
+import VaultSidebarToggle from "./VaultSidebarToggle";
 import { useVaultStyles } from "./useVaultStyles";
 import { layoutBounds, simulateLayout, type GraphNode } from "./graphLayout";
 import { useGraphViewport, type Viewport } from "./useGraphViewport";
@@ -10,8 +18,14 @@ import type { VaultFolder, VaultNote } from "./types";
 interface VaultGraphProps {
   folders: VaultFolder[];
   activeId: string | null;
+  /** Fills the pane in place of the note view instead of sitting beside it. */
+  expanded: boolean;
+  sidebarOpen: boolean;
   onOpenNote: (id: string) => void;
   onClose: () => void;
+  onOpenSidebar: () => void;
+  /** Brings back the note view; left out when no note is open to show. */
+  onShowNoteView?: () => void;
 }
 
 const TOOLTIP_WIDTH = 240;
@@ -29,8 +43,12 @@ const hostname = (url: string) => {
 const VaultGraph: React.FC<VaultGraphProps> = ({
   folders,
   activeId,
+  expanded,
+  sidebarOpen,
   onOpenNote,
   onClose,
+  onOpenSidebar,
+  onShowNoteView,
 }) => {
   const { t } = useTranslation();
   const c = useVaultStyles();
@@ -83,20 +101,42 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
 
   return (
     <aside
-      className={`absolute lg:static inset-y-0 end-0 z-30 w-[85%] max-w-sm lg:w-72 xl:w-96 flex-shrink-0 flex flex-col border-s ${c.sidebar}`}
+      className={`flex flex-col ${
+        expanded
+          ? `flex-1 min-w-0 ${c.pane}`
+          : `absolute lg:static inset-y-0 end-0 z-30 w-[85%] max-w-sm lg:w-72 xl:w-96 flex-shrink-0 border-s ${c.sidebar}`
+      }`}
     >
       <div className={`flex items-center gap-2 px-4 py-3 border-b ${c.guide}`}>
+        {expanded && !sidebarOpen && (
+          <VaultSidebarToggle
+            label={t("resources.vault.open_sidebar")}
+            onClick={onOpenSidebar}
+            className="-ms-1.5"
+          />
+        )}
         <LuWaypoints size={16} className={c.accentText} />
         <span className={`font-display text-sm truncate ${c.text}`}>
           {t("resources.vault.graph_title")}
         </span>
-        <button
-          onClick={onClose}
-          aria-label={t("resources.vault.close_graph")}
-          className={`ms-auto p-1.5 rounded-md transition-colors ${c.icon}`}
-        >
-          <LuX size={16} />
-        </button>
+        {!expanded && (
+          <button
+            onClick={onClose}
+            aria-label={t("resources.vault.close_graph")}
+            className={`ms-auto p-1.5 rounded-md transition-colors ${c.icon}`}
+          >
+            <LuX size={16} />
+          </button>
+        )}
+        {expanded && onShowNoteView && (
+          <button
+            onClick={onShowNoteView}
+            className={`ms-auto flex items-center gap-1.5 px-2 py-1 rounded-md text-sm transition-colors ${c.icon}`}
+          >
+            <LuFileText size={15} />
+            {t("resources.vault.show_note_view")}
+          </button>
+        )}
       </div>
 
       <div

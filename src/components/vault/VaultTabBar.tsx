@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { LuFileText, LuWaypoints, LuX } from "react-icons/lu";
+import { LuFileText, LuMinimize2, LuWaypoints, LuX } from "react-icons/lu";
 import VaultSidebarToggle from "./VaultSidebarToggle";
 import { useVaultStyles } from "./useVaultStyles";
 import type { VaultEntry } from "./useVaultTabs";
@@ -14,6 +14,7 @@ interface VaultTabBarProps {
   onClose: (id: string) => void;
   onOpenSidebar: () => void;
   onToggleGraph: () => void;
+  onCloseNoteView: () => void;
 }
 
 /** Row of open notes above the pane, like editor tabs. */
@@ -26,6 +27,7 @@ const VaultTabBar: React.FC<VaultTabBarProps> = ({
   onClose,
   onOpenSidebar,
   onToggleGraph,
+  onCloseNoteView,
 }) => {
   const { t } = useTranslation();
   const c = useVaultStyles();
@@ -40,7 +42,10 @@ const VaultTabBar: React.FC<VaultTabBarProps> = ({
         />
       )}
 
-      <div className="flex min-w-0 items-end gap-1 overflow-x-auto" role="tablist">
+      <div
+        className="flex min-w-0 items-end gap-1 overflow-x-auto"
+        role="tablist"
+      >
         {tabs.map(({ note }) => {
           const isActive = note.id === activeId;
           return (
@@ -74,18 +79,30 @@ const VaultTabBar: React.FC<VaultTabBarProps> = ({
         })}
       </div>
 
-      <button
-        onClick={onToggleGraph}
-        aria-label={t(
-          graphOpen ? "resources.vault.close_graph" : "resources.vault.open_graph",
-        )}
-        aria-pressed={graphOpen}
-        className={`ms-auto mb-1.5 flex-shrink-0 p-1.5 rounded-md transition-colors ${c.icon} ${
-          graphOpen ? c.accentText : ""
-        }`}
-      >
-        <LuWaypoints size={18} />
-      </button>
+      <div className="ms-auto mb-1.5 flex flex-shrink-0 items-center gap-0.5">
+        <button
+          onClick={onToggleGraph}
+          aria-label={t(
+            graphOpen
+              ? "resources.vault.close_graph"
+              : "resources.vault.open_graph",
+          )}
+          aria-pressed={graphOpen}
+          className={`p-1.5 rounded-md transition-colors ${c.icon} ${
+            graphOpen ? c.accentText : ""
+          }`}
+        >
+          <LuWaypoints size={18} />
+        </button>
+        <button
+          onClick={onCloseNoteView}
+          aria-label={t("resources.vault.close_note_view")}
+          title={t("resources.vault.close_note_view")}
+          className={`p-1.5 rounded-md transition-colors ${c.icon}`}
+        >
+          <LuMinimize2 size={18} />
+        </button>
+      </div>
     </div>
   );
 };

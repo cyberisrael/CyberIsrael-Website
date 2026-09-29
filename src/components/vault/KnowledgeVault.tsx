@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import VaultSidebar from "./VaultSidebar";
@@ -19,21 +19,25 @@ const isPhone = () => window.matchMedia("(max-width: 767px)").matches;
 /** Below `lg` the graph overlays the note too; it only starts open where all three columns fit. */
 const isNarrow = () => window.matchMedia("(max-width: 1023px)").matches;
 const isWide = () => window.matchMedia("(min-width: 1280px)").matches;
+/** A shared `?note=` link should land on that note rather than on the graph. */
+const hasLinkedNote = () =>
+  new URLSearchParams(window.location.search).has("note");
 
-/** Obsidian-style browser: folder tree on the side, open notes as tabs, one note in focus, graph view on the far side. */
+/**
+ * Obsidian-style browser: folder tree on the side, open notes as tabs, one note in focus,
+ * graph view on the far side. With the note view closed the graph takes over the pane.
+ */
 const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
   const { t } = useTranslation();
   const c = useVaultStyles();
+  const [noteViewOpen, setNoteViewOpen] = useState(hasLinkedNote);
   const { openTabs, active, activeId, setActiveId, openNote, closeNote } =
-    useVaultTabs(folders);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+    useVaultTabs(folders, noteViewOpen);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [graphOpen, setGraphOpen] = useState(isWide);
 
-  useEffect(() => {
-    if (isPhone()) setSidebarOpen(false);
-  }, []);
-
   const handleOpenNote = (id: string) => {
+    setNoteViewOpen(true);
     openNote(id);
     if (isPhone()) setSidebarOpen(false);
     if (isNarrow()) setGraphOpen(false);
@@ -43,6 +47,9 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
     if (!graphOpen && isPhone()) setSidebarOpen(false);
     setGraphOpen(!graphOpen);
   };
+
+  // The graph is the only view left when the note view is closed, so it can't be hidden then.
+  const graphExpanded = !noteViewOpen;
 
   return (
     <div
@@ -61,7 +68,7 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
             onClick={() => setSidebarOpen(false)}
           />
         )}
-        {graphOpen && (
+        {graphOpen && !graphExpanded && (
           <motion.button
             key="graph-backdrop"
             aria-label={t("resources.vault.close_graph")}
@@ -82,37 +89,44 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className={`flex-1 min-w-0 flex flex-col ${c.pane}`}>
-        <VaultTabBar
-          tabs={openTabs}
-          activeId={activeId}
-          sidebarOpen={sidebarOpen}
-          graphOpen={graphOpen}
-          onSelect={setActiveId}
-          onClose={closeNote}
-          onOpenSidebar={() => setSidebarOpen(true)}
-          onToggleGraph={toggleGraph}
-        />
+      {noteViewOpen && (
+        <div className={`flex-1 min-w-0 flex flex-col ${c.pane}`}>
+          <VaultTabBar
+            tabs={openTabs}
+            activeId={activeId}
+            sidebarOpen={sidebarOpen}
+            graphOpen={graphOpen}
+            onSelect={setActiveId}
+            onClose={closeNote}
+            onOpenSidebar={() => setSidebarOpen(true)}
+            onToggleGraph={toggleGraph}
+            onCloseNoteView={() => setNoteViewOpen(false)}
+          />
 
-        <div className="flex-1 overflow-y-auto px-5 py-8 md:px-10 md:py-10 flex flex-col">
-          {active ? (
-            <VaultNoteView
-              key={active.note.id}
-              note={active.note}
-              folderTitle={active.folder.title}
-            />
-          ) : (
-            <VaultEmptyState />
-          )}
+          <div className="flex-1 overflow-y-auto px-5 py-8 md:px-10 md:py-10 flex flex-col">
+            {active ? (
+              <VaultNoteView
+                key={active.note.id}
+                note={active.note}
+                folderTitle={active.folder.title}
+              />
+            ) : (
+              <VaultEmptyState />
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {graphOpen && (
+      {(graphOpen || graphExpanded) && (
         <VaultGraph
           folders={folders}
           activeId={activeId}
+          expanded={graphExpanded}
+          sidebarOpen={sidebarOpen}
           onOpenNote={handleOpenNote}
           onClose={() => setGraphOpen(false)}
+          onOpenSidebar={() => setSidebarOpen(true)}
+          onShowNoteView={active ? () => setNoteViewOpen(true) : undefined}
         />
       )}
     </div>
