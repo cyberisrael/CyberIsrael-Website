@@ -205,24 +205,6 @@ const he = {
       close_note_view: "סגירת תצוגת המשאב",
       show_note_view: "הצגת המשאב",
     },
-    past_lectures: [
-      {
-        title: "AI Malware השיעור המלא",
-        url: "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview",
-      },
-    ],
-    sheets_title: "מפת דרכים עבור גאמא",
-    docs_title: "מפת דרכים מאפס למאה",
-    slides_presentations: [
-      {
-        title: "סרטונים מומלצים לשבוע",
-        url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p",
-      },
-      {
-        title: "קבוצת פיתוח",
-        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.p",
-      },
-    ],
     suggestions_title: "הצעות",
     suggestions_subtitle: "שתפו את הרעיונות שלכם",
     suggestions_description: "יש לכם רעיון או הצעה לעוד משאבים? נשמח לשמוע!",

@@ -207,24 +207,6 @@ const en = {
       close_note_view: "Close note view",
       show_note_view: "Show note",
     },
-    past_lectures: [
-      {
-        title: "AI Malware full lecture",
-        url: "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview ",
-      },
-    ],
-    sheets_title: "Roadmap for Gamma",
-    docs_title: "Zero to Hero Roadmap",
-    slides_presentations: [
-      {
-        title: "Recommended Weekly Videos",
-        url: "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p",
-      },
-      {
-        title: "Development Group",
-        url: "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.p",
-      },
-    ],
     suggestions_title: "Suggestions",
     suggestions_subtitle: "Share your ideas",
     suggestions_description: "Have an idea or suggestion for more resources? We'd love to hear it!",
