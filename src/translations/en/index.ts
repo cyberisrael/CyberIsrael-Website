@@ -209,6 +209,8 @@ const en = {
       zoom_in: "Zoom in",
       zoom_out: "Zoom out",
       fit_view: "Fit to view",
+      close_note_view: "Close note view",
+      show_note_view: "Show note",
     },
     past_lectures: [
       {
