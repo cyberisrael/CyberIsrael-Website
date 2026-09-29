@@ -1,0 +1,86 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { LuStar } from "react-icons/lu";
+import { useVaultStyles } from "./useVaultStyles";
+import { noteDetail } from "./noteDetail";
+import type { VaultEntry } from "./useVaultTabs";
+
+interface VaultFeaturedProps {
+  entries: VaultEntry[];
+  activeId: string | null;
+  onOpenNote: (id: string) => void;
+}
+
+/** Pinned notes above the vault, as a row of cards laid out like the graph's hover tooltip. */
+const VaultFeatured: React.FC<VaultFeaturedProps> = ({
+  entries,
+  activeId,
+  onOpenNote,
+}) => {
+  const { t } = useTranslation();
+  const c = useVaultStyles();
+
+  if (entries.length === 0) return null;
+
+  return (
+    <section className="mb-4" aria-labelledby="vault-featured-title">
+      <h2
+        id="vault-featured-title"
+        className={`flex items-center gap-1.5 mb-2 font-display text-xs tracking-widest uppercase ${c.muted}`}
+      >
+        <LuStar size={12} />
+        {t("resources.vault.featured")}
+      </h2>
+
+      <ul className="flex gap-3 overflow-x-auto pb-2 snap-x">
+        {entries.map(({ note, folder }) => {
+          const Icon = folder.icon;
+          const active = note.id === activeId;
+          return (
+            <li key={note.id} className="snap-start flex-shrink-0 w-64">
+              <button
+                type="button"
+                onClick={() => onOpenNote(note.id)}
+                aria-current={active || undefined}
+                className={`w-full h-full flex flex-col rounded-lg border p-3 text-start backdrop-blur-sm transition-colors ${
+                  active ? c.featuredCardActive : c.featuredCard
+                }`}
+              >
+                <span
+                  className={`flex items-center gap-1.5 text-xs mb-1 ${c.muted}`}
+                >
+                  <Icon size={12} className="flex-shrink-0" />
+                  <span className="truncate">{folder.title}</span>
+                </span>
+                <span
+                  className="font-semibold text-sm leading-snug mb-2 line-clamp-2"
+                  dir="auto"
+                >
+                  {note.title}
+                </span>
+                <span
+                  className={`self-start px-2 py-0.5 rounded-full text-xs font-display mb-2 ${c.tagPill}`}
+                >
+                  #{note.tag}
+                </span>
+                <span
+                  className={`text-xs leading-relaxed line-clamp-3 ${c.muted}`}
+                  dir="auto"
+                >
+                  {noteDetail(note)}
+                </span>
+                <span
+                  className={`mt-auto pt-2 text-xs font-display ${c.accentText}`}
+                >
+                  {t("resources.vault.graph_open_hint")}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+};
+
+export default VaultFeatured;

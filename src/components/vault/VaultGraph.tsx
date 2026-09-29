@@ -13,11 +13,14 @@ import VaultSidebarToggle from "./VaultSidebarToggle";
 import { useVaultStyles } from "./useVaultStyles";
 import { layoutBounds, simulateLayout, type GraphNode } from "./graphLayout";
 import { useGraphViewport, type Viewport } from "./useGraphViewport";
-import type { VaultFolder, VaultNote } from "./types";
+import { noteDetail } from "./noteDetail";
+import type { VaultFolder } from "./types";
 
 interface VaultGraphProps {
   folders: VaultFolder[];
   activeId: string | null;
+  /** Notes pinned above the vault; their nodes glow gold. */
+  featuredIds: Set<string>;
   /** Fills the pane in place of the note view instead of sitting beside it. */
   expanded: boolean;
   sidebarOpen: boolean;
@@ -31,18 +34,11 @@ interface VaultGraphProps {
 const TOOLTIP_WIDTH = 240;
 const TOOLTIP_GAP = 24;
 
-const hostname = (url: string) => {
-  try {
-    return new URL(url.trim()).hostname.replace(/^www\./, "");
-  } catch {
-    return url;
-  }
-};
-
 /** Resources as a graph: folders are hubs, every note an icon linked to its folder. */
 const VaultGraph: React.FC<VaultGraphProps> = ({
   folders,
   activeId,
+  featuredIds,
   expanded,
   sidebarOpen,
   onOpenNote,
@@ -222,7 +218,9 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
                           className={`grid place-items-center w-8 h-8 rounded-full border transition-colors ${
                             node.note.id === activeId
                               ? c.graphNodeActive
-                              : c.graphNode
+                              : featuredIds.has(node.note.id)
+                                ? c.graphNodeFeatured
+                                : c.graphNode
                           }`}
                         >
                           <Icon size={15} />
@@ -274,13 +272,6 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
       </div>
     </aside>
   );
-};
-
-/** One-line detail under the title: an article's excerpt, or where an embed is hosted. */
-const noteDetail = (note: VaultNote) => {
-  if (note.kind === "article") return note.article.excerpt;
-  if (note.kind === "embed") return hostname(note.src);
-  return hostname(note.url);
 };
 
 const GraphTooltip: React.FC<{

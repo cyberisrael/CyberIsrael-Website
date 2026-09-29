@@ -9,6 +9,7 @@ import type { VaultFolder } from "./types";
 interface VaultSidebarProps {
   folders: VaultFolder[];
   activeId: string | null;
+  featuredIds: Set<string>;
   open: boolean;
   onOpenNote: (id: string) => void;
   onClose: () => void;
@@ -18,6 +19,7 @@ interface VaultSidebarProps {
 const VaultSidebar: React.FC<VaultSidebarProps> = ({
   folders,
   activeId,
+  featuredIds,
   open,
   onOpenNote,
   onClose,
@@ -89,6 +91,7 @@ const VaultSidebar: React.FC<VaultSidebarProps> = ({
             // A search expands every folder so matches are never hidden.
             collapsed={!normalizedQuery && collapsed.has(folder.id)}
             activeId={activeId}
+            featuredIds={featuredIds}
             onToggle={() => toggleFolder(folder.id)}
             onOpenNote={onOpenNote}
           />

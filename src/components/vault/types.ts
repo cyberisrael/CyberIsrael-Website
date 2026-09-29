@@ -7,6 +7,8 @@ interface NoteBase {
   title: string;
   /** Shown as an Obsidian-style `#tag` pill under the title. */
   tag: string;
+  /** Short blurb for featured cards and graph tooltips; articles use their excerpt instead. */
+  description?: string;
 }
 
 export type VaultNote =

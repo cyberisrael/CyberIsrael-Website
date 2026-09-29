@@ -10,6 +10,7 @@ import {
 import { useTheme } from "@/context/ThemeContext";
 import { articles } from "@/services/articlesData";
 import {
+  EMPTY_VAULT_RESOURCES,
   fetchVaultResources,
   localize,
   type VaultResources,
@@ -33,7 +34,7 @@ const ResourcesPage: React.FC = () => {
         if (controller.signal.aborted) return;
         console.error(err);
         // Still show the articles, which don't depend on the file.
-        setResources({ lectures: [], roadmaps: [], slides: [], instagram: [] });
+        setResources(EMPTY_VAULT_RESOURCES);
       });
     return () => controller.abort();
   }, []);
@@ -63,6 +64,7 @@ const ResourcesPage: React.FC = () => {
           kind: "embed" as const,
           id: lecture.id,
           title: localize(lecture.title, lang) ?? lecture.id,
+          description: localize(lecture.description, lang),
           tag: t("resources.vault.tag.lecture"),
           src: lecture.url,
           ratio: "video" as const,
@@ -76,6 +78,7 @@ const ResourcesPage: React.FC = () => {
           kind: "embed" as const,
           id: roadmap.id,
           title: localize(roadmap.title, lang) ?? roadmap.id,
+          description: localize(roadmap.description, lang),
           tag: t("resources.vault.tag.roadmap"),
           src: roadmap.url,
           ratio: "page" as const,
@@ -89,6 +92,7 @@ const ResourcesPage: React.FC = () => {
           kind: "embed" as const,
           id: slides.id,
           title: localize(slides.title, lang) ?? slides.id,
+          description: localize(slides.description, lang),
           tag: t("resources.vault.tag.slides"),
           src: slides.url,
           ratio: "video" as const,
@@ -104,6 +108,7 @@ const ResourcesPage: React.FC = () => {
           title:
             localize(post.title, lang) ??
             t("resources.vault.instagram_post", { number: index + 1 }),
+          description: localize(post.description, lang),
           tag: t("resources.vault.tag.instagram"),
           url: post.url,
         })),
@@ -135,7 +140,7 @@ const ResourcesPage: React.FC = () => {
 
         {/* The vault reads `?note=` once on mount, so it waits for every note to exist. */}
         {resources ? (
-          <KnowledgeVault folders={folders} />
+          <KnowledgeVault folders={folders} featuredIds={resources.featured} />
         ) : (
           <div
             aria-busy="true"

@@ -25,9 +25,15 @@ const darkStyles = {
     "bg-cyber-card border-cyber-border text-slate-300 hover:border-cyber-green hover:text-cyber-green",
   graphNodeActive:
     "bg-cyber-card border-cyber-green text-cyber-green shadow-[0_0_14px_rgba(0,255,136,0.45)]",
+  graphNodeFeatured:
+    "bg-cyber-card border-amber-400 text-amber-300 shadow-[0_0_14px_rgba(251,191,36,0.55)] hover:border-amber-300 hover:text-amber-200",
   graphHub:
     "bg-cyber-dark border-cyber-green/60 text-cyber-green shadow-[0_0_18px_rgba(0,255,136,0.18)]",
   tooltip: "bg-cyber-dark/95 border-cyber-border text-slate-300",
+  featuredCard:
+    "bg-cyber-dark/90 border-cyber-border/70 text-slate-300 hover:border-cyber-green/60",
+  featuredCardActive:
+    "bg-cyber-dark/90 border-cyber-green text-slate-200 shadow-[0_0_14px_rgba(0,255,136,0.25)]",
   tagPill: "bg-cyber-purple/20 text-violet-300",
   graphControl:
     "bg-cyber-card/80 border-cyber-border/60 text-slate-400 hover:text-white hover:border-cyber-green/60",
@@ -57,8 +63,14 @@ const lightStyles: typeof darkStyles = {
     "bg-white border-light-border text-light-muted hover:border-light-blue hover:text-light-blue",
   graphNodeActive:
     "bg-white border-light-blue text-light-blue shadow-[0_0_12px_rgba(37,99,235,0.35)]",
+  graphNodeFeatured:
+    "bg-white border-amber-500 text-amber-600 shadow-[0_0_12px_rgba(245,158,11,0.55)] hover:border-amber-400 hover:text-amber-500",
   graphHub: "bg-light-bg border-light-blue/60 text-light-blue shadow-sm",
   tooltip: "bg-white/95 border-light-border text-light-text shadow-glass-light",
+  featuredCard:
+    "bg-white/90 border-light-border text-light-text shadow-glass-light hover:border-light-blue/60",
+  featuredCardActive:
+    "bg-white/90 border-light-blue text-light-text shadow-[0_0_12px_rgba(37,99,235,0.25)]",
   tagPill: "bg-violet-100 text-violet-700",
   graphControl:
     "bg-white/80 border-light-border text-light-muted hover:text-light-text hover:border-light-blue/60",

@@ -1,10 +1,20 @@
 {
+  "featured": [
+    "roadmap-zero-to-hero",
+    "lecture-1",
+    "article-what-is-cyber-why-study-it-and-how",
+    "slides-1"
+  ],
   "lectures": [
     {
       "id": "lecture-1",
       "title": {
         "en": "AI Malware full lecture",
         "he": "AI Malware השיעור המלא"
+      },
+      "description": {
+        "en": "Full recording of our lecture on AI-powered malware.",
+        "he": "ההקלטה המלאה של ההרצאה שלנו על נוזקות מבוססות AI."
       },
       "url": "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview"
     }
@@ -15,6 +25,10 @@
       "title": {
         "en": "Zero to Hero Roadmap",
         "he": "מפת דרכים מאפס למאה"
+      },
+      "description": {
+        "en": "A step-by-step path into cyber, from the very basics onwards.",
+        "he": "מסלול מסודר, צעד אחר צעד, לעולם הסייבר, מהבסיס ומעלה."
       },
       "url": "https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview"
     },
@@ -33,6 +47,10 @@
       "title": {
         "en": "Recommended Weekly Videos",
         "he": "סרטונים מומלצים לשבוע"
+      },
+      "description": {
+        "en": "Our weekly picks of videos worth watching.",
+        "he": "הסרטונים שבחרנו השבוע ששווה לצפות בהם."
       },
       "url": "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p"
     },
