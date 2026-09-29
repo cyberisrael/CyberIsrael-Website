@@ -58,5 +58,13 @@ export const useVaultTabs = (folders: VaultFolder[], shown: boolean) => {
   const openTabs = openIds.flatMap((id) => notesById.get(id) ?? []);
   const active = activeId ? notesById.get(activeId) : undefined;
 
-  return { openTabs, active, activeId, setActiveId, openNote, closeNote };
+  return {
+    notesById,
+    openTabs,
+    active,
+    activeId,
+    setActiveId,
+    openNote,
+    closeNote,
+  };
 };

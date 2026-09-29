@@ -195,6 +195,7 @@ const he = {
       read_time: "זמן קריאה:",
       tags: "תגיות:",
       instagram_post: "פוסט אינסטגרם #{{number}}",
+      featured: "מומלצים",
       open_sidebar: "הצגת סרגל הצד",
       close_sidebar: "הסתרת סרגל הצד",
       close_tab: "סגירת כרטיסייה",

@@ -197,6 +197,7 @@ const en = {
       read_time: "Reading time:",
       tags: "Tags:",
       instagram_post: "Instagram post #{{number}}",
+      featured: "Recommended",
       open_sidebar: "Show sidebar",
       close_sidebar: "Hide sidebar",
       close_tab: "Close tab",

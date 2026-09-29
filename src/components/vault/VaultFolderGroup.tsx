@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { LuChevronRight } from "react-icons/lu";
 import { useVaultStyles } from "./useVaultStyles";
 import type { VaultFolder } from "./types";
@@ -7,6 +8,8 @@ interface VaultFolderGroupProps {
   folder: VaultFolder;
   collapsed: boolean;
   activeId: string | null;
+  /** Notes pinned above the vault; they get a star after their title. */
+  featuredIds: Set<string>;
   onToggle: () => void;
   onOpenNote: (id: string) => void;
 }
@@ -16,9 +19,11 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
   folder,
   collapsed,
   activeId,
+  featuredIds,
   onToggle,
   onOpenNote,
 }) => {
+  const { t } = useTranslation();
   const c = useVaultStyles();
   const Icon = folder.icon;
 
@@ -51,7 +56,7 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
                 <button
                   onClick={() => onOpenNote(note.id)}
                   title={note.title}
-                  className={`relative w-full truncate rounded-md px-3 py-1.5 text-start transition-colors ${
+                  className={`relative w-full flex items-center gap-1.5 rounded-md px-3 py-1.5 text-start transition-colors ${
                     isActive ? c.itemActive : c.item
                   }`}
                 >
@@ -60,7 +65,17 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
                       className={`absolute inset-y-1.5 start-0 w-0.5 rounded-full ${c.accentBar}`}
                     />
                   )}
-                  {note.title}
+                  <span className="truncate">{note.title}</span>
+                  {featuredIds.has(note.id) && (
+                    <span
+                      role="img"
+                      aria-label={t("resources.vault.featured")}
+                      title={t("resources.vault.featured")}
+                      className="flex-shrink-0 text-xs"
+                    >
+                      ⭐
+                    </span>
+                  )}
                 </button>
               </li>
             );

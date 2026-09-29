@@ -14,21 +14,27 @@ export interface VaultResource {
   id: string;
   /** Optional for Instagram posts, which fall back to "Instagram post #n". */
   title?: LocalizedText;
+  /** Short blurb for the featured strip and graph tooltip; falls back to the link's host. */
+  description?: LocalizedText;
   url: string;
 }
 
-export interface VaultResources {
-  lectures: VaultResource[];
-  roadmaps: VaultResource[];
-  slides: VaultResource[];
-  instagram: VaultResource[];
-}
+type ResourceListKey = "lectures" | "roadmaps" | "slides" | "instagram";
 
-const EMPTY: VaultResources = {
+export type VaultResources = Record<ResourceListKey, VaultResource[]> & {
+  /**
+   * Note ids pinned above the vault, in display order. Any note can be listed, including an
+   * article as `article-<slug>`; ids that match nothing are skipped.
+   */
+  featured: string[];
+};
+
+export const EMPTY_VAULT_RESOURCES: VaultResources = {
   lectures: [],
   roadmaps: [],
   slides: [],
   instagram: [],
+  featured: [],
 };
 
 const isLocalizedText = (value: unknown): value is LocalizedText =>
@@ -39,27 +45,29 @@ const isLocalizedText = (value: unknown): value is LocalizedText =>
 
 const isResource = (value: unknown): value is VaultResource => {
   if (!value || typeof value !== "object") return false;
-  const { id, title, url } = value as Record<string, unknown>;
+  const { id, title, description, url } = value as Record<string, unknown>;
   return (
     typeof id === "string" &&
     typeof url === "string" &&
-    (title === undefined || isLocalizedText(title))
+    (title === undefined || isLocalizedText(title)) &&
+    (description === undefined || isLocalizedText(description))
   );
 };
 
 /** Keeps the well-formed entries of a list and warns about the rest, so one typo can't blank the page. */
-const resourceList = (
+const validList = <T>(
   data: Record<string, unknown>,
   key: keyof VaultResources,
-) => {
+  isValid: (item: unknown) => item is T,
+): T[] => {
   const list = data[key];
   if (list === undefined) return [];
   if (!Array.isArray(list)) {
     console.warn(`${VAULT_RESOURCES_URL}: "${key}" should be an array`);
     return [];
   }
-  return list.filter((item) => {
-    if (isResource(item)) return true;
+  return list.filter((item): item is T => {
+    if (isValid(item)) return true;
     console.warn(
       `${VAULT_RESOURCES_URL}: skipping malformed "${key}" entry`,
       item,
@@ -68,6 +76,9 @@ const resourceList = (
   });
 };
 
+const resourceList = (data: Record<string, unknown>, key: ResourceListKey) =>
+  validList(data, key, isResource);
+
 export const fetchVaultResources = async (
   signal?: AbortSignal,
 ): Promise<VaultResources> => {
@@ -75,13 +86,18 @@ export const fetchVaultResources = async (
   const res = await fetch(VAULT_RESOURCES_URL, { cache: "no-cache", signal });
   if (!res.ok) throw new Error(`${VAULT_RESOURCES_URL}: HTTP ${res.status}`);
   const data: unknown = await res.json();
-  if (!data || typeof data !== "object") return EMPTY;
+  if (!data || typeof data !== "object") return EMPTY_VAULT_RESOURCES;
   const record = data as Record<string, unknown>;
   return {
     lectures: resourceList(record, "lectures"),
     roadmaps: resourceList(record, "roadmaps"),
     slides: resourceList(record, "slides"),
     instagram: resourceList(record, "instagram"),
+    featured: validList(
+      record,
+      "featured",
+      (id): id is string => typeof id === "string",
+    ),
   };
 };
 
