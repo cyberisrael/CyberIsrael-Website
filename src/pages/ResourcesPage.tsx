@@ -1,6 +1,12 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { LuInstagram, LuMap, LuNewspaper, LuPresentation, LuVideo } from "react-icons/lu";
+import {
+  LuInstagram,
+  LuMap,
+  LuNewspaper,
+  LuPresentation,
+  LuVideo,
+} from "react-icons/lu";
 import { useTheme } from "@/context/ThemeContext";
 import { articles } from "@/services/articlesData";
 import KnowledgeVault from "@/components/vault/KnowledgeVault";
@@ -29,7 +35,9 @@ const ResourcesPage: React.FC = () => {
       if (!Array.isArray(value)) return [];
       return value.filter(
         (item): item is LinkedResource =>
-          !!item && typeof item.title === "string" && typeof item.url === "string",
+          !!item &&
+          typeof item.title === "string" &&
+          typeof item.url === "string",
       );
     };
 
@@ -50,14 +58,16 @@ const ResourcesPage: React.FC = () => {
         id: "lectures",
         title: t("resources.vault.folders.lectures"),
         icon: LuVideo,
-        notes: linkedResources("resources.past_lectures").map((lecture, index) => ({
-          kind: "embed" as const,
-          id: `lecture-${index + 1}`,
-          title: lecture.title,
-          tag: t("resources.vault.tag.lecture"),
-          src: lecture.url,
-          ratio: "video" as const,
-        })),
+        notes: linkedResources("resources.past_lectures").map(
+          (lecture, index) => ({
+            kind: "embed" as const,
+            id: `lecture-${index + 1}`,
+            title: lecture.title,
+            tag: t("resources.vault.tag.lecture"),
+            src: lecture.url,
+            ratio: "video" as const,
+          }),
+        ),
       },
       {
         id: "roadmaps",
@@ -86,14 +96,16 @@ const ResourcesPage: React.FC = () => {
         id: "slides",
         title: t("resources.vault.folders.slides"),
         icon: LuPresentation,
-        notes: linkedResources("resources.slides_presentations").map((slides, index) => ({
-          kind: "embed" as const,
-          id: `slides-${index + 1}`,
-          title: slides.title,
-          tag: t("resources.vault.tag.slides"),
-          src: slides.url,
-          ratio: "video" as const,
-        })),
+        notes: linkedResources("resources.slides_presentations").map(
+          (slides, index) => ({
+            kind: "embed" as const,
+            id: `slides-${index + 1}`,
+            title: slides.title,
+            tag: t("resources.vault.tag.slides"),
+            src: slides.url,
+            ratio: "video" as const,
+          }),
+        ),
       },
       {
         id: "instagram",
