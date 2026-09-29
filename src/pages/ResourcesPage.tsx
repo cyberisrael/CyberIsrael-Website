@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   LuInstagram,
@@ -9,37 +9,38 @@ import {
 } from "react-icons/lu";
 import { useTheme } from "@/context/ThemeContext";
 import { articles } from "@/services/articlesData";
+import {
+  fetchVaultResources,
+  localize,
+  type VaultResources,
+} from "@/services/vaultResources";
 import KnowledgeVault from "@/components/vault/KnowledgeVault";
+import { useVaultStyles } from "@/components/vault/useVaultStyles";
 import type { VaultFolder } from "@/components/vault/types";
-
-interface LinkedResource {
-  title: string;
-  url: string;
-}
-
-const instagramPosts = [
-  "https://www.instagram.com/p/DXuiFBEiLtQ/",
-  "https://www.instagram.com/p/DabKNJWiCni/",
-  "https://www.instagram.com/p/DaQehYhCAYr/",
-];
 
 const ResourcesPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
+  const c = useVaultStyles();
   const isDark = theme === "dark";
+  const [resources, setResources] = useState<VaultResources | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchVaultResources(controller.signal)
+      .then(setResources)
+      .catch((err) => {
+        if (controller.signal.aborted) return;
+        console.error(err);
+        // Still show the articles, which don't depend on the file.
+        setResources({ lectures: [], roadmaps: [], slides: [], instagram: [] });
+      });
+    return () => controller.abort();
+  }, []);
 
   const folders = useMemo<VaultFolder[]>(() => {
-    /** Lectures and slides are translated arrays of `{ title, url }`; drop anything malformed. */
-    const linkedResources = (key: string): LinkedResource[] => {
-      const value = t(key, { returnObjects: true });
-      if (!Array.isArray(value)) return [];
-      return value.filter(
-        (item): item is LinkedResource =>
-          !!item &&
-          typeof item.title === "string" &&
-          typeof item.url === "string",
-      );
-    };
+    if (!resources) return [];
+    const lang = i18n.language;
 
     return [
       {
@@ -58,71 +59,59 @@ const ResourcesPage: React.FC = () => {
         id: "lectures",
         title: t("resources.vault.folders.lectures"),
         icon: LuVideo,
-        notes: linkedResources("resources.past_lectures").map(
-          (lecture, index) => ({
-            kind: "embed" as const,
-            id: `lecture-${index + 1}`,
-            title: lecture.title,
-            tag: t("resources.vault.tag.lecture"),
-            src: lecture.url,
-            ratio: "video" as const,
-          }),
-        ),
+        notes: resources.lectures.map((lecture) => ({
+          kind: "embed" as const,
+          id: lecture.id,
+          title: localize(lecture.title, lang) ?? lecture.id,
+          tag: t("resources.vault.tag.lecture"),
+          src: lecture.url,
+          ratio: "video" as const,
+        })),
       },
       {
         id: "roadmaps",
         title: t("resources.vault.folders.roadmaps"),
         icon: LuMap,
-        notes: [
-          {
-            kind: "embed",
-            id: "roadmap-zero-to-hero",
-            title: t("resources.docs_title"),
-            tag: t("resources.vault.tag.roadmap"),
-            src: "https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview",
-            ratio: "page",
-          },
-          {
-            kind: "embed",
-            id: "roadmap-gamma",
-            title: t("resources.sheets_title"),
-            tag: t("resources.vault.tag.roadmap"),
-            src: "https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0",
-            ratio: "page",
-          },
-        ],
+        notes: resources.roadmaps.map((roadmap) => ({
+          kind: "embed" as const,
+          id: roadmap.id,
+          title: localize(roadmap.title, lang) ?? roadmap.id,
+          tag: t("resources.vault.tag.roadmap"),
+          src: roadmap.url,
+          ratio: "page" as const,
+        })),
       },
       {
         id: "slides",
         title: t("resources.vault.folders.slides"),
         icon: LuPresentation,
-        notes: linkedResources("resources.slides_presentations").map(
-          (slides, index) => ({
-            kind: "embed" as const,
-            id: `slides-${index + 1}`,
-            title: slides.title,
-            tag: t("resources.vault.tag.slides"),
-            src: slides.url,
-            ratio: "video" as const,
-          }),
-        ),
+        notes: resources.slides.map((slides) => ({
+          kind: "embed" as const,
+          id: slides.id,
+          title: localize(slides.title, lang) ?? slides.id,
+          tag: t("resources.vault.tag.slides"),
+          src: slides.url,
+          ratio: "video" as const,
+        })),
       },
       {
         id: "instagram",
         title: t("resources.vault.folders.instagram"),
         icon: LuInstagram,
-        notes: instagramPosts.map((url, index) => ({
+        notes: resources.instagram.map((post, index) => ({
           kind: "instagram" as const,
-          id: `instagram-${index + 1}`,
-          title: t("resources.vault.instagram_post", { number: index + 1 }),
+          id: post.id,
+          title:
+            localize(post.title, lang) ??
+            t("resources.vault.instagram_post", { number: index + 1 }),
           tag: t("resources.vault.tag.instagram"),
-          url,
+          url: post.url,
         })),
       },
     ];
     // i18n.language re-runs this when the language switches.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t, i18n.language]);
+  }, [t, i18n.language, resources]);
 
   return (
     <div className="min-h-screen pt-24 pb-10 px-4 sm:px-6">
@@ -144,7 +133,15 @@ const ResourcesPage: React.FC = () => {
           </h1>
         </header>
 
-        <KnowledgeVault folders={folders} />
+        {/* The vault reads `?note=` once on mount, so it waits for every note to exist. */}
+        {resources ? (
+          <KnowledgeVault folders={folders} />
+        ) : (
+          <div
+            aria-busy="true"
+            className={`h-[calc(100vh-12rem)] min-h-[560px] rounded-xl border animate-pulse ${c.frame}`}
+          />
+        )}
       </div>
     </div>
   );

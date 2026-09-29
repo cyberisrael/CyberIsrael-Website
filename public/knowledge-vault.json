@@ -1,0 +1,53 @@
+{
+  "lectures": [
+    {
+      "id": "lecture-1",
+      "title": {
+        "en": "AI Malware full lecture",
+        "he": "AI Malware השיעור המלא"
+      },
+      "url": "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview"
+    }
+  ],
+  "roadmaps": [
+    {
+      "id": "roadmap-zero-to-hero",
+      "title": {
+        "en": "Zero to Hero Roadmap",
+        "he": "מפת דרכים מאפס למאה"
+      },
+      "url": "https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview"
+    },
+    {
+      "id": "roadmap-gamma",
+      "title": {
+        "en": "Roadmap for Gamma",
+        "he": "מפת דרכים עבור גאמא"
+      },
+      "url": "https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0"
+    }
+  ],
+  "slides": [
+    {
+      "id": "slides-1",
+      "title": {
+        "en": "Recommended Weekly Videos",
+        "he": "סרטונים מומלצים לשבוע"
+      },
+      "url": "https://docs.google.com/presentation/d/1W8TuB9rc-2p-nbyEIC1zIGrHahdPVe0PdggLRYINp5A/edit?slide=id.p#slide=id.p"
+    },
+    {
+      "id": "slides-2",
+      "title": {
+        "en": "Development Group",
+        "he": "קבוצת פיתוח"
+      },
+      "url": "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.p"
+    }
+  ],
+  "instagram": [
+    { "id": "instagram-1", "url": "https://www.instagram.com/p/DXuiFBEiLtQ/" },
+    { "id": "instagram-2", "url": "https://www.instagram.com/p/DabKNJWiCni/" },
+    { "id": "instagram-3", "url": "https://www.instagram.com/p/DaQehYhCAYr/" }
+  ]
+}
