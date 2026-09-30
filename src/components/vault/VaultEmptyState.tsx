@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { LuFileQuestion } from "react-icons/lu";
 import { useVaultStyles } from "./useVaultStyles";
 
-/** Shown in the pane once every tab has been closed. */
 const VaultEmptyState: React.FC = () => {
   const { t } = useTranslation();
   const c = useVaultStyles();

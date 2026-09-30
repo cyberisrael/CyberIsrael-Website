@@ -10,11 +10,11 @@ import VaultFeatured from "./VaultFeatured";
 import { useVaultStyles } from "./useVaultStyles";
 import { useVaultTabs } from "./useVaultTabs";
 import type { VaultFolder } from "./types";
+import { localize, type VaultFeaturedConfig } from "@/services/vaultResources";
 
 interface KnowledgeVaultProps {
   folders: VaultFolder[];
-  /** Note ids shown as cards above the vault, in order; unknown ids are skipped. */
-  featuredIds?: string[];
+  featured: VaultFeaturedConfig;
 }
 
 /** On phones the sidebar overlays the note instead of sitting beside it. */
@@ -32,9 +32,9 @@ const hasLinkedNote = () =>
  */
 const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({
   folders,
-  featuredIds = [],
+  featured,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const c = useVaultStyles();
   const frameRef = useRef<HTMLDivElement>(null);
   const [noteViewOpen, setNoteViewOpen] = useState(hasLinkedNote);
@@ -50,8 +50,12 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [graphOpen, setGraphOpen] = useState(isWide);
 
-  const featured = featuredIds.flatMap((id) => notesById.get(id) ?? []);
-  const featuredSet = new Set(featuredIds);
+  const lang = i18n.language;
+
+  const featuredEntries = featured.items.flatMap(
+    (id) => notesById.get(id) ?? [],
+  );
+  const featuredSet = new Set(featured.items);
 
   const handleOpenNote = (id: string) => {
     setNoteViewOpen(true);
@@ -65,19 +69,18 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({
     setGraphOpen(!graphOpen);
   };
 
-  // The cards sit above the vault, so bring the vault into view to show what was opened.
   const handleOpenFeatured = (id: string) => {
     handleOpenNote(id);
     frameRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   };
 
-  // The graph is the only view left when the note view is closed, so it can't be hidden then.
   const graphExpanded = !noteViewOpen;
 
   return (
     <>
       <VaultFeatured
-        entries={featured}
+        entries={featuredEntries}
+        description={localize(featured.description, lang)}
         activeId={noteViewOpen ? activeId : null}
         onOpenNote={handleOpenFeatured}
       />
@@ -115,6 +118,7 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({
           folders={folders}
           activeId={activeId}
           featuredIds={featuredSet}
+          featuredEmoji={featured.emoji}
           open={sidebarOpen}
           onOpenNote={handleOpenNote}
           onClose={() => setSidebarOpen(false)}
@@ -153,6 +157,7 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({
             folders={folders}
             activeId={activeId}
             featuredIds={featuredSet}
+            featuredColor={featured.graphColor}
             expanded={graphExpanded}
             sidebarOpen={sidebarOpen}
             onOpenNote={handleOpenNote}

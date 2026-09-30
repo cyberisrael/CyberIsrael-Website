@@ -140,7 +140,7 @@ const ResourcesPage: React.FC = () => {
 
         {/* The vault reads `?note=` once on mount, so it waits for every note to exist. */}
         {resources ? (
-          <KnowledgeVault folders={folders} featuredIds={resources.featured} />
+          <KnowledgeVault folders={folders} featured={resources.featured} />
         ) : (
           <div
             aria-busy="true"

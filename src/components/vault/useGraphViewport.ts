@@ -16,10 +16,7 @@ interface Size {
 
 const MIN_ZOOM = 0.3;
 const MAX_ZOOM = 2.5;
-/**
- * The first view is close to full size, so a narrow panel shows part of the graph at a
- * readable size and the rest is a drag away. The fit button zooms out further, to MIN_ZOOM.
- */
+
 const MIN_INITIAL_ZOOM = 0.9;
 /** Room kept around the graph when fitting it, for hub labels and node circles. */
 const FIT_PADDING = 48;
