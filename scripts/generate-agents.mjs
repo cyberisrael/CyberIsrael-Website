@@ -1,10 +1,6 @@
 /**
- * Builds `agents.txt`: a Markdown guide for AI agents, in the llms.txt format
- * (https://llmstxt.org) — a title, a one-line summary, then sections of links.
- *
- * The site is a client-rendered SPA, so fetching an article URL without running
- * JavaScript returns an empty shell. Each article therefore links to its raw
- * Markdown file, which is what the page itself fetches and renders.
+ * fetching an article URL without running JavaScript returns an empty shell.
+ * Each article therefore links to its raw Markdown file.
  */
 import { readArticles } from './articles-index.mjs'
 import { SITE_URL } from './generate-sitemap.mjs'
