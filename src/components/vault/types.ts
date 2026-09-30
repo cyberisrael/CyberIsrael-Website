@@ -2,12 +2,9 @@ import { IconType } from "react-icons";
 import type { Article } from "@/services/articlesData";
 
 interface NoteBase {
-  /** Stable id, also used as the `?note=` query param. */
   id: string;
   title: string;
-  /** Shown as an Obsidian-style `#tag` pill under the title. */
   tag: string;
-  /** Short blurb for featured cards and graph tooltips; articles use their excerpt instead. */
   description?: string;
 }
 
@@ -15,7 +12,6 @@ export type VaultNote =
   | (NoteBase & {
       kind: "embed";
       src: string;
-      /** `video` keeps 16:9 (lectures, slides); `page` fills the pane (docs, sheets). */
       ratio: "video" | "page";
     })
   | (NoteBase & { kind: "article"; article: Article })

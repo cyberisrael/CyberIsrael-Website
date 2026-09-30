@@ -8,8 +8,8 @@ interface VaultFolderGroupProps {
   folder: VaultFolder;
   collapsed: boolean;
   activeId: string | null;
-  /** Notes pinned above the vault; they get a star after their title. */
   featuredIds: Set<string>;
+  featuredEmoji: string;
   onToggle: () => void;
   onOpenNote: (id: string) => void;
 }
@@ -20,6 +20,7 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
   collapsed,
   activeId,
   featuredIds,
+  featuredEmoji,
   onToggle,
   onOpenNote,
 }) => {
@@ -73,7 +74,7 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
                       title={t("resources.vault.featured")}
                       className="flex-shrink-0 text-xs"
                     >
-                      ⭐
+                      {featuredEmoji}
                     </span>
                   )}
                 </button>

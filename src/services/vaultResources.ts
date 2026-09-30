@@ -1,32 +1,35 @@
-/**
- * The Knowledge Vault's linked resources (lectures, roadmaps, slides, Instagram posts) live in
- * `public/knowledge-vault.json` and are fetched at runtime, so editing them needs no code change
- * or rebuild. Articles are not listed there; they come from the articles index.
- */
-
 export const VAULT_RESOURCES_URL = "/knowledge-vault.json";
 
 /** Either one string for every language, or one per language code (`en`, `he`). */
 export type LocalizedText = string | Record<string, string>;
 
 export interface VaultResource {
-  /** Stable id, also used as the `?note=` query param, so keep it unchanged once published. */
   id: string;
   /** Optional for Instagram posts, which fall back to "Instagram post #n". */
   title?: LocalizedText;
-  /** Short blurb for the featured strip and graph tooltip; falls back to the link's host. */
   description?: LocalizedText;
   url: string;
 }
 
 type ResourceListKey = "lectures" | "roadmaps" | "slides" | "instagram";
 
+export interface VaultFeaturedConfig {
+  emoji: string;
+  graphColor: string;
+  description?: LocalizedText;
+  /** Note ids in display order; an article is `article-<slug>`. */
+  items: string[];
+}
+
 export type VaultResources = Record<ResourceListKey, VaultResource[]> & {
-  /**
-   * Note ids pinned above the vault, in display order. Any note can be listed, including an
-   * article as `article-<slug>`; ids that match nothing are skipped.
-   */
-  featured: string[];
+  featured: VaultFeaturedConfig;
+};
+
+const DEFAULT_FEATURED: VaultFeaturedConfig = {
+  emoji: "⭐",
+  graphColor: "#fbbf24",
+  description: "Recommended",
+  items: [],
 };
 
 export const EMPTY_VAULT_RESOURCES: VaultResources = {
@@ -34,7 +37,7 @@ export const EMPTY_VAULT_RESOURCES: VaultResources = {
   roadmaps: [],
   slides: [],
   instagram: [],
-  featured: [],
+  featured: DEFAULT_FEATURED,
 };
 
 const isLocalizedText = (value: unknown): value is LocalizedText =>
@@ -57,7 +60,7 @@ const isResource = (value: unknown): value is VaultResource => {
 /** Keeps the well-formed entries of a list and warns about the rest, so one typo can't blank the page. */
 const validList = <T>(
   data: Record<string, unknown>,
-  key: keyof VaultResources,
+  key: string,
   isValid: (item: unknown) => item is T,
 ): T[] => {
   const list = data[key];
@@ -79,6 +82,46 @@ const validList = <T>(
 const resourceList = (data: Record<string, unknown>, key: ResourceListKey) =>
   validList(data, key, isResource);
 
+const isId = (id: unknown): id is string => typeof id === "string";
+
+const featuredConfig = (value: unknown): VaultFeaturedConfig => {
+  if (value === undefined) return DEFAULT_FEATURED;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    console.warn(
+      `${VAULT_RESOURCES_URL}: "featured" should be { emoji, graphColor, items }`,
+    );
+    return DEFAULT_FEATURED;
+  }
+  const { emoji, graphColor, description } = value as Record<string, unknown>;
+
+  const validEmoji = typeof emoji === "string" && emoji.trim() !== "";
+  if (emoji !== undefined && !validEmoji)
+    console.warn(`${VAULT_RESOURCES_URL}: ignoring invalid "featured.emoji"`);
+
+  const validColor =
+    typeof graphColor === "string" && CSS.supports("color", graphColor);
+  if (graphColor !== undefined && !validColor)
+    console.warn(
+      `${VAULT_RESOURCES_URL}: ignoring invalid "featured.graphColor"`,
+      graphColor,
+    );
+
+  const validDescription =
+    description === undefined || isLocalizedText(description);
+  if (description !== undefined && !validDescription)
+    console.warn(
+      `${VAULT_RESOURCES_URL}: ignoring invalid "featured.description"`,
+      description,
+    );
+
+  return {
+    emoji: validEmoji ? emoji.trim() : DEFAULT_FEATURED.emoji,
+    graphColor: validColor ? graphColor : DEFAULT_FEATURED.graphColor,
+    description: validDescription ? description : DEFAULT_FEATURED.description,
+    items: validList(value as Record<string, unknown>, "items", isId),
+  };
+};
+
 export const fetchVaultResources = async (
   signal?: AbortSignal,
 ): Promise<VaultResources> => {
@@ -93,11 +136,7 @@ export const fetchVaultResources = async (
     roadmaps: resourceList(record, "roadmaps"),
     slides: resourceList(record, "slides"),
     instagram: resourceList(record, "instagram"),
-    featured: validList(
-      record,
-      "featured",
-      (id): id is string => typeof id === "string",
-    ),
+    featured: featuredConfig(record.featured),
   };
 };
 

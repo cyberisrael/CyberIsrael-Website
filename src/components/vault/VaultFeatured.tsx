@@ -1,19 +1,19 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { LuStar } from "react-icons/lu";
 import { useVaultStyles } from "./useVaultStyles";
 import { noteDetail } from "./noteDetail";
 import type { VaultEntry } from "./useVaultTabs";
 
 interface VaultFeaturedProps {
   entries: VaultEntry[];
+  description: string | undefined;
   activeId: string | null;
   onOpenNote: (id: string) => void;
 }
 
-/** Pinned notes above the vault, as a row of cards laid out like the graph's hover tooltip. */
 const VaultFeatured: React.FC<VaultFeaturedProps> = ({
   entries,
+  description,
   activeId,
   onOpenNote,
 }) => {
@@ -28,8 +28,7 @@ const VaultFeatured: React.FC<VaultFeaturedProps> = ({
         id="vault-featured-title"
         className={`flex items-center gap-1.5 mb-2 font-display text-xs tracking-widest uppercase ${c.muted}`}
       >
-        <LuStar size={12} />
-        {t("resources.vault.featured")}
+        {description}
       </h2>
 
       <ul className="flex gap-3 overflow-x-auto pb-2 snap-x">

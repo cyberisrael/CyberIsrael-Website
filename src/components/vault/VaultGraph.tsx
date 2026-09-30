@@ -19,8 +19,9 @@ import type { VaultFolder } from "./types";
 interface VaultGraphProps {
   folders: VaultFolder[];
   activeId: string | null;
-  /** Notes pinned above the vault; their nodes glow gold. */
+  /** Notes pinned above the vault; their nodes are drawn and glow in `featuredColor`. */
   featuredIds: Set<string>;
+  featuredColor: string;
   /** Fills the pane in place of the note view instead of sitting beside it. */
   expanded: boolean;
   sidebarOpen: boolean;
@@ -39,6 +40,7 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
   folders,
   activeId,
   featuredIds,
+  featuredColor,
   expanded,
   sidebarOpen,
   onOpenNote,
@@ -97,6 +99,8 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
 
   return (
     <aside
+      // Read by `graphNodeFeatured`, since the colour comes from the config file at runtime.
+      style={{ "--vault-featured": featuredColor } as React.CSSProperties}
       className={`flex flex-col ${
         expanded
           ? `flex-1 min-w-0 ${c.pane}`

@@ -26,7 +26,7 @@ const darkStyles = {
   graphNodeActive:
     "bg-cyber-card border-cyber-green text-cyber-green shadow-[0_0_14px_rgba(0,255,136,0.45)]",
   graphNodeFeatured:
-    "bg-cyber-card border-amber-400 text-amber-300 shadow-[0_0_14px_rgba(251,191,36,0.55)] hover:border-amber-300 hover:text-amber-200",
+    "bg-cyber-card border-[color:var(--vault-featured)] text-[color:var(--vault-featured)] shadow-[0_0_14px_color-mix(in_srgb,var(--vault-featured)_55%,transparent)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--vault-featured)_80%,transparent)]",
   graphHub:
     "bg-cyber-dark border-cyber-green/60 text-cyber-green shadow-[0_0_18px_rgba(0,255,136,0.18)]",
   tooltip: "bg-cyber-dark/95 border-cyber-border text-slate-300",
@@ -64,7 +64,7 @@ const lightStyles: typeof darkStyles = {
   graphNodeActive:
     "bg-white border-light-blue text-light-blue shadow-[0_0_12px_rgba(37,99,235,0.35)]",
   graphNodeFeatured:
-    "bg-white border-amber-500 text-amber-600 shadow-[0_0_12px_rgba(245,158,11,0.55)] hover:border-amber-400 hover:text-amber-500",
+    "bg-white border-[color:var(--vault-featured)] text-[color:var(--vault-featured)] shadow-[0_0_12px_color-mix(in_srgb,var(--vault-featured)_55%,transparent)] hover:shadow-[0_0_18px_color-mix(in_srgb,var(--vault-featured)_80%,transparent)]",
   graphHub: "bg-light-bg border-light-blue/60 text-light-blue shadow-sm",
   tooltip: "bg-white/95 border-light-border text-light-text shadow-glass-light",
   featuredCard:
@@ -78,7 +78,6 @@ const lightStyles: typeof darkStyles = {
 
 export type VaultStyles = typeof darkStyles;
 
-/** Tailwind classes shared by the vault's pieces, picked for the current theme. */
 export const useVaultStyles = (): VaultStyles => {
   const { theme } = useTheme();
   return theme === "dark" ? darkStyles : lightStyles;
