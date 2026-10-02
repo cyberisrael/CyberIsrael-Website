@@ -4,13 +4,17 @@ import { join } from 'node:path'
 const ROUTES_PATH = join('src', 'siteRoutes.json')
 
 /**
- * The site's routes, shared by App.tsx, the sitemap and agents.txt.
+ * The site's routes, shared by App.tsx, the navbar and footer, the sitemap and agents.txt.
  * Fails loudly on a route the app could not render or the sitemap could not list.
  */
 export function readSiteRoutes(root = process.cwd()) {
   const routes = JSON.parse(readFileSync(join(root, ROUTES_PATH), 'utf8'))
+  const navLabels = ['en', 'he'].map((lang) => {
+    const file = join('src', 'translations', lang, 'index.ts')
+    return { file, block: readFileSync(join(root, file), 'utf8').match(/\bnav:\s*\{([^}]*)\}/)?.[1] ?? '' }
+  })
 
-  for (const { path, page, indexed } of routes) {
+  for (const { path, page, nav, indexed } of routes) {
     if (!path.startsWith('/')) {
       throw new Error(`${ROUTES_PATH}: path "${path}" must start with "/"`)
     }
@@ -19,6 +23,14 @@ export function readSiteRoutes(root = process.cwd()) {
     }
     if (indexed && path.includes(':')) {
       throw new Error(`${ROUTES_PATH}: "${path}" has a parameter, so it cannot be indexed`)
+    }
+    if (nav && path.includes(':')) {
+      throw new Error(`${ROUTES_PATH}: "${path}" has a parameter, so it cannot be a nav link`)
+    }
+    for (const { file, block } of nav ? navLabels : []) {
+      if (!new RegExp(`\\b${nav}:`).test(block)) {
+        throw new Error(`${ROUTES_PATH}: "${path}" uses nav.${nav}, which ${file} does not define`)
+      }
     }
   }
 

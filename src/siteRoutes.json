@@ -2,6 +2,7 @@
   {
     "path": "/",
     "page": "HomePage",
+    "nav": "home",
     "indexed": {
       "title": "Home",
       "description": "About the community, its values, events and how to join",
@@ -12,6 +13,7 @@
   {
     "path": "/articles",
     "page": "ArticlesPage",
+    "nav": "articles",
     "indexed": {
       "title": "Articles",
       "description": "Index of all community articles",
@@ -26,6 +28,7 @@
   {
     "path": "/impact",
     "page": "ImpactPage",
+    "nav": "impact",
     "indexed": {
       "title": "Impact",
       "description": "What the community has built and achieved",
@@ -36,6 +39,7 @@
   {
     "path": "/collaborate",
     "page": "CollaboratePage",
+    "nav": "collaborate",
     "indexed": {
       "title": "Collaborate",
       "description": "Partnership and guest speaker enquiries",
