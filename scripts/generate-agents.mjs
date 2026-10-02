@@ -4,12 +4,16 @@
  */
 import { readArticles } from './articles-index.mjs'
 import { SITE_URL } from './generate-sitemap.mjs'
+import { readIndexedRoutes } from './site-routes.mjs'
 
 /**
  * @param {string} root project root
  * @returns {string} the agents.txt Markdown
  */
 export function buildAgentsTxt(root = process.cwd()) {
+  const pages = readIndexedRoutes(root).map(({ path, indexed }) =>
+    `- [${indexed.title}](${SITE_URL}${path}): ${indexed.description}`
+  )
   const articles = readArticles(root).map(({ href, title, excerpt, language }) =>
     `- [${title}](${SITE_URL}/articles/${href}/${href}.md): ${excerpt} (${language})`
   )
@@ -24,10 +28,7 @@ frontmatter (title, category, tags, date) followed by the article body.
 
 ## Pages
 
-- [Home](${SITE_URL}/): About the community, its values, events and how to join
-- [Articles](${SITE_URL}/articles): Index of all community articles
-- [Impact](${SITE_URL}/impact): What the community has built and achieved
-- [Collaborate](${SITE_URL}/collaborate): Partnership and guest speaker enquiries
+${pages.join('\n')}
 
 ## Articles
 
