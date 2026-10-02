@@ -1,0 +1,54 @@
+[
+  {
+    "path": "/",
+    "page": "HomePage",
+    "indexed": {
+      "title": "Home",
+      "description": "About the community, its values, events and how to join",
+      "changefreq": "weekly",
+      "priority": 1.0
+    }
+  },
+  {
+    "path": "/articles",
+    "page": "ArticlesPage",
+    "indexed": {
+      "title": "Articles",
+      "description": "Index of all community articles",
+      "changefreq": "weekly",
+      "priority": 0.9
+    }
+  },
+  {
+    "path": "/articles/:slug",
+    "page": "ArticlePage"
+  },
+  {
+    "path": "/impact",
+    "page": "ImpactPage",
+    "indexed": {
+      "title": "Impact",
+      "description": "What the community has built and achieved",
+      "changefreq": "monthly",
+      "priority": 0.7
+    }
+  },
+  {
+    "path": "/collaborate",
+    "page": "CollaboratePage",
+    "indexed": {
+      "title": "Collaborate",
+      "description": "Partnership and guest speaker enquiries",
+      "changefreq": "monthly",
+      "priority": 0.7
+    }
+  },
+  {
+    "path": "/coming-soon",
+    "page": "ComingSoonPage"
+  },
+  {
+    "path": "/coming-soon/:name",
+    "page": "ComingSoonPage"
+  }
+]
