@@ -3,9 +3,10 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import articles from './scripts/vite-plugin-articles.mjs'
+import generatedFiles from './scripts/vite-plugin-generated-files.mjs'
 
 export default defineConfig({
-  plugins: [react(), cloudflare(), articles()],
+  plugins: [react(), cloudflare(), articles(), generatedFiles()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

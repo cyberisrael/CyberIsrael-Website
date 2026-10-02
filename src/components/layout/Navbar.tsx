@@ -7,6 +7,7 @@ import Logo from '@/components/ui/Logo'
 import { useTheme } from '@/context/ThemeContext'
 import { useLang } from '@/context/LangContext'
 import { socialLinks } from '@/services/socialLinks'
+import { navLinks as navRoutes } from '@/services/navLinks'
 
 
 const Navbar: React.FC = () => {
@@ -27,12 +28,7 @@ const Navbar: React.FC = () => {
     setMobileOpen(false)
   }, [location])
 
-  const navLinks = [
-    { to: '/', label: t('nav.home') },
-    { to: '/articles', label: t('nav.articles') },
-    { to: '/impact', label: t('nav.impact') },
-    { to: '/collaborate', label: t('nav.collaborate') },
-  ]
+  const navLinks = navRoutes.map(({ to, labelKey }) => ({ to, label: t(labelKey) }))
 
   const isActive = (path: string) =>
     path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)
