@@ -1,0 +1,5 @@
+# Without a charset, browsers decode these as the reader's locale default (Windows-1255 on Hebrew systems), garbling the Hebrew.
+/*.txt
+  Content-Type: text/plain; charset=utf-8
+/*.md
+  Content-Type: text/markdown; charset=utf-8
