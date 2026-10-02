@@ -160,6 +160,11 @@ const he = {
     min_read: 'דקות קריאה',
     featured: 'מומלץ',
     by: 'מאת',
+    filter_title: 'סינון לפי נושא',
+    filter_clear: 'ניקוי סינון',
+    filter_search_placeholder: 'חיפוש נושא…',
+    filter_no_topics: 'לא נמצאו נושאים מתאימים',
+    no_results: 'לא נמצאו מאמרים בנושאים שנבחרו.',
     categories,
   },
   resources: {
@@ -328,6 +333,25 @@ const he = {
   lang: {
     en: "English",
     he: "עברית",
+  },
+  accessibility: {
+    open: "אפשרויות נגישות",
+    title: "הגדרות נגישות",
+    close: "סגור",
+    text_size: "גודל טקסט",
+    size_small: "קטן",
+    size_normal: "רגיל",
+    size_large: "גדול",
+    size_xlarge: "ענק",
+    contrast: "ניגודיות וצבע",
+    contrast_default: "ברירת מחדל",
+    contrast_grayscale: "גווני אפור",
+    contrast_high: "ניגודיות גבוהה",
+    adjustments: "התאמות נוספות",
+    highlight_links: "הדגשת קישורים",
+    reduce_motion: "עצירת אנימציות",
+    readable_font: "גופן קריא",
+    reset: "איפוס הגדרות",
   },
 };
 

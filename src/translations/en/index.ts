@@ -162,6 +162,11 @@ const en = {
     min_read: 'min read',
     featured: 'Featured',
     by: 'By',
+    filter_title: 'Filter by topic',
+    filter_clear: 'Clear filters',
+    filter_search_placeholder: 'Search topics…',
+    filter_no_topics: 'No matching topics',
+    no_results: 'No articles match the selected topics.',
     categories,
   },
   resources: {
@@ -332,6 +337,25 @@ const en = {
   lang: {
     en: "English",
     he: "עברית",
+  },
+  accessibility: {
+    open: "Accessibility options",
+    title: "Accessibility Settings",
+    close: "Close",
+    text_size: "Text Size",
+    size_small: "Small",
+    size_normal: "Normal",
+    size_large: "Large",
+    size_xlarge: "Huge",
+    contrast: "Contrast & Colors",
+    contrast_default: "Default",
+    contrast_grayscale: "Grayscale",
+    contrast_high: "High Contrast",
+    adjustments: "Additional Adjustments",
+    highlight_links: "Highlight Links",
+    reduce_motion: "Stop Animations",
+    readable_font: "Readable Font",
+    reset: "Reset Settings",
   },
 };
 
