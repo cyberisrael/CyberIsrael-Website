@@ -179,6 +179,8 @@ const en = {
         lectures: "Lectures",
         roadmaps: "Roadmaps",
         slides: "Presentations",
+        documents: "Documents",
+        spreadsheets: "Spreadsheets",
         instagram: "Instagram",
       },
       tag: {
@@ -186,6 +188,8 @@ const en = {
         lecture: "lecture",
         roadmap: "roadmap",
         slides: "slides",
+        document: "document",
+        spreadsheet: "spreadsheet",
         instagram: "instagram",
       },
       from: "From",

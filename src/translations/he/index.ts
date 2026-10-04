@@ -177,6 +177,8 @@ const he = {
         lectures: "הרצאות",
         roadmaps: "מפות דרכים",
         slides: "מצגות",
+        documents: "מסמכים",
+        spreadsheets: "גיליונות",
         instagram: "אינסטגרם",
       },
       tag: {
@@ -184,6 +186,8 @@ const he = {
         lecture: "הרצאה",
         roadmap: "מפת_דרכים",
         slides: "מצגת",
+        document: "מסמך",
+        spreadsheet: "גיליון",
         instagram: "אינסטגרם",
       },
       from: "מתוך",

@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  LuFileText,
   LuInstagram,
   LuMap,
   LuNewspaper,
   LuPresentation,
+  LuSheet,
   LuVideo,
 } from "react-icons/lu";
 import { useTheme } from "@/context/ThemeContext";
@@ -45,6 +47,16 @@ const NOTE_TYPE_CONFIG: Record<
     folderId: "slides",
     icon: LuPresentation,
     embed: { kind: "embed", ratio: "video" },
+  },
+  document: {
+    folderId: "documents",
+    icon: LuFileText,
+    embed: { kind: "embed", ratio: "page" },
+  },
+  spreadsheet: {
+    folderId: "spreadsheets",
+    icon: LuSheet,
+    embed: { kind: "embed", ratio: "page" },
   },
   instagram: {
     folderId: "instagram",
@@ -126,7 +138,11 @@ const ResourcesPage: React.FC = () => {
       };
     });
 
-    return [articlesFolder, ...typeFolders];
+    // A type with nothing in the file yet would only be an empty sun in the graph.
+    return [
+      articlesFolder,
+      ...typeFolders.filter((folder) => folder.notes.length > 0),
+    ];
     // i18n.language re-runs this when the language switches.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t, i18n.language, resources]);

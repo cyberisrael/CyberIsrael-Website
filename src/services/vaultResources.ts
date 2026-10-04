@@ -8,6 +8,8 @@ export const VAULT_NOTE_TYPES = [
   "lecture",
   "roadmap",
   "slides",
+  "document",
+  "spreadsheet",
   "instagram",
 ] as const;
 
@@ -15,6 +17,7 @@ export type VaultNoteType = (typeof VAULT_NOTE_TYPES)[number];
 
 export interface VaultResource {
   id: string;
+  /** Optional in the file when it can be deduced from `url` (see `typeFromUrl`); always set once fetched. */
   type: VaultNoteType;
   /** Optional for Instagram posts, which fall back to "Instagram post #n". */
   title?: LocalizedText;
@@ -53,7 +56,9 @@ const isLocalizedText = (value: unknown): value is LocalizedText =>
     typeof value === "object" &&
     Object.values(value).every((text) => typeof text === "string"));
 
-const isResource = (value: unknown): value is VaultResource => {
+type RawResource = Omit<VaultResource, "type"> & { type?: VaultNoteType };
+
+const isResource = (value: unknown): value is RawResource => {
   if (!value || typeof value !== "object") return false;
   const { id, type, title, description, url } = value as Record<
     string,
@@ -61,7 +66,7 @@ const isResource = (value: unknown): value is VaultResource => {
   >;
   return (
     typeof id === "string" &&
-    VAULT_NOTE_TYPES.includes(type as VaultNoteType) &&
+    (type === undefined || VAULT_NOTE_TYPES.includes(type as VaultNoteType)) &&
     typeof url === "string" &&
     (title === undefined || isLocalizedText(title)) &&
     (description === undefined || isLocalizedText(description))
@@ -89,6 +94,38 @@ const validList = <T>(
     return false;
   });
 };
+
+const GOOGLE_DOCS_TYPES: Record<string, VaultNoteType> = {
+  presentation: "slides",
+  document: "document",
+  spreadsheets: "spreadsheet",
+};
+
+/** The type a link's host implies, for notes that leave `type` out. */
+const typeFromUrl = (url: string): VaultNoteType | undefined => {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return undefined;
+  }
+  const host = parsed.hostname.replace(/^www\./, "");
+  if (host === "instagram.com") return "instagram";
+  if (host === "docs.google.com")
+    return GOOGLE_DOCS_TYPES[parsed.pathname.split("/")[1]];
+  return undefined;
+};
+
+/** An explicit `type` always wins; otherwise the URL decides, and a note neither settles is left out. */
+const withType = (notes: RawResource[]): VaultResource[] =>
+  notes.flatMap((note) => {
+    const type = note.type ?? typeFromUrl(note.url);
+    if (type) return [{ ...note, type }];
+    console.warn(
+      `${VAULT_RESOURCES_URL}: skipping "${note.id}", which has no "type" and a URL that doesn't imply one`,
+    );
+    return [];
+  });
 
 const isId = (id: unknown): id is string => typeof id === "string";
 
@@ -140,7 +177,7 @@ export const fetchVaultResources = async (
   if (!data || typeof data !== "object") return EMPTY_VAULT_RESOURCES;
   const record = data as Record<string, unknown>;
   return {
-    notes: validList(record, "notes", isResource),
+    notes: withType(validList(record, "notes", isResource)),
     featured: featuredConfig(record.featured),
   };
 };
