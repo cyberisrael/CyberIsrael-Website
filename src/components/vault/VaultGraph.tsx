@@ -5,6 +5,7 @@ import { LuMaximize, LuMinus, LuPlus } from "react-icons/lu";
 import GraphHeader from "./GraphHeader";
 import GraphScene from "./GraphScene";
 import GraphTooltip from "./GraphTooltip";
+import FeaturedHoverEffect from "./FeaturedHoverEffect";
 import { useVaultStyles } from "./useVaultStyles";
 import { layoutBounds, simulateLayout } from "./graphLayout";
 import { useGraphViewport } from "./useGraphViewport";
@@ -97,6 +98,19 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
       >
         {size.width > 0 && (
           <>
+            {/* Before the scene, so the effect sits behind the nodes and edges. */}
+            <AnimatePresence>
+              {hovered?.kind === "note" && featuredIds.has(hovered.id) && (
+                <FeaturedHoverEffect
+                  key={hovered.id}
+                  node={hovered}
+                  view={view}
+                  canvasWidth={size.width}
+                  canvasHeight={size.height}
+                />
+              )}
+            </AnimatePresence>
+
             <GraphScene
               layout={layout}
               nodesById={nodesById}
