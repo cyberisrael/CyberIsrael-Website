@@ -187,20 +187,24 @@ const en = {
     video_desc: "CTF competition highlights and community moments.",
     timeline_list: [
       {
-        title: "Community Launch",
-        desc: "A WhatsApp group founded by Omer to help students prepare for technological military roles (Gama Cyber), built around shared learning and guidance.",
+        title: "The Community Begins",
+        desc: "Omer started giving lectures at various schools to help students prepare for technological roles in their military service. As part of the lectures, a WhatsApp group was founded around shared learning and guidance.",
       },
       {
-        title: "Early Growth (100+ Members)",
+        title: "Early Growth (200+ Members)",
         desc: "The community quickly grew as students joined to study cybersecurity and programming together.",
       },
       {
-        title: "School Outreach Begins",
-        desc: "Omer and Gal which joined to help Omer, started giving short lectures in schools, helping students prepare for advanced tech and military tracks.",
+        title: "Many Pre-Enlistees Accepted to Tech Units",
+        desc: "Many pre-enlistees were accepted to various technological units thanks to the WhatsApp group and the lectures.",
       },
       {
-        title: "Zero-to-Hero Roadmap",
-        desc: "Ido joined and created a structured cybersecurity roadmap with weekly challenges, resources, and learning paths.",
+        title: "Renewed Growth",
+        desc: "Gal, who had attended Omer's lecture a year earlier, took inspiration and started giving short lectures at his school, helping students prepare for technological military tracks. Gal also opened a WhatsApp group and added Omer to it.",
+      },
+      {
+        title: "Ido Joins",
+        desc: "Ido joined the group's management and created a structured cybersecurity roadmap with weekly challenges, resources, and learning paths.",
       },
       {
         title: "500 Members",
@@ -212,7 +216,7 @@ const en = {
       },
       {
         title: "Community Leadership Expansion",
-        desc: "Amichay and Noam joined as managers, helping run beginner groups and support new learners.",
+        desc: "Amichay and Noam joined as managers, helping run beginner groups, weekly puzzles and videos, and support new learners.",
       },
       {
         title: "Bar-Ilan Conference",
@@ -232,7 +236,7 @@ const en = {
       },
       {
         title: "Content Platforms Launch",
-        desc: "CyberIsrael launched Instagram and TikTok, posting weekly cybersecurity content on malware, cryptography, and more.",
+        desc: "CyberIsrael launched Instagram and TikTok, posting weekly cybersecurity content on a variety of topics.",
       },
       {
         title: "Community Reaches 1,000",
@@ -249,6 +253,14 @@ const en = {
       {
         title: "Online Lecture Series",
         desc: "Launched structured online lectures covering cybersecurity topics and career guidance, including AI Malware by Chen Shiri.",
+      },
+      {
+        title: "Official Website Launch",
+        desc: "CyberIsrael's official website launched, bringing all the information about the community into one place: technical articles, events, past highlights, and more!",
+      },
+      {
+        title: "Community Team Expansion",
+        desc: "Amit and Tal joined to expand the website's development, and Reut joined to grow our social media output.",
       },
     ],
     community_members: "Active Community Members & Growing",
