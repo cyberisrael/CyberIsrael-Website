@@ -119,6 +119,9 @@ const GraphScene: React.FC<GraphSceneProps> = ({
                   onClick={() => onOpenNote(node.note.id)}
                   aria-label={node.note.title}
                   aria-current={node.note.id === activeId || undefined}
+                  style={
+                    { "--vault-type": node.folder.color } as React.CSSProperties
+                  }
                   className={`grid place-items-center w-8 h-8 rounded-full border transition-colors ${
                     node.note.id === activeId
                       ? c.graphNodeActive

@@ -21,5 +21,7 @@ export interface VaultFolder {
   id: string;
   title: string;
   icon: IconType;
+  /** Any CSS colour; tints the folder's notes (their halo in the graph, their text in the sidebar). */
+  color: string;
   notes: VaultNote[];
 }

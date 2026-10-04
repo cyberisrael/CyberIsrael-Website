@@ -8,8 +8,9 @@ const darkStyles = {
   tabBar: "bg-cyber-dark border-cyber-border/60",
   tabActive: "bg-cyber-card text-white",
   tabIdle: "text-slate-500 hover:text-slate-300 hover:bg-cyber-card/50",
-  item: "text-slate-400 hover:bg-cyber-card hover:text-white",
-  itemActive: "bg-cyber-card text-white",
+  // `--vault-type` is the note's folder colour, set on the element by the component.
+  item: "text-[color:color-mix(in_srgb,var(--vault-type)_80%,#94a3b8)] hover:bg-cyber-card hover:text-[color:var(--vault-type)]",
+  itemActive: "bg-cyber-card text-[color:var(--vault-type)]",
   folder: "text-slate-300 hover:bg-cyber-card/60",
   icon: "text-slate-400 hover:text-white hover:bg-cyber-card",
   input:
@@ -22,7 +23,7 @@ const darkStyles = {
   graphEdge: "stroke-cyber-border",
   graphEdgeActive: "stroke-cyber-green",
   graphNode:
-    "bg-cyber-card border-cyber-border text-slate-300 hover:border-cyber-green hover:text-cyber-green",
+    "bg-cyber-card border-[color:color-mix(in_srgb,var(--vault-type)_55%,transparent)] text-slate-300 shadow-[0_0_10px_color-mix(in_srgb,var(--vault-type)_40%,transparent)] hover:border-[color:var(--vault-type)] hover:text-[color:var(--vault-type)] hover:shadow-[0_0_16px_color-mix(in_srgb,var(--vault-type)_70%,transparent)]",
   graphNodeActive:
     "bg-cyber-card border-cyber-green text-cyber-green shadow-[0_0_14px_rgba(0,255,136,0.45)]",
   graphNodeFeatured:
@@ -46,8 +47,10 @@ const lightStyles: typeof darkStyles = {
   tabBar: "bg-light-bg border-light-border",
   tabActive: "bg-white text-light-text",
   tabIdle: "text-light-muted hover:text-light-text hover:bg-white/60",
-  item: "text-light-muted hover:bg-white hover:text-light-text",
-  itemActive: "bg-white text-light-text shadow-sm",
+  // Darkened so bright folder colours (yellow, pink) stay readable on white.
+  item: "text-[color:color-mix(in_srgb,var(--vault-type)_60%,#1e293b)] hover:bg-white",
+  itemActive:
+    "bg-white text-[color:color-mix(in_srgb,var(--vault-type)_70%,#1e293b)] shadow-sm",
   folder: "text-light-text hover:bg-white/70",
   icon: "text-light-muted hover:text-light-text hover:bg-white",
   input:
@@ -60,7 +63,7 @@ const lightStyles: typeof darkStyles = {
   graphEdge: "stroke-light-border",
   graphEdgeActive: "stroke-light-blue",
   graphNode:
-    "bg-white border-light-border text-light-muted hover:border-light-blue hover:text-light-blue",
+    "bg-white border-[color:color-mix(in_srgb,var(--vault-type)_60%,transparent)] text-light-muted shadow-[0_0_10px_color-mix(in_srgb,var(--vault-type)_45%,transparent)] hover:border-[color:var(--vault-type)] hover:text-[color:color-mix(in_srgb,var(--vault-type)_70%,#1e293b)] hover:shadow-[0_0_14px_color-mix(in_srgb,var(--vault-type)_70%,transparent)]",
   graphNodeActive:
     "bg-white border-light-blue text-light-blue shadow-[0_0_12px_rgba(37,99,235,0.35)]",
   graphNodeFeatured:

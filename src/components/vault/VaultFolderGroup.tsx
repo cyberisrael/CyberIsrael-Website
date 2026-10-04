@@ -49,7 +49,10 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
       </button>
 
       {!collapsed && (
-        <ul className={`ms-[15px] ps-2 border-s ${c.guide}`}>
+        <ul
+          className={`ms-[15px] ps-2 border-s ${c.guide}`}
+          style={{ "--vault-type": folder.color } as React.CSSProperties}
+        >
           {folder.notes.map((note) => {
             const isActive = note.id === activeId;
             return (

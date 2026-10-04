@@ -24,43 +24,55 @@ import KnowledgeVault from "@/components/vault/KnowledgeVault";
 import { useVaultStyles } from "@/components/vault/useVaultStyles";
 import type { VaultFolder } from "@/components/vault/types";
 
-/** How each note type is shown: its folder, icon and how it embeds. The tag is `resources.vault.tag.<type>`. */
+const ARTICLES_COLOR = "#22d3ee";
+
+/**
+ * How each note type is shown: its folder, icon, colour (the note's halo in the graph and its
+ * text in the sidebar) and how it embeds. The tag is `resources.vault.tag.<type>`.
+ */
 const NOTE_TYPE_CONFIG: Record<
   VaultNoteType,
   {
     folderId: string;
     icon: IconType;
+    color: string;
     embed: { kind: "embed"; ratio: "video" | "page" } | { kind: "instagram" };
   }
 > = {
   lecture: {
     folderId: "lectures",
     icon: LuVideo,
+    color: "#fb923c",
     embed: { kind: "embed", ratio: "video" },
   },
   roadmap: {
     folderId: "roadmaps",
     icon: LuMap,
+    color: "#a78bfa",
     embed: { kind: "embed", ratio: "page" },
   },
   slides: {
     folderId: "slides",
     icon: LuPresentation,
+    color: "#facc15",
     embed: { kind: "embed", ratio: "video" },
   },
   document: {
     folderId: "documents",
     icon: LuFileText,
+    color: "#60a5fa",
     embed: { kind: "embed", ratio: "page" },
   },
   spreadsheet: {
     folderId: "spreadsheets",
     icon: LuSheet,
+    color: "#4ade80",
     embed: { kind: "embed", ratio: "page" },
   },
   instagram: {
     folderId: "instagram",
     icon: LuInstagram,
+    color: "#f472b6",
     embed: { kind: "instagram" },
   },
 };
@@ -93,6 +105,7 @@ const ResourcesPage: React.FC = () => {
       id: "articles",
       title: t("resources.vault.folders.articles"),
       icon: LuNewspaper,
+      color: ARTICLES_COLOR,
       notes: articles.map((article) => ({
         kind: "article" as const,
         id: `article-${article.href}`,
@@ -103,12 +116,13 @@ const ResourcesPage: React.FC = () => {
     };
 
     const typeFolders = VAULT_NOTE_TYPES.map((type): VaultFolder => {
-      const { folderId, icon, embed } = NOTE_TYPE_CONFIG[type];
+      const { folderId, icon, color, embed } = NOTE_TYPE_CONFIG[type];
       const tag = t(`resources.vault.tag.${type}`);
       return {
         id: folderId,
         title: t(`resources.vault.folders.${folderId}`),
         icon,
+        color,
         notes: resources.notes
           .filter((note) => note.type === type)
           .map((note, index) => {
