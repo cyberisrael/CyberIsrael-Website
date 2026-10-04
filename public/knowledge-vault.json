@@ -13,9 +13,10 @@
       "slides-1"
     ]
   },
-  "lectures": [
+  "notes": [
     {
       "id": "lecture-1",
+      "type": "lecture",
       "title": {
         "en": "AI Malware full lecture",
         "he": "AI Malware השיעור המלא"
@@ -25,11 +26,10 @@
         "he": "ההקלטה המלאה של ההרצאה שלנו על נוזקות מבוססות AI."
       },
       "url": "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview"
-    }
-  ],
-  "roadmaps": [
+    },
     {
       "id": "roadmap-zero-to-hero",
+      "type": "roadmap",
       "title": {
         "en": "Zero to Hero Roadmap",
         "he": "מפת דרכים מאפס למאה"
@@ -42,16 +42,16 @@
     },
     {
       "id": "roadmap-gamma",
+      "type": "roadmap",
       "title": {
         "en": "Roadmap for Gamma",
         "he": "מפת דרכים עבור גאמא"
       },
       "url": "https://docs.google.com/spreadsheets/d/1ylNPja33yQBsLWXUK2loKzthUMrBe9UpHUsAbnc0iLA/preview?gid=0"
-    }
-  ],
-  "slides": [
+    },
     {
       "id": "slides-1",
+      "type": "slides",
       "title": {
         "en": "Recommended Weekly Videos",
         "he": "סרטונים מומלצים לשבוע"
@@ -64,16 +64,15 @@
     },
     {
       "id": "slides-2",
+      "type": "slides",
       "title": {
         "en": "Development Group",
         "he": "קבוצת פיתוח"
       },
       "url": "https://docs.google.com/presentation/d/1IGr0ndIL12qLgTE3ZlawPfCKnRBI6LKMLc2l3N23gno/edit?slide=id.p#slide=id.p"
-    }
-  ],
-  "instagram": [
-    { "id": "instagram-1", "url": "https://www.instagram.com/p/DXuiFBEiLtQ/" },
-    { "id": "instagram-2", "url": "https://www.instagram.com/p/DabKNJWiCni/" },
-    { "id": "instagram-3", "url": "https://www.instagram.com/p/DaQehYhCAYr/" }
+    },
+    { "id": "instagram-1", "type": "instagram", "url": "https://www.instagram.com/p/DXuiFBEiLtQ/" },
+    { "id": "instagram-2", "type": "instagram", "url": "https://www.instagram.com/p/DabKNJWiCni/" },
+    { "id": "instagram-3", "type": "instagram", "url": "https://www.instagram.com/p/DaQehYhCAYr/" }
   ]
 }

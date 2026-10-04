@@ -3,15 +3,24 @@ export const VAULT_RESOURCES_URL = "/knowledge-vault.json";
 /** Either one string for every language, or one per language code (`en`, `he`). */
 export type LocalizedText = string | Record<string, string>;
 
+/** Each type becomes one folder in the vault, in this order. */
+export const VAULT_NOTE_TYPES = [
+  "lecture",
+  "roadmap",
+  "slides",
+  "instagram",
+] as const;
+
+export type VaultNoteType = (typeof VAULT_NOTE_TYPES)[number];
+
 export interface VaultResource {
   id: string;
+  type: VaultNoteType;
   /** Optional for Instagram posts, which fall back to "Instagram post #n". */
   title?: LocalizedText;
   description?: LocalizedText;
   url: string;
 }
-
-type ResourceListKey = "lectures" | "roadmaps" | "slides" | "instagram";
 
 export interface VaultFeaturedConfig {
   emoji: string;
@@ -21,9 +30,10 @@ export interface VaultFeaturedConfig {
   items: string[];
 }
 
-export type VaultResources = Record<ResourceListKey, VaultResource[]> & {
+export interface VaultResources {
+  notes: VaultResource[];
   featured: VaultFeaturedConfig;
-};
+}
 
 const DEFAULT_FEATURED: VaultFeaturedConfig = {
   emoji: "⭐",
@@ -33,10 +43,7 @@ const DEFAULT_FEATURED: VaultFeaturedConfig = {
 };
 
 export const EMPTY_VAULT_RESOURCES: VaultResources = {
-  lectures: [],
-  roadmaps: [],
-  slides: [],
-  instagram: [],
+  notes: [],
   featured: DEFAULT_FEATURED,
 };
 
@@ -48,9 +55,13 @@ const isLocalizedText = (value: unknown): value is LocalizedText =>
 
 const isResource = (value: unknown): value is VaultResource => {
   if (!value || typeof value !== "object") return false;
-  const { id, title, description, url } = value as Record<string, unknown>;
+  const { id, type, title, description, url } = value as Record<
+    string,
+    unknown
+  >;
   return (
     typeof id === "string" &&
+    VAULT_NOTE_TYPES.includes(type as VaultNoteType) &&
     typeof url === "string" &&
     (title === undefined || isLocalizedText(title)) &&
     (description === undefined || isLocalizedText(description))
@@ -78,9 +89,6 @@ const validList = <T>(
     return false;
   });
 };
-
-const resourceList = (data: Record<string, unknown>, key: ResourceListKey) =>
-  validList(data, key, isResource);
 
 const isId = (id: unknown): id is string => typeof id === "string";
 
@@ -132,10 +140,7 @@ export const fetchVaultResources = async (
   if (!data || typeof data !== "object") return EMPTY_VAULT_RESOURCES;
   const record = data as Record<string, unknown>;
   return {
-    lectures: resourceList(record, "lectures"),
-    roadmaps: resourceList(record, "roadmaps"),
-    slides: resourceList(record, "slides"),
-    instagram: resourceList(record, "instagram"),
+    notes: validList(record, "notes", isResource),
     featured: featuredConfig(record.featured),
   };
 };

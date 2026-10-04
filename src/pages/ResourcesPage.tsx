@@ -9,15 +9,49 @@ import {
 } from "react-icons/lu";
 import { useTheme } from "@/context/ThemeContext";
 import { articles } from "@/services/articlesData";
+import type { IconType } from "react-icons";
 import {
   EMPTY_VAULT_RESOURCES,
   fetchVaultResources,
   localize,
+  VAULT_NOTE_TYPES,
+  type VaultNoteType,
   type VaultResources,
 } from "@/services/vaultResources";
 import KnowledgeVault from "@/components/vault/KnowledgeVault";
 import { useVaultStyles } from "@/components/vault/useVaultStyles";
 import type { VaultFolder } from "@/components/vault/types";
+
+/** How each note type is shown: its folder, icon and how it embeds. The tag is `resources.vault.tag.<type>`. */
+const NOTE_TYPE_CONFIG: Record<
+  VaultNoteType,
+  {
+    folderId: string;
+    icon: IconType;
+    embed: { kind: "embed"; ratio: "video" | "page" } | { kind: "instagram" };
+  }
+> = {
+  lecture: {
+    folderId: "lectures",
+    icon: LuVideo,
+    embed: { kind: "embed", ratio: "video" },
+  },
+  roadmap: {
+    folderId: "roadmaps",
+    icon: LuMap,
+    embed: { kind: "embed", ratio: "page" },
+  },
+  slides: {
+    folderId: "slides",
+    icon: LuPresentation,
+    embed: { kind: "embed", ratio: "video" },
+  },
+  instagram: {
+    folderId: "instagram",
+    icon: LuInstagram,
+    embed: { kind: "instagram" },
+  },
+};
 
 const ResourcesPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -43,77 +77,56 @@ const ResourcesPage: React.FC = () => {
     if (!resources) return [];
     const lang = i18n.language;
 
-    return [
-      {
-        id: "articles",
-        title: t("resources.vault.folders.articles"),
-        icon: LuNewspaper,
-        notes: articles.map((article) => ({
-          kind: "article" as const,
-          id: `article-${article.href}`,
-          title: article.title,
-          tag: t("resources.vault.tag.article"),
-          article,
-        })),
-      },
-      {
-        id: "lectures",
-        title: t("resources.vault.folders.lectures"),
-        icon: LuVideo,
-        notes: resources.lectures.map((lecture) => ({
-          kind: "embed" as const,
-          id: lecture.id,
-          title: localize(lecture.title, lang) ?? lecture.id,
-          description: localize(lecture.description, lang),
-          tag: t("resources.vault.tag.lecture"),
-          src: lecture.url,
-          ratio: "video" as const,
-        })),
-      },
-      {
-        id: "roadmaps",
-        title: t("resources.vault.folders.roadmaps"),
-        icon: LuMap,
-        notes: resources.roadmaps.map((roadmap) => ({
-          kind: "embed" as const,
-          id: roadmap.id,
-          title: localize(roadmap.title, lang) ?? roadmap.id,
-          description: localize(roadmap.description, lang),
-          tag: t("resources.vault.tag.roadmap"),
-          src: roadmap.url,
-          ratio: "page" as const,
-        })),
-      },
-      {
-        id: "slides",
-        title: t("resources.vault.folders.slides"),
-        icon: LuPresentation,
-        notes: resources.slides.map((slides) => ({
-          kind: "embed" as const,
-          id: slides.id,
-          title: localize(slides.title, lang) ?? slides.id,
-          description: localize(slides.description, lang),
-          tag: t("resources.vault.tag.slides"),
-          src: slides.url,
-          ratio: "video" as const,
-        })),
-      },
-      {
-        id: "instagram",
-        title: t("resources.vault.folders.instagram"),
-        icon: LuInstagram,
-        notes: resources.instagram.map((post, index) => ({
-          kind: "instagram" as const,
-          id: post.id,
-          title:
-            localize(post.title, lang) ??
-            t("resources.vault.instagram_post", { number: index + 1 }),
-          description: localize(post.description, lang),
-          tag: t("resources.vault.tag.instagram"),
-          url: post.url,
-        })),
-      },
-    ];
+    const articlesFolder: VaultFolder = {
+      id: "articles",
+      title: t("resources.vault.folders.articles"),
+      icon: LuNewspaper,
+      notes: articles.map((article) => ({
+        kind: "article" as const,
+        id: `article-${article.href}`,
+        title: article.title,
+        tag: t("resources.vault.tag.article"),
+        article,
+      })),
+    };
+
+    const typeFolders = VAULT_NOTE_TYPES.map((type): VaultFolder => {
+      const { folderId, icon, embed } = NOTE_TYPE_CONFIG[type];
+      const tag = t(`resources.vault.tag.${type}`);
+      return {
+        id: folderId,
+        title: t(`resources.vault.folders.${folderId}`),
+        icon,
+        notes: resources.notes
+          .filter((note) => note.type === type)
+          .map((note, index) => {
+            const description = localize(note.description, lang);
+            const title = localize(note.title, lang);
+            if (embed.kind === "instagram")
+              return {
+                kind: "instagram" as const,
+                id: note.id,
+                title:
+                  title ??
+                  t("resources.vault.instagram_post", { number: index + 1 }),
+                description,
+                tag,
+                url: note.url,
+              };
+            return {
+              kind: "embed" as const,
+              id: note.id,
+              title: title ?? note.id,
+              description,
+              tag,
+              src: note.url,
+              ratio: embed.ratio,
+            };
+          }),
+      };
+    });
+
+    return [articlesFolder, ...typeFolders];
     // i18n.language re-runs this when the language switches.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t, i18n.language, resources]);
