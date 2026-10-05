@@ -158,6 +158,7 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({
             activeId={activeId}
             featuredIds={featuredSet}
             featuredColor={featured.graphColor}
+            featuredEmoji={featured.emoji}
             expanded={graphExpanded}
             sidebarOpen={sidebarOpen}
             onOpenNote={handleOpenNote}

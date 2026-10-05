@@ -11,6 +11,8 @@ interface GraphTooltipProps {
   view: Viewport;
   canvasWidth: number;
   canvasHeight: number;
+  /** Set only when the note is featured: shown beside the title, which turns `--vault-featured`. */
+  featuredEmoji?: string;
 }
 
 const TOOLTIP_WIDTH = 240;
@@ -22,6 +24,7 @@ const GraphTooltip: React.FC<GraphTooltipProps> = ({
   view,
   canvasWidth,
   canvasHeight,
+  featuredEmoji,
 }) => {
   const { t } = useTranslation();
   const c = useVaultStyles();
@@ -58,8 +61,22 @@ const GraphTooltip: React.FC<GraphTooltipProps> = ({
 
       {node.kind === "note" && (
         <>
-          <p className="font-semibold text-sm leading-snug mb-2" dir="auto">
+          <p
+            className={`font-semibold text-sm leading-snug mb-2 ${
+              featuredEmoji ? c.featuredText : ""
+            }`}
+            dir="auto"
+          >
             {node.note.title}
+            {featuredEmoji && (
+              <span
+                role="img"
+                aria-label={t("resources.vault.featured")}
+                className="ms-1.5"
+              >
+                {featuredEmoji}
+              </span>
+            )}
           </p>
           <span
             className={`inline-block px-2 py-0.5 rounded-full text-xs font-display mb-2 ${c.tagPill}`}

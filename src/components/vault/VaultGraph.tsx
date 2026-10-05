@@ -17,6 +17,7 @@ interface VaultGraphProps {
   /** Notes pinned above the vault; their nodes are drawn and glow in `featuredColor`. */
   featuredIds: Set<string>;
   featuredColor: string;
+  featuredEmoji: string;
   /** Fills the pane in place of the note view instead of sitting beside it. */
   expanded: boolean;
   sidebarOpen: boolean;
@@ -33,6 +34,7 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
   activeId,
   featuredIds,
   featuredColor,
+  featuredEmoji,
   expanded,
   sidebarOpen,
   onOpenNote,
@@ -131,6 +133,9 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
                   view={view}
                   canvasWidth={size.width}
                   canvasHeight={size.height}
+                  featuredEmoji={
+                    featuredIds.has(hovered.id) ? featuredEmoji : undefined
+                  }
                 />
               )}
             </AnimatePresence>

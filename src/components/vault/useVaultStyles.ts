@@ -31,6 +31,7 @@ const darkStyles = {
   graphHub:
     "bg-cyber-dark border-cyber-green/60 text-cyber-green shadow-[0_0_18px_rgba(0,255,136,0.18)]",
   tooltip: "bg-cyber-dark/95 border-cyber-border text-slate-300",
+  featuredText: "text-[color:var(--vault-featured)]",
   featuredCard:
     "bg-cyber-dark/90 border-cyber-border/70 text-slate-300 hover:border-cyber-green/60",
   featuredCardActive:
@@ -70,6 +71,9 @@ const lightStyles: typeof darkStyles = {
     "bg-white border-[color:var(--vault-featured)] text-[color:var(--vault-featured)] shadow-[0_0_12px_color-mix(in_srgb,var(--vault-featured)_55%,transparent)] hover:shadow-[0_0_18px_color-mix(in_srgb,var(--vault-featured)_80%,transparent)]",
   graphHub: "bg-light-bg border-light-blue/60 text-light-blue shadow-sm",
   tooltip: "bg-white/95 border-light-border text-light-text shadow-glass-light",
+  // Darkened so a bright featured colour (amber by default) stays readable on white.
+  featuredText:
+    "text-[color:color-mix(in_srgb,var(--vault-featured)_70%,#1e293b)]",
   featuredCard:
     "bg-white/90 border-light-border text-light-text shadow-glass-light hover:border-light-blue/60",
   featuredCardActive:
