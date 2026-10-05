@@ -2,23 +2,27 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useVaultStyles } from "./useVaultStyles";
 import { noteDetail } from "./noteDetail";
+import { useVaultResources } from "./VaultResourcesContext";
 import type { VaultEntry } from "./useVaultTabs";
+import { localize } from "@/services/vaultResources";
 
 interface VaultFeaturedProps {
   entries: VaultEntry[];
-  description: string | undefined;
   activeId: string | null;
   onOpenNote: (id: string) => void;
 }
 
 const VaultFeatured: React.FC<VaultFeaturedProps> = ({
   entries,
-  description,
   activeId,
   onOpenNote,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const c = useVaultStyles();
+  const description = localize(
+    useVaultResources().resources.featured.description,
+    i18n.language,
+  );
 
   if (entries.length === 0) return null;
 

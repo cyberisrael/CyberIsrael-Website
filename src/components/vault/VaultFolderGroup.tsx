@@ -2,14 +2,13 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { LuChevronRight } from "react-icons/lu";
 import { useVaultStyles } from "./useVaultStyles";
+import { useVaultResources } from "./VaultResourcesContext";
 import type { VaultFolder } from "./types";
 
 interface VaultFolderGroupProps {
   folder: VaultFolder;
   collapsed: boolean;
   activeId: string | null;
-  featuredIds: Set<string>;
-  featuredEmoji: string;
   onToggle: () => void;
   onOpenNote: (id: string) => void;
 }
@@ -19,13 +18,12 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
   folder,
   collapsed,
   activeId,
-  featuredIds,
-  featuredEmoji,
   onToggle,
   onOpenNote,
 }) => {
   const { t } = useTranslation();
   const c = useVaultStyles();
+  const { resources, isFeatured } = useVaultResources();
   const Icon = folder.icon;
 
   return (
@@ -70,14 +68,14 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
                     />
                   )}
                   <span className="truncate">{note.title}</span>
-                  {featuredIds.has(note.id) && (
+                  {isFeatured(note.id) && (
                     <span
                       role="img"
                       aria-label={t("resources.vault.featured")}
                       title={t("resources.vault.featured")}
                       className="flex-shrink-0 text-xs"
                     >
-                      {featuredEmoji}
+                      {resources.featured.emoji}
                     </span>
                   )}
                 </button>

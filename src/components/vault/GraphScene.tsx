@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useVaultStyles } from "./useVaultStyles";
+import { useVaultResources } from "./VaultResourcesContext";
 import type { GraphLayout, GraphNode } from "./graphLayout";
 import type { Viewport } from "./useGraphViewport";
 
@@ -12,7 +13,6 @@ interface GraphSceneProps {
   smooth: boolean;
   hoveredId: string | null;
   activeId: string | null;
-  featuredIds: Set<string>;
   onHover: (id: string | null) => void;
   onOpenNote: (id: string) => void;
 }
@@ -25,11 +25,11 @@ const GraphScene: React.FC<GraphSceneProps> = ({
   smooth,
   hoveredId,
   activeId,
-  featuredIds,
   onHover,
   onOpenNote,
 }) => {
   const c = useVaultStyles();
+  const { isFeatured } = useVaultResources();
 
   // The hovered node plus everything it links to; the rest of the graph fades back.
   const highlighted = useMemo(() => {
@@ -125,7 +125,7 @@ const GraphScene: React.FC<GraphSceneProps> = ({
                   className={`grid place-items-center w-8 h-8 rounded-full border transition-colors ${
                     node.note.id === activeId
                       ? c.graphNodeActive
-                      : featuredIds.has(node.note.id)
+                      : isFeatured(node.note.id)
                         ? c.graphNodeFeatured
                         : c.graphNode
                   }`}

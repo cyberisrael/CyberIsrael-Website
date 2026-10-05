@@ -7,6 +7,7 @@ import GraphScene from "./GraphScene";
 import GraphTooltip from "./GraphTooltip";
 import FeaturedHoverEffect from "./FeaturedHoverEffect";
 import { useVaultStyles } from "./useVaultStyles";
+import { useVaultResources } from "./VaultResourcesContext";
 import { layoutBounds, simulateLayout } from "./graphLayout";
 import { useGraphViewport } from "./useGraphViewport";
 import type { VaultFolder } from "./types";
@@ -14,10 +15,6 @@ import type { VaultFolder } from "./types";
 interface VaultGraphProps {
   folders: VaultFolder[];
   activeId: string | null;
-  /** Notes pinned above the vault; their nodes are drawn and glow in `featuredColor`. */
-  featuredIds: Set<string>;
-  featuredColor: string;
-  featuredEmoji: string;
   /** Fills the pane in place of the note view instead of sitting beside it. */
   expanded: boolean;
   sidebarOpen: boolean;
@@ -32,9 +29,6 @@ interface VaultGraphProps {
 const VaultGraph: React.FC<VaultGraphProps> = ({
   folders,
   activeId,
-  featuredIds,
-  featuredColor,
-  featuredEmoji,
   expanded,
   sidebarOpen,
   onOpenNote,
@@ -44,6 +38,7 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
 }) => {
   const { t } = useTranslation();
   const c = useVaultStyles();
+  const { isFeatured } = useVaultResources();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -75,8 +70,6 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
 
   return (
     <aside
-      // Read by `graphNodeFeatured`, since the colour comes from the config file at runtime.
-      style={{ "--vault-featured": featuredColor } as React.CSSProperties}
       className={`flex flex-col ${
         expanded
           ? `flex-1 min-w-0 ${c.pane}`
@@ -102,7 +95,7 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
           <>
             {/* Before the scene, so the effect sits behind the nodes and edges. */}
             <AnimatePresence>
-              {hovered?.kind === "note" && featuredIds.has(hovered.id) && (
+              {hovered?.kind === "note" && isFeatured(hovered.id) && (
                 <FeaturedHoverEffect
                   key={hovered.id}
                   node={hovered}
@@ -120,7 +113,6 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
               smooth={smooth}
               hoveredId={hoveredId}
               activeId={activeId}
-              featuredIds={featuredIds}
               onHover={setHoveredId}
               onOpenNote={onOpenNote}
             />
@@ -133,9 +125,6 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
                   view={view}
                   canvasWidth={size.width}
                   canvasHeight={size.height}
-                  featuredEmoji={
-                    featuredIds.has(hovered.id) ? featuredEmoji : undefined
-                  }
                 />
               )}
             </AnimatePresence>

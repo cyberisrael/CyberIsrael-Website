@@ -21,6 +21,7 @@ import {
   type VaultResources,
 } from "@/services/vaultResources";
 import KnowledgeVault from "@/components/vault/KnowledgeVault";
+import { VaultResourcesProvider } from "@/components/vault/VaultResourcesContext";
 import { useVaultStyles } from "@/components/vault/useVaultStyles";
 import type { VaultFolder } from "@/components/vault/types";
 
@@ -183,7 +184,9 @@ const ResourcesPage: React.FC = () => {
 
         {/* The vault reads `?note=` once on mount, so it waits for every note to exist. */}
         {resources ? (
-          <KnowledgeVault folders={folders} featured={resources.featured} />
+          <VaultResourcesProvider resources={resources}>
+            <KnowledgeVault folders={folders} />
+          </VaultResourcesProvider>
         ) : (
           <div
             aria-busy="true"
