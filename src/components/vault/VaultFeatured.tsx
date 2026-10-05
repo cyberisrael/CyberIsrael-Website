@@ -17,25 +17,16 @@ const VaultFeatured: React.FC<VaultFeaturedProps> = ({
   activeId,
   onOpenNote,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const c = useVaultStyles();
-  const description = localize(
-    useVaultResources().resources.featured.description,
-    i18n.language,
-  );
+  const { resources } = useVaultResources();
 
   if (entries.length === 0) return null;
 
   return (
     <section className="mb-4" aria-labelledby="vault-featured-title">
-      <h2
-        id="vault-featured-title"
-        className={`flex items-center gap-1.5 mb-2 font-display text-xs tracking-widest uppercase ${c.muted}`}
-      >
-        {description}
-      </h2>
-
-      <ul className="flex gap-3 overflow-x-auto pb-2 snap-x">
+      {/* A scroller clips what spills out of it, so the padding gives the cards' glow room. */}
+      <ul className="flex gap-4 overflow-x-auto -mx-4 px-4 pt-3 pb-6 scroll-px-4 snap-x">
         {entries.map(({ note, folder }) => {
           const Icon = folder.icon;
           const active = note.id === activeId;
@@ -45,7 +36,7 @@ const VaultFeatured: React.FC<VaultFeaturedProps> = ({
                 type="button"
                 onClick={() => onOpenNote(note.id)}
                 aria-current={active || undefined}
-                className={`w-full h-full flex flex-col rounded-lg border p-3 text-start backdrop-blur-sm transition-colors ${
+                className={`w-full h-full flex flex-col rounded-lg border p-3 text-start backdrop-blur-sm transition-[border-color,box-shadow] duration-300 ${
                   active ? c.featuredCardActive : c.featuredCard
                 }`}
               >
@@ -56,10 +47,10 @@ const VaultFeatured: React.FC<VaultFeaturedProps> = ({
                   <span className="truncate">{folder.title}</span>
                 </span>
                 <span
-                  className="font-semibold text-sm leading-snug mb-2 line-clamp-2"
+                  className={`font-semibold text-sm leading-snug mb-2 line-clamp-2 ${c.featuredText}`}
                   dir="auto"
                 >
-                  {note.title}
+                  {`${note.title} ${resources.featured.emoji}`}
                 </span>
                 <span
                   className={`self-start px-2 py-0.5 rounded-full text-xs font-display mb-2 ${c.tagPill}`}

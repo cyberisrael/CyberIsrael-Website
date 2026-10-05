@@ -33,9 +33,9 @@ const darkStyles = {
   tooltip: "bg-cyber-dark/95 border-cyber-border text-slate-300",
   featuredText: "text-[color:var(--vault-featured)]",
   featuredCard:
-    "bg-cyber-dark/90 border-cyber-border/70 text-slate-300 hover:border-cyber-green/60",
+    "bg-cyber-dark/90 border-[color:color-mix(in_srgb,var(--vault-featured)_75%,transparent)] text-slate-300 shadow-[0_0_12px_color-mix(in_srgb,var(--vault-featured)_35%,transparent),inset_0_0_10px_color-mix(in_srgb,var(--vault-featured)_12%,transparent)] hover:border-[color:var(--vault-featured)] hover:shadow-[0_0_26px_color-mix(in_srgb,var(--vault-featured)_70%,transparent),inset_0_0_14px_color-mix(in_srgb,var(--vault-featured)_25%,transparent)]",
   featuredCardActive:
-    "bg-cyber-dark/90 border-cyber-green text-slate-200 shadow-[0_0_14px_rgba(0,255,136,0.25)]",
+    "bg-cyber-dark/90 border-[color:var(--vault-featured)] text-slate-200 shadow-[0_0_26px_color-mix(in_srgb,var(--vault-featured)_70%,transparent),inset_0_0_14px_color-mix(in_srgb,var(--vault-featured)_25%,transparent)]",
   tagPill: "bg-cyber-purple/20 text-violet-300",
   graphControl:
     "bg-cyber-card/80 border-cyber-border/60 text-slate-400 hover:text-white hover:border-cyber-green/60",
@@ -75,9 +75,9 @@ const lightStyles: typeof darkStyles = {
   featuredText:
     "text-[color:color-mix(in_srgb,var(--vault-featured)_70%,#1e293b)]",
   featuredCard:
-    "bg-white/90 border-light-border text-light-text shadow-glass-light hover:border-light-blue/60",
+    "bg-white/90 border-[color:color-mix(in_srgb,var(--vault-featured)_80%,transparent)] text-light-text shadow-[0_0_10px_color-mix(in_srgb,var(--vault-featured)_35%,transparent)] hover:border-[color:var(--vault-featured)] hover:shadow-[0_0_22px_color-mix(in_srgb,var(--vault-featured)_65%,transparent)]",
   featuredCardActive:
-    "bg-white/90 border-light-blue text-light-text shadow-[0_0_12px_rgba(37,99,235,0.25)]",
+    "bg-white/90 border-[color:var(--vault-featured)] text-light-text shadow-[0_0_22px_color-mix(in_srgb,var(--vault-featured)_65%,transparent)]",
   tagPill: "bg-violet-100 text-violet-700",
   graphControl:
     "bg-white/80 border-light-border text-light-muted hover:text-light-text hover:border-light-blue/60",

@@ -71,15 +71,10 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
   const graphExpanded = !noteViewOpen;
 
   return (
-    <div
+    <div className={`relative flex flex-col h-full gap-10`}
       // Read by the featured styles, since the colour comes from the config file at runtime.
       style={{ "--vault-featured": featured.graphColor } as React.CSSProperties}
     >
-      <VaultFeatured
-        entries={featuredEntries}
-        activeId={noteViewOpen ? activeId : null}
-        onOpenNote={handleOpenFeatured}
-      />
       <div
         ref={frameRef}
         className={`relative flex h-[calc(100vh-12rem)] min-h-[560px] rounded-xl border overflow-hidden backdrop-blur-sm ${c.frame}`}
@@ -159,6 +154,11 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
           />
         )}
       </div>
+      <VaultFeatured
+        entries={featuredEntries}
+        activeId={noteViewOpen ? activeId : null}
+        onOpenNote={handleOpenFeatured}
+      />
     </div>
   );
 };

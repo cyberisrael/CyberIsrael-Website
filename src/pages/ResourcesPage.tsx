@@ -180,6 +180,20 @@ const ResourcesPage: React.FC = () => {
           >
             {t("resources.title")}
           </h1>
+
+          <h2
+            id="vault-featured-title"
+            style={{
+              color: resources?.featured.graphColor,
+              // `currentColor` is the featured colour above; softer on white, where a glow smudges.
+              textShadow: isDark
+                ? "0 0 10px color-mix(in srgb, currentColor 90%, transparent), 0 0 16px color-mix(in srgb, currentColor 45%, transparent)"
+                : "0 0 16px color-mix(in srgb, currentColor 35%, transparent)",
+            }}
+            className={`flex items-center gap-1.5 mb-2 font-display tracking-widest uppercase font-bold mt-3`}
+          >
+            {localize(resources?.featured.description, i18n.language)}
+          </h2>
         </header>
 
         {/* The vault reads `?note=` once on mount, so it waits for every note to exist. */}
