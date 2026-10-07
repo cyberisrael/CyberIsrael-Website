@@ -43,7 +43,7 @@ const NOTE_TYPE_CONFIG: Record<
   lecture: {
     folderId: "lectures",
     icon: LuVideo,
-    color: "#fb923c",
+    color: "#04c92f",
     embed: { kind: "embed", ratio: "video" },
   },
   roadmap: {
@@ -55,7 +55,7 @@ const NOTE_TYPE_CONFIG: Record<
   slides: {
     folderId: "slides",
     icon: LuPresentation,
-    color: "#facc15",
+    color: "#ffe836",
     embed: { kind: "embed", ratio: "video" },
   },
   document: {

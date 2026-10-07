@@ -26,10 +26,13 @@ const darkStyles = {
     "bg-cyber-card border-[color:color-mix(in_srgb,var(--vault-type)_55%,transparent)] text-slate-300 shadow-[0_0_10px_color-mix(in_srgb,var(--vault-type)_40%,transparent)] hover:border-[color:var(--vault-type)] hover:text-[color:var(--vault-type)] hover:shadow-[0_0_16px_color-mix(in_srgb,var(--vault-type)_70%,transparent)]",
   graphNodeActive:
     "bg-cyber-card border-cyber-green text-cyber-green shadow-[0_0_14px_rgba(0,255,136,0.45)]",
+  // Solid featured fill with a dark outline + icon, then a featured-colour ring and glow outside it.
   graphNodeFeatured:
-    "bg-cyber-card border-[color:var(--vault-featured)] text-[color:var(--vault-featured)] shadow-[0_0_14px_color-mix(in_srgb,var(--vault-featured)_55%,transparent)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--vault-featured)_80%,transparent)]",
+    "bg-[color:var(--vault-featured)] border-cyber-black text-cyber-black shadow-[0_0_0_2px_var(--vault-featured),0_0_18px_color-mix(in_srgb,var(--vault-featured)_70%,transparent)] hover:scale-110 hover:shadow-[0_0_0_2px_var(--vault-featured),0_0_28px_var(--vault-featured)]",
+  graphNodeFeaturedActive:
+    "bg-[color:var(--vault-featured)] border-cyber-black text-cyber-black scale-110 shadow-[0_0_0_2px_var(--vault-featured),0_0_0_4px_#00FF88,0_0_28px_var(--vault-featured)]",
   graphHub:
-    "bg-cyber-dark border-cyber-green/60 text-cyber-green shadow-[0_0_18px_rgba(0,255,136,0.18)]",
+    "bg-cyber-dark border-[color:color-mix(in_srgb,var(--vault-type)_70%,transparent)] text-[color:var(--vault-type)] shadow-[0_0_18px_color-mix(in_srgb,var(--vault-type)_40%,transparent)]",
   tooltip: "bg-cyber-dark/95 border-cyber-border text-slate-300",
   featuredText: "text-[color:var(--vault-featured)]",
   featuredCard:
@@ -68,8 +71,12 @@ const lightStyles: typeof darkStyles = {
   graphNodeActive:
     "bg-white border-light-blue text-light-blue shadow-[0_0_12px_rgba(37,99,235,0.35)]",
   graphNodeFeatured:
-    "bg-white border-[color:var(--vault-featured)] text-[color:var(--vault-featured)] shadow-[0_0_12px_color-mix(in_srgb,var(--vault-featured)_55%,transparent)] hover:shadow-[0_0_18px_color-mix(in_srgb,var(--vault-featured)_80%,transparent)]",
-  graphHub: "bg-light-bg border-light-blue/60 text-light-blue shadow-sm",
+    "bg-[color:var(--vault-featured)] border-white text-light-text shadow-[0_0_0_2px_var(--vault-featured),0_0_14px_color-mix(in_srgb,var(--vault-featured)_60%,transparent)] hover:scale-110 hover:shadow-[0_0_0_2px_var(--vault-featured),0_0_22px_var(--vault-featured)]",
+  graphNodeFeaturedActive:
+    "bg-[color:var(--vault-featured)] border-white text-light-text scale-110 shadow-[0_0_0_2px_var(--vault-featured),0_0_0_4px_#2563EB,0_0_22px_var(--vault-featured)]",
+  // Icon darkened so bright type colours (yellow, pink) stay readable on the light hub.
+  graphHub:
+    "bg-light-bg border-[color:color-mix(in_srgb,var(--vault-type)_75%,transparent)] text-[color:color-mix(in_srgb,var(--vault-type)_70%,#1e293b)] shadow-[0_0_14px_color-mix(in_srgb,var(--vault-type)_40%,transparent)]",
   tooltip: "bg-white/95 border-light-border text-light-text shadow-glass-light",
   // Darkened so a bright featured colour (amber by default) stays readable on white.
   featuredText:

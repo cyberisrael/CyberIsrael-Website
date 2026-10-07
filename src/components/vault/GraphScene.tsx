@@ -104,6 +104,9 @@ const GraphScene: React.FC<GraphSceneProps> = ({
               {node.kind === "folder" ? (
                 <div
                   {...hoverProps(node.id)}
+                  style={
+                    { "--vault-type": node.folder.color } as React.CSSProperties
+                  }
                   className={`relative grid place-items-center w-11 h-11 rounded-full border-2 ${c.graphHub}`}
                 >
                   <Icon size={20} />
@@ -122,15 +125,22 @@ const GraphScene: React.FC<GraphSceneProps> = ({
                   style={
                     { "--vault-type": node.folder.color } as React.CSSProperties
                   }
-                  className={`grid place-items-center w-8 h-8 rounded-full border transition-colors ${
-                    node.note.id === activeId
-                      ? c.graphNodeActive
-                      : isFeatured(node.note.id)
-                        ? c.graphNodeFeatured
-                        : c.graphNode
+                  className={`grid place-items-center rounded-full transition-[color,background-color,border-color,box-shadow,transform] duration-200 ${
+                    // A featured node stays featured while open; the active style only adds a ring.
+                    isFeatured(node.note.id)
+                      ? `w-9 h-9 border-2 ${
+                          node.note.id === activeId
+                            ? c.graphNodeFeaturedActive
+                            : c.graphNodeFeatured
+                        }`
+                      : `w-8 h-8 border ${
+                          node.note.id === activeId
+                            ? c.graphNodeActive
+                            : c.graphNode
+                        }`
                   }`}
                 >
-                  <Icon size={15} />
+                  <Icon size={isFeatured(node.note.id) ? 17 : 15} />
                 </button>
               )}
             </motion.div>

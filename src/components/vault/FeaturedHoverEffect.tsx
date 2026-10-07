@@ -6,28 +6,18 @@ import type { Viewport } from "./useGraphViewport";
 interface FeaturedHoverEffectProps {
   node: GraphNode;
   view: Viewport;
-  canvasWidth: number;
-  canvasHeight: number;
 }
 
-const RINGS = 3;
-const RING_DURATION = 2.4;
+const PULSE_DURATION = 2.4;
 
-/**
- * Drawn behind the graph while a featured note is hovered: a soft glow plus rings that keep
- * rippling out from the node across the whole canvas, in `--vault-featured`.
- */
+/** Drawn behind the graph while a featured note is hovered: a soft glow pulsing in `--vault-featured`. */
 const FeaturedHoverEffect: React.FC<FeaturedHoverEffectProps> = ({
   node,
   view,
-  canvasWidth,
-  canvasHeight,
 }) => {
   const reduceMotion = useReducedMotion();
   const x = node.x * view.k + view.x;
   const y = node.y * view.k + view.y;
-  // Big enough that a ring from any corner still sweeps past the far edge.
-  const reach = 2 * Math.hypot(canvasWidth, canvasHeight);
 
   return (
     <motion.div
@@ -52,36 +42,11 @@ const FeaturedHoverEffect: React.FC<FeaturedHoverEffectProps> = ({
         }}
         animate={reduceMotion ? undefined : { scale: [1, 1.25, 1] }}
         transition={{
-          duration: RING_DURATION,
+          duration: PULSE_DURATION,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
-
-      {!reduceMotion &&
-        Array.from({ length: RINGS }, (_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full border"
-            style={{
-              left: x,
-              x: "-50%",
-              y: "-50%",
-              top: y,
-              width: reach,
-              height: reach,
-              borderColor: "var(--vault-featured)",
-            }}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: [0, 1], opacity: [0.5, 0] }}
-            transition={{
-              duration: RING_DURATION * 2,
-              repeat: Infinity,
-              ease: "easeOut",
-              delay: (i * RING_DURATION * 2) / RINGS,
-            }}
-          />
-        ))}
     </motion.div>
   );
 };

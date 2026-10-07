@@ -202,6 +202,8 @@ const en = {
       tags: "Tags:",
       instagram_post: "Instagram post #{{number}}",
       featured: "Recommended",
+      featured_show: "Show recommended ({{count}})",
+      featured_hide: "Hide recommended",
       open_sidebar: "Show sidebar",
       close_sidebar: "Hide sidebar",
       close_tab: "Close tab",

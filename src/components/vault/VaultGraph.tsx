@@ -100,8 +100,6 @@ const VaultGraph: React.FC<VaultGraphProps> = ({
                   key={hovered.id}
                   node={hovered}
                   view={view}
-                  canvasWidth={size.width}
-                  canvasHeight={size.height}
                 />
               )}
             </AnimatePresence>

@@ -60,7 +60,7 @@ const VaultFolderGroup: React.FC<VaultFolderGroupProps> = ({
                   title={note.title}
                   className={`relative w-full flex items-center gap-1.5 rounded-md px-3 py-1.5 text-start transition-colors ${
                     isActive ? c.itemActive : c.item
-                  }`}
+                  } ${isFeatured(note.id) ? c.featuredText : ""}`}
                 >
                   {isActive && (
                     <span

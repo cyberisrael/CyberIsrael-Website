@@ -200,6 +200,8 @@ const he = {
       tags: "תגיות:",
       instagram_post: "פוסט אינסטגרם #{{number}}",
       featured: "מומלצים",
+      featured_show: "הצג מומלצים ({{count}})",
+      featured_hide: "הסתר מומלצים",
       open_sidebar: "הצגת סרגל הצד",
       close_sidebar: "הסתרת סרגל הצד",
       close_tab: "סגירת כרטיסייה",

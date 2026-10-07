@@ -44,7 +44,7 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
     openNote,
     closeNote,
   } = useVaultTabs(folders, noteViewOpen);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [graphOpen, setGraphOpen] = useState(isWide);
 
   const featuredEntries = featured.items.flatMap(
@@ -71,10 +71,15 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
   const graphExpanded = !noteViewOpen;
 
   return (
-    <div className={`relative flex flex-col h-full gap-10`}
+    <div className={`relative flex flex-col h-full gap-2`}
       // Read by the featured styles, since the colour comes from the config file at runtime.
       style={{ "--vault-featured": featured.graphColor } as React.CSSProperties}
     >
+      <VaultFeatured
+        entries={featuredEntries}
+        activeId={noteViewOpen ? activeId : null}
+        onOpenNote={handleOpenFeatured}
+      />
       <div
         ref={frameRef}
         className={`relative flex h-[calc(100vh-12rem)] min-h-[560px] rounded-xl border overflow-hidden backdrop-blur-sm ${c.frame}`}
@@ -154,11 +159,6 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
           />
         )}
       </div>
-      <VaultFeatured
-        entries={featuredEntries}
-        activeId={noteViewOpen ? activeId : null}
-        onOpenNote={handleOpenFeatured}
-      />
     </div>
   );
 };
