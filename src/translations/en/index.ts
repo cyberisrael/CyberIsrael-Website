@@ -193,6 +193,7 @@ const en = {
       search: "Search the vault...",
       no_results: "No matching resources.",
       open_external: "Open in a new tab",
+      go_to_source: "Go to source",
       summary: "Summary",
       category: "Category:",
       read_time: "Reading time:",

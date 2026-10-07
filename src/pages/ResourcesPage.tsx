@@ -16,6 +16,7 @@ import {
   EMPTY_VAULT_RESOURCES,
   fetchVaultResources,
   localize,
+  embedRatio,
   sourceFromUrl,
   VAULT_NOTE_TYPES,
   type VaultNoteType,
@@ -29,8 +30,8 @@ import type { VaultFolder } from "@/components/vault/types";
 const ARTICLES_COLOR = "#22d3ee";
 
 /**
- * How each note type is shown: its folder, icon, colour (the note's halo in the graph and its
- * text in the sidebar) and how it embeds.
+ * Which folder each note type goes in, with its icon and colour (the note's halo in the graph and
+ * its text in the sidebar). How a note renders comes from its own URL, not from here.
  */
 const NOTE_TYPE_CONFIG: Record<
   VaultNoteType,
@@ -38,44 +39,37 @@ const NOTE_TYPE_CONFIG: Record<
     folderId: string;
     icon: IconType;
     color: string;
-    embed: { kind: "embed"; ratio: "video" | "page" } | { kind: "instagram" };
   }
 > = {
   lecture: {
     folderId: "lectures",
     icon: LuVideo,
     color: "#04c92f",
-    embed: { kind: "embed", ratio: "video" },
   },
   roadmap: {
     folderId: "roadmaps",
     icon: LuMap,
     color: "#a78bfa",
-    embed: { kind: "embed", ratio: "page" },
   },
   slides: {
     folderId: "slides",
     icon: LuPresentation,
     color: "#ffe836",
-    embed: { kind: "embed", ratio: "video" },
   },
   document: {
     folderId: "documents",
     icon: LuFileText,
     color: "#60a5fa",
-    embed: { kind: "embed", ratio: "page" },
   },
   spreadsheet: {
     folderId: "spreadsheets",
     icon: LuSheet,
     color: "#4ade80",
-    embed: { kind: "embed", ratio: "page" },
   },
   instagram: {
     folderId: "instagram",
     icon: LuInstagram,
     color: "#f472b6",
-    embed: { kind: "instagram" },
   },
 };
 
@@ -121,7 +115,7 @@ const ResourcesPage: React.FC = () => {
     };
 
     const typeFolders = VAULT_NOTE_TYPES.map((type): VaultFolder => {
-      const { folderId, icon, color, embed } = NOTE_TYPE_CONFIG[type];
+      const { folderId, icon, color } = NOTE_TYPE_CONFIG[type];
       return {
         id: folderId,
         title: t(`resources.vault.folders.${folderId}`),
@@ -132,13 +126,24 @@ const ResourcesPage: React.FC = () => {
           .map((note, index) => {
             const description = localize(note.description, lang);
             const title = localize(note.title, lang);
+            // The URL alone decides how the note renders, whatever folder it's in.
+            const origin = sourceFromUrl(note.url);
             const source = {
               label:
                 localize(note.from, lang) ??
-                t(`resources.vault.source.${sourceFromUrl(note.url)}`),
+                t(`resources.vault.source.${origin}`),
               url: note.url.trim(),
             };
-            if (embed.kind === "instagram")
+            if (origin === "unknown")
+              return {
+                kind: "link" as const,
+                id: note.id,
+                title: title ?? note.id,
+                description,
+                source,
+                url: note.url,
+              };
+            if (origin === "instagram")
               return {
                 kind: "instagram" as const,
                 id: note.id,
@@ -156,7 +161,7 @@ const ResourcesPage: React.FC = () => {
               description,
               source,
               src: note.url,
-              ratio: embed.ratio,
+              ratio: embedRatio(note.url),
             };
           }),
       };

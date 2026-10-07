@@ -136,6 +136,19 @@ export const sourceFromUrl = (url: string): VaultSource => {
   return "unknown";
 };
 
+/** How tall a Drive embed is: videos and slides are 16:9, documents and sheets fill the page. */
+export const embedRatio = (url: string): "video" | "page" => {
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    return "page";
+  }
+  const host = parsed.hostname.replace(/^www\./, "");
+  if (host === "drive.google.com") return "video";
+  return parsed.pathname.split("/")[1] === "presentation" ? "video" : "page";
+};
+
 /** An explicit `type` always wins; otherwise the URL decides, and a note neither settles is left out. */
 const withType = (notes: RawResource[]): VaultResource[] =>
   notes.flatMap((note) => {

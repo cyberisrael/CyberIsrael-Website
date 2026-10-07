@@ -128,6 +128,28 @@ const VaultNoteView: React.FC<VaultNoteViewProps> = ({ note }) => {
           <InstagramEmbedCard url={note.url} />
         </div>
       )}
+
+      {note.kind === "link" && (
+        <>
+          {note.description && (
+            <p
+              className={`leading-relaxed mb-6 ${isDark ? "text-slate-300" : "text-light-text/80"}`}
+              dir="auto"
+            >
+              {note.description}
+            </p>
+          )}
+          <a
+            href={note.url.trim()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex items-center gap-2 self-start"
+          >
+            {t("resources.vault.go_to_source")}
+            <LuExternalLink />
+          </a>
+        </>
+      )}
     </motion.article>
   );
 };

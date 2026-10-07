@@ -16,7 +16,8 @@ export type VaultNote =
       ratio: "video" | "page";
     })
   | (NoteBase & { kind: "article"; article: Article })
-  | (NoteBase & { kind: "instagram"; url: string });
+  | (NoteBase & { kind: "instagram"; url: string })
+  | (NoteBase & { kind: "link"; url: string });
 
 export interface VaultFolder {
   id: string;

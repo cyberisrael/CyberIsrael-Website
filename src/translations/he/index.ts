@@ -191,6 +191,7 @@ const he = {
       search: "חיפוש בתיבת הידע...",
       no_results: "לא נמצאו משאבים מתאימים.",
       open_external: "פתיחה בכרטיסייה חדשה",
+      go_to_source: "מעבר למקור",
       summary: "תקציר",
       category: "קטגוריה:",
       read_time: "זמן קריאה:",
