@@ -4,7 +4,8 @@ import type { Article } from "@/services/articlesData";
 interface NoteBase {
   id: string;
   title: string;
-  tag: string;
+  /** Where the resource lives, shown as a "from …" link; `url` may be an in-site path. */
+  source: { label: string; url: string };
   description?: string;
 }
 

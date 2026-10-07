@@ -43,7 +43,7 @@ const VaultSidebar: React.FC<VaultSidebarProps> = ({
           notes: folder.notes.filter(
             (note) =>
               note.title.toLowerCase().includes(normalizedQuery) ||
-              note.tag.toLowerCase().includes(normalizedQuery),
+              note.source.label.toLowerCase().includes(normalizedQuery),
           ),
         }))
         .filter((folder) => folder.notes.length > 0)

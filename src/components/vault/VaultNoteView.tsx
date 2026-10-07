@@ -12,7 +12,6 @@ import { useVaultResources } from "@/components/vault/VaultResourcesContext";
 
 interface VaultNoteViewProps {
   note: VaultNote;
-  folderTitle: string;
 }
 
 /** Google embeds need `/embed`/`/preview` instead of the `/edit` URL people paste. */
@@ -45,14 +44,43 @@ const EmbedBody: React.FC<{
   );
 };
 
-const VaultNoteView: React.FC<VaultNoteViewProps> = ({ note, folderTitle }) => {
+/** "from Drive" pill linking to where the note lives; in-site paths stay in the SPA. */
+const SourceLink: React.FC<{ source: VaultNote["source"] }> = ({ source }) => {
+  const { t } = useTranslation();
+  const { theme } = useTheme();
+  const className = `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-sm font-display transition-colors ${
+    theme === "dark"
+      ? "bg-cyber-purple/20 text-violet-300 hover:bg-cyber-purple/35"
+      : "bg-violet-100 text-violet-700 hover:bg-violet-200"
+  }`;
+  const label = t("resources.vault.from_source", { source: source.label });
+
+  if (source.url.startsWith("/"))
+    return (
+      <Link to={source.url} className={className}>
+        {label}
+      </Link>
+    );
+  return (
+    <a
+      href={source.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+    >
+      {label}
+      <LuExternalLink size={12} />
+    </a>
+  );
+};
+
+const VaultNoteView: React.FC<VaultNoteViewProps> = ({ note }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { resources, isFeatured } = useVaultResources();
 
   const isDark = theme === "dark";
 
-  const muted = isDark ? "text-slate-400" : "text-light-muted";
   const accentText = isDark ? "text-cyber-green" : "text-light-blue";
 
   return (
@@ -74,24 +102,9 @@ const VaultNoteView: React.FC<VaultNoteViewProps> = ({ note, folderTitle }) => {
         {`${isFeatured(note.id) ? resources.featured.emoji : ""}${note.title}`}
       </h1>
 
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span
-          className={`px-2.5 py-0.5 rounded-full text-sm font-display ${
-            isDark
-              ? "bg-cyber-purple/20 text-violet-300"
-              : "bg-violet-100 text-violet-700"
-          }`}
-        >
-          #{note.tag}
-        </span>
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <SourceLink source={note.source} />
       </div>
-
-      <p className={`mb-6 ${muted}`}>
-        {t("resources.vault.from")}{" "}
-        <span className={`underline underline-offset-4 ${accentText}`}>
-          {folderTitle}
-        </span>
-      </p>
 
       {note.kind === "embed" && (
         <>

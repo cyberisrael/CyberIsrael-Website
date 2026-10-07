@@ -16,6 +16,7 @@ import {
   EMPTY_VAULT_RESOURCES,
   fetchVaultResources,
   localize,
+  sourceFromUrl,
   VAULT_NOTE_TYPES,
   type VaultNoteType,
   type VaultResources,
@@ -29,7 +30,7 @@ const ARTICLES_COLOR = "#22d3ee";
 
 /**
  * How each note type is shown: its folder, icon, colour (the note's halo in the graph and its
- * text in the sidebar) and how it embeds. The tag is `resources.vault.tag.<type>`.
+ * text in the sidebar) and how it embeds.
  */
 const NOTE_TYPE_CONFIG: Record<
   VaultNoteType,
@@ -111,14 +112,16 @@ const ResourcesPage: React.FC = () => {
         kind: "article" as const,
         id: `article-${article.href}`,
         title: article.title,
-        tag: t("resources.vault.tag.article"),
+        source: {
+          label: t("resources.vault.source.site"),
+          url: `/articles/${article.href}`,
+        },
         article,
       })),
     };
 
     const typeFolders = VAULT_NOTE_TYPES.map((type): VaultFolder => {
       const { folderId, icon, color, embed } = NOTE_TYPE_CONFIG[type];
-      const tag = t(`resources.vault.tag.${type}`);
       return {
         id: folderId,
         title: t(`resources.vault.folders.${folderId}`),
@@ -129,6 +132,12 @@ const ResourcesPage: React.FC = () => {
           .map((note, index) => {
             const description = localize(note.description, lang);
             const title = localize(note.title, lang);
+            const source = {
+              label:
+                localize(note.from, lang) ??
+                t(`resources.vault.source.${sourceFromUrl(note.url)}`),
+              url: note.url.trim(),
+            };
             if (embed.kind === "instagram")
               return {
                 kind: "instagram" as const,
@@ -137,7 +146,7 @@ const ResourcesPage: React.FC = () => {
                   title ??
                   t("resources.vault.instagram_post", { number: index + 1 }),
                 description,
-                tag,
+                source,
                 url: note.url,
               };
             return {
@@ -145,7 +154,7 @@ const ResourcesPage: React.FC = () => {
               id: note.id,
               title: title ?? note.id,
               description,
-              tag,
+              source,
               src: note.url,
               ratio: embed.ratio,
             };

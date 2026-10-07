@@ -101,7 +101,9 @@ const VaultFeatured: React.FC<VaultFeaturedProps> = ({
                         <span
                           className={`ms-auto flex-shrink-0 px-1.5 rounded-full font-display ${c.tagPill}`}
                         >
-                          #{note.tag}
+                          {t("resources.vault.from_source", {
+                            source: note.source.label,
+                          })}
                         </span>
                       </span>
                       <span

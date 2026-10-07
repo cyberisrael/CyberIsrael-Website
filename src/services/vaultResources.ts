@@ -23,6 +23,8 @@ export interface VaultResource {
   title?: LocalizedText;
   description?: LocalizedText;
   url: string;
+  /** Names where the resource lives ("from …"); overrides the source deduced from `url` (see `sourceFromUrl`). */
+  from?: LocalizedText;
 }
 
 export interface VaultFeaturedConfig {
@@ -60,7 +62,7 @@ type RawResource = Omit<VaultResource, "type"> & { type?: VaultNoteType };
 
 const isResource = (value: unknown): value is RawResource => {
   if (!value || typeof value !== "object") return false;
-  const { id, type, title, description, url } = value as Record<
+  const { id, type, title, description, url, from } = value as Record<
     string,
     unknown
   >;
@@ -69,7 +71,8 @@ const isResource = (value: unknown): value is RawResource => {
     (type === undefined || VAULT_NOTE_TYPES.includes(type as VaultNoteType)) &&
     typeof url === "string" &&
     (title === undefined || isLocalizedText(title)) &&
-    (description === undefined || isLocalizedText(description))
+    (description === undefined || isLocalizedText(description)) &&
+    (from === undefined || isLocalizedText(from))
   );
 };
 
@@ -114,6 +117,23 @@ const typeFromUrl = (url: string): VaultNoteType | undefined => {
   if (host === "docs.google.com")
     return GOOGLE_DOCS_TYPES[parsed.pathname.split("/")[1]];
   return undefined;
+};
+
+/** Where a link points, named by `resources.vault.source.<source>`. */
+export type VaultSource = "drive" | "instagram" | "unknown";
+
+/** The source a link's host implies, for notes that leave `from` out. */
+export const sourceFromUrl = (url: string): VaultSource => {
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    return "unknown";
+  }
+  const host = parsed.hostname.replace(/^www\./, "");
+  if (host === "drive.google.com" || host === "docs.google.com") return "drive";
+  if (host === "instagram.com") return "instagram";
+  return "unknown";
 };
 
 /** An explicit `type` always wins; otherwise the URL decides, and a note neither settles is left out. */

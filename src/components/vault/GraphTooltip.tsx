@@ -82,7 +82,9 @@ const GraphTooltip: React.FC<GraphTooltipProps> = ({
           <span
             className={`inline-block px-2 py-0.5 rounded-full text-xs font-display mb-2 ${c.tagPill}`}
           >
-            #{node.note.tag}
+            {t("resources.vault.from_source", {
+              source: node.note.source.label,
+            })}
           </span>
           <p
             className={`text-xs leading-relaxed line-clamp-3 ${c.muted}`}

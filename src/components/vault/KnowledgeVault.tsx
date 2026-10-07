@@ -134,11 +134,7 @@ const KnowledgeVault: React.FC<KnowledgeVaultProps> = ({ folders }) => {
 
             <div className="flex-1 overflow-y-auto px-5 py-8 md:px-10 md:py-10 flex flex-col">
               {active ? (
-                <VaultNoteView
-                  key={active.note.id}
-                  note={active.note}
-                  folderTitle={active.folder.title}
-                />
+                <VaultNoteView key={active.note.id} note={active.note} />
               ) : (
                 <VaultEmptyState />
               )}
