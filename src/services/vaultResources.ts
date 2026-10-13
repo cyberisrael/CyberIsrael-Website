@@ -1,3 +1,5 @@
+import { isAllowedVaultUrl } from "./vaultUrlPolicy";
+
 export const VAULT_RESOURCES_URL = "/knowledge-vault.json";
 
 /** Either one string for every language, or one per language code (`en`, `he`). */
@@ -149,6 +151,19 @@ export const embedRatio = (url: string): "video" | "page" => {
   return parsed.pathname.split("/")[1] === "presentation" ? "video" : "page";
 };
 
+/**
+ * The Worker already strips these before the file is served; checking again here covers
+ * any setup where it isn't running (and keeps a `javascript:` URL out of an `href`).
+ */
+const withAllowedUrl = (notes: RawResource[]): RawResource[] =>
+  notes.filter((note) => {
+    if (isAllowedVaultUrl(note.url)) return true;
+    console.warn(
+      `${VAULT_RESOURCES_URL}: skipping "${note.id}", whose URL is not on the allowlist (see vaultUrlPolicy.ts)`,
+    );
+    return false;
+  });
+
 /** An explicit `type` always wins; otherwise the URL decides, and a note neither settles is left out. */
 const withType = (notes: RawResource[]): VaultResource[] =>
   notes.flatMap((note) => {
@@ -210,7 +225,7 @@ export const fetchVaultResources = async (
   if (!data || typeof data !== "object") return EMPTY_VAULT_RESOURCES;
   const record = data as Record<string, unknown>;
   return {
-    notes: withType(validList(record, "notes", isResource)),
+    notes: withType(withAllowedUrl(validList(record, "notes", isResource))),
     featured: featuredConfig(record.featured),
   };
 };

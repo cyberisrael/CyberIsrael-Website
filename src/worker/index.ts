@@ -15,9 +15,9 @@
  */
 
 import { ORGANISATION, isOrganisationMember } from './organisation'
+import { serveKnowledgeVault, type KnowledgeVaultEnv } from './knowledgeVault'
 
-interface Env {
-  ASSETS: { fetch(request: Request): Promise<Response> }
+interface Env extends KnowledgeVaultEnv {
   GITHUB_CLIENT_ID?: string
   GITHUB_CLIENT_SECRET?: string
 }
@@ -215,6 +215,8 @@ export default {
     const { pathname } = new URL(request.url)
 
     if (pathname === '/oauth/auth') return startAuth(request, env)
+
+    if (pathname === '/knowledge-vault.json') return serveKnowledgeVault(request, env)
 
     if (pathname === '/oauth/callback') {
       const response = await completeAuth(request, env)

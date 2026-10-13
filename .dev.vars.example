@@ -3,3 +3,6 @@
 # In production these are set with `npx wrangler secret put <NAME>` instead.
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
+# Google Safe Browsing key for the knowledge vault's URL check. Optional locally: without
+# it the Worker still applies the host allowlist and logs that the check was skipped.
+SAFE_BROWSING_API_KEY=

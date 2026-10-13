@@ -11,7 +11,9 @@
     // The SPA fallback is answered by the asset layer, which sits in front of the Worker,
     // so a browser navigation to a Worker route gets index.html back and the Worker never
     // runs. Paths listed here opt out of that and reach the Worker first.
-    "run_worker_first": ["/oauth/*"],
+    // /knowledge-vault.json is a real file, so without this the asset layer would serve it
+    // unfiltered and skip the Worker's URL security check.
+    "run_worker_first": ["/oauth/*", "/knowledge-vault.json"],
     // Whatever the Worker does not handle itself goes back to the asset layer through
     // this binding, which is what keeps the SPA fallback working.
     "binding": "ASSETS"
