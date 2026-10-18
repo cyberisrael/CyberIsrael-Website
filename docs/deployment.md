@@ -51,8 +51,9 @@ file gets `index.html` back and the Worker is never invoked — so a Worker rout
 "run_worker_first": ["/oauth/*", "/knowledge-vault.json"]
 ```
 
-`/knowledge-vault.json` is there for a different reason: it is a real file, so the asset
-layer would serve it directly. Routing it through the Worker is what applies the
+`/knowledge-vault.json` is there for a different reason: it is a real file (generated at
+build time from `content/vault/` by `scripts/vault-index.mjs`), so the asset layer would
+serve it directly. Routing it through the Worker is what applies the
 knowledge vault's URL security check (see [Knowledge vault URL check](#knowledge-vault-url-check)).
 
 This is easy to miss because `curl` does **not** reproduce it: without a browser's

@@ -1,21 +1,19 @@
 import { isAllowedVaultUrl } from "./vaultUrlPolicy";
+import noteTypes from "./vaultNoteTypes.json";
 
 export const VAULT_RESOURCES_URL = "/knowledge-vault.json";
 
 /** Either one string for every language, or one per language code (`en`, `he`). */
 export type LocalizedText = string | Record<string, string>;
 
-/** Each type becomes one folder in the vault, in this order. */
-export const VAULT_NOTE_TYPES = [
-  "lecture",
-  "roadmap",
-  "slides",
-  "document",
-  "spreadsheet",
-  "instagram",
-] as const;
+/**
+ * The note types live in `vaultNoteTypes.json`, which the CMS reads too. A JSON import
+ * keeps its keys as literals, so adding a type there fails `tsc` until it has an icon.
+ */
+export type VaultNoteType = keyof typeof noteTypes;
 
-export type VaultNoteType = (typeof VAULT_NOTE_TYPES)[number];
+/** Each type becomes one folder in the vault, in this order. */
+export const VAULT_NOTE_TYPES = Object.keys(noteTypes) as VaultNoteType[];
 
 export interface VaultResource {
   id: string;
@@ -100,13 +98,12 @@ const validList = <T>(
   });
 };
 
-const GOOGLE_DOCS_TYPES: Record<string, VaultNoteType> = {
-  presentation: "slides",
-  document: "document",
-  spreadsheets: "spreadsheet",
-};
+type UrlRule = { host: string; path?: string };
 
-/** The type a link's host implies, for notes that leave `type` out. */
+/**
+ * The type a link implies, for notes that leave `type` out. The rules are each type's
+ * `match` list in `vaultNoteTypes.json`; the CMS applies the same ones (admin/vault.js).
+ */
 const typeFromUrl = (url: string): VaultNoteType | undefined => {
   let parsed: URL;
   try {
@@ -115,10 +112,13 @@ const typeFromUrl = (url: string): VaultNoteType | undefined => {
     return undefined;
   }
   const host = parsed.hostname.replace(/^www\./, "");
-  if (host === "instagram.com") return "instagram";
-  if (host === "docs.google.com")
-    return GOOGLE_DOCS_TYPES[parsed.pathname.split("/")[1]];
-  return undefined;
+  const segment = parsed.pathname.split("/")[1];
+  return VAULT_NOTE_TYPES.find((type) =>
+    (noteTypes[type].match as UrlRule[]).some(
+      (rule) =>
+        rule.host === host && (rule.path === undefined || rule.path === segment),
+    ),
+  );
 };
 
 /** Where a link points, named by `resources.vault.source.<source>`. */

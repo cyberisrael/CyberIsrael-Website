@@ -1,0 +1,14 @@
+{
+  "id": "roadmap-zero-to-hero",
+  "type": "roadmap",
+  "title": {
+    "en": "Zero to Hero Roadmap",
+    "he": "מפת דרכים מאפס למאה"
+  },
+  "description": {
+    "en": "A step-by-step path into cyber, from the very basics onwards.",
+    "he": "מסלול מסודר, צעד אחר צעד, לעולם הסייבר, מהבסיס ומעלה."
+  },
+  "url": "https://docs.google.com/document/d/19tF4arwM14EaQJFX3Y6OPH3tG9ZytQ3oRCM7gCIhxt8/preview",
+  "order": 2
+}

@@ -1,0 +1,15 @@
+{
+  "emoji": "⭐",
+  "graphColor": "#fbbf24",
+  "description": {
+    "en": "The resources we marked with a ⭐ are our most recommended",
+    "he": "המקורות שסימנו ב-⭐ הם המומלצים ביותר"
+  },
+  "items": [
+    "roadmap-zero-to-hero",
+    "lecture-1",
+    "article-what-is-cyber-why-study-it-and-how",
+    "slides-1",
+    "instagram-1"
+  ]
+}

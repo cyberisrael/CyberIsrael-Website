@@ -1,0 +1,14 @@
+{
+  "id": "lecture-1",
+  "type": "lecture",
+  "title": {
+    "en": "AI Malware full lecture",
+    "he": "AI Malware השיעור המלא"
+  },
+  "description": {
+    "en": "Full recording of our lecture on AI-powered malware.",
+    "he": "ההקלטה המלאה של ההרצאה שלנו על נוזקות מבוססות AI."
+  },
+  "url": "https://drive.google.com/file/d/1k7t2PglsbcEERzsapNf2GWmQffMRGequ/preview",
+  "order": 1
+}
