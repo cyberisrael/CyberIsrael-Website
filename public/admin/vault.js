@@ -5,10 +5,10 @@
  *   vault-type  a type dropdown that follows the note's URL until the author picks a
  *               type themselves.
  *
- * Decap only re-renders a widget when its own value changes unless the control defines
- * `shouldComponentUpdate`, which is why vault-type does: it has to see the URL change.
- * Decap calls that method itself, with `nextProps` only, so it must not rely on
- * `nextState` being there.
+ * Decap never re-renders a widget when a *different* field changes: the parent control is
+ * a pure connected component, and the `entry` prop it passes down is documented as stale.
+ * So vault-type listens for typing anywhere in the editor and, once it pauses, reads the
+ * URL through `getEntry()`, which goes to the store and is always current.
  */
 
 /** `note-` + 12 hex digits: unique in practice, and the build rejects a clash anyway. */
@@ -55,31 +55,34 @@ const VaultTypeControl = createClass({
 
   componentDidMount() {
     this.followUrl()
+    document.addEventListener('input', this.handleEditorInput)
   },
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.value !== this.props.value ||
-      // Decap's Widget wrapper calls this with props only; React passes state as well.
-      (nextState !== undefined && nextState.auto !== this.state.auto) ||
-      this.url(nextProps) !== this.url(this.props) ||
-      nextProps.classNameWrapper !== this.props.classNameWrapper
-    )
+  componentWillUnmount() {
+    document.removeEventListener('input', this.handleEditorInput)
+    clearTimeout(this.followTimer)
   },
 
   componentDidUpdate() {
     this.followUrl()
   },
 
-  url(props) {
-    return props.entry.getIn(['data', 'url']) || ''
+  /** Re-checks the URL once typing pauses, so a half-typed address doesn't flicker the type. */
+  handleEditorInput() {
+    clearTimeout(this.followTimer)
+    this.followTimer = setTimeout(this.followUrl, 400)
+  },
+
+  url() {
+    const entry = this.props.getEntry ? this.props.getEntry() : this.props.entry
+    return (entry && entry.getIn(['data', 'url'])) || ''
   },
 
   /** While the type is automatic it tracks the URL, including back to empty. */
   followUrl() {
     if (!this.state.auto) return
     const rules = (this.props.field.get('url_rules') || { toJS: () => [] }).toJS()
-    const detected = typeFromUrl(this.url(this.props), rules) || ''
+    const detected = typeFromUrl(this.url(), rules) || ''
     if (detected !== (this.props.value || '')) this.props.onChange(detected)
   },
 
