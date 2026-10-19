@@ -171,7 +171,7 @@ const en = {
   },
   resources: {
     title: "All of our Knowledge in one place",
-    subtitle: "Learn · Explore · Level up",
+    subtitle: "Explore & Learn",
     articles_cta: "Read the full article",
     vault: {
       folders: {

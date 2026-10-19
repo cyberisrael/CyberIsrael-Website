@@ -169,7 +169,7 @@ const he = {
   },
   resources: {
     title: "כל המשאבים שלנו במקום אחד",
-    subtitle: "למדו · חקרו · התפתחו",
+    subtitle: "חקרו ולמדו",
     articles_cta: "לקריאת המאמר המלא",
     vault: {
       folders: {
