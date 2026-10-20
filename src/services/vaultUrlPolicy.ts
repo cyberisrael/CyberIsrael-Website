@@ -3,8 +3,7 @@
  * must stay free of DOM-only APIs.
  *
  * Anyone will eventually be able to add entries, so a link is shown only if its host is
- * listed here. Adding a host is a code change on purpose: it goes through PR review. The
- * Worker additionally checks every allowed link against Google Safe Browsing.
+ * listed here. Adding a host is a code change on purpose: it goes through PR review.
  */
 
 /** A host matches when it is one of these or a subdomain of one (`www.`, `m.`). */

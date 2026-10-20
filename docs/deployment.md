@@ -144,33 +144,14 @@ They attach to the Worker named in `wrangler.jsonc` (`cyberisrael-website`). For
 runs, copy `.dev.vars.example` to `.dev.vars`, which is gitignored. See
 [articles.md](./articles.md) for the OAuth app setup and how to verify the access check.
 
-The knowledge vault's reputation check needs one more:
-
-```bash
-npx wrangler secret put SAFE_BROWSING_API_KEY
-```
-
-Create it in a Google Cloud project: enable the **Safe Browsing API**, create an API key
-and restrict it to that API. The free Lookup API is licensed for non-commercial use; if
-that ever stops fitting, Google's Web Risk API is the commercial equivalent.
-
 ### Knowledge vault URL check
 
 The Worker serves `/knowledge-vault.json` with suspicious entries removed
-(`src/worker/knowledgeVault.ts`):
-
-1. **Allowlist** — only `https:` links to a host listed in `src/services/vaultUrlPolicy.ts`
-   are kept. Adding a host is a code change, reviewed like any other. The browser applies
-   the same list again, so nothing slips through where the Worker isn't running.
-2. **Safe Browsing** — every remaining URL is checked against Google's malware/phishing
-   lists, and matches are dropped.
-
-The filtered result is cached per edge for 30 minutes, keyed on a hash of the file, so an
-edit is rechecked on the next request. If Safe Browsing can't answer (outage, quota, no
-key) the allowlist-filtered result is served and cached for only a minute. Every hidden
-entry is logged with its reason — look in the Worker's logs in the Cloudflare dashboard.
-The Cache API does nothing on `*.workers.dev`, so preview builds query Safe Browsing on
-every request.
+(`src/worker/knowledgeVault.ts`): only `https:` links to a host listed in
+`src/services/vaultUrlPolicy.ts` are kept. Adding a host is a code change, reviewed like
+any other. The browser applies the same list again, so nothing slips through where the
+Worker isn't running. Every hidden entry is logged — look in the Worker's logs in the
+Cloudflare dashboard.
 
 
 ## If something looks wrong
