@@ -116,13 +116,14 @@ const typeFromUrl = (url: string): VaultNoteType | undefined => {
   return VAULT_NOTE_TYPES.find((type) =>
     (noteTypes[type].match as UrlRule[]).some(
       (rule) =>
-        rule.host === host && (rule.path === undefined || rule.path === segment),
+        rule.host === host &&
+        (rule.path === undefined || rule.path === segment),
     ),
   );
 };
 
 /** Where a link points, named by `resources.vault.source.<source>`. */
-export type VaultSource = "drive" | "instagram" | "unknown";
+export type VaultSource = "drive" | "instagram" | "youtube" | "other";
 
 /** The source a link's host implies, for notes that leave `from` out. */
 export const sourceFromUrl = (url: string): VaultSource => {
@@ -130,12 +131,45 @@ export const sourceFromUrl = (url: string): VaultSource => {
   try {
     parsed = new URL(url.trim());
   } catch {
-    return "unknown";
+    return "other";
   }
   const host = parsed.hostname.replace(/^www\./, "");
   if (host === "drive.google.com" || host === "docs.google.com") return "drive";
   if (host === "instagram.com") return "instagram";
-  return "unknown";
+  if (host === "youtube.com" || host === "m.youtube.com" || host === "youtu.be")
+    return "youtube";
+  return "other";
+};
+
+/**
+ * The player URL for a YouTube video or playlist, since the watch/share URLs people paste
+ * refuse to load in an iframe. `undefined` for anything that isn't one (a channel page).
+ */
+export const youtubeEmbedUrl = (url: string): string | undefined => {
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    return undefined;
+  }
+  const host = parsed.hostname.replace(/^www\./, "");
+  const [first, second] = parsed.pathname.split("/").slice(1);
+  const list = parsed.searchParams.get("list");
+  const start = parsed.searchParams.get("t")?.replace(/s$/, "");
+
+  let id: string | null | undefined;
+  if (host === "youtu.be") id = first;
+  else if (first === "watch") id = parsed.searchParams.get("v");
+  else if (first === "shorts" || first === "live" || first === "embed")
+    id = second;
+  else if (first === "playlist" && list)
+    return `https://www.youtube-nocookie.com/embed/videoseries?list=${encodeURIComponent(list)}`;
+  if (!id || !/^[\w-]+$/.test(id)) return undefined;
+
+  const embed = new URL(`https://www.youtube-nocookie.com/embed/${id}`);
+  if (list) embed.searchParams.set("list", list);
+  if (start && /^\d+$/.test(start)) embed.searchParams.set("start", start);
+  return embed.toString();
 };
 
 /** How tall a Drive embed is: videos and slides are 16:9, documents and sheets fill the page. */

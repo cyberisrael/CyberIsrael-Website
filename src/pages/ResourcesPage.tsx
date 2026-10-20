@@ -8,6 +8,7 @@ import {
   LuPresentation,
   LuSheet,
   LuVideo,
+  LuYoutube,
 } from "react-icons/lu";
 import { useTheme } from "@/context/ThemeContext";
 import { articles } from "@/services/articlesData";
@@ -18,6 +19,7 @@ import {
   localize,
   embedRatio,
   sourceFromUrl,
+  youtubeEmbedUrl,
   VAULT_NOTE_TYPES,
   type VaultNoteType,
   type VaultResources,
@@ -70,6 +72,11 @@ const NOTE_TYPE_CONFIG: Record<
     folderId: "instagram",
     icon: LuInstagram,
     color: "#f472b6",
+  },
+  youtube: {
+    folderId: "youtube",
+    icon: LuYoutube,
+    color: "#ef4444",
   },
 };
 
@@ -134,7 +141,20 @@ const ResourcesPage: React.FC = () => {
                 t(`resources.vault.source.${origin}`),
               url: note.url.trim(),
             };
-            if (origin === "unknown")
+            const youtubeSrc =
+              origin === "youtube" ? youtubeEmbedUrl(note.url) : undefined;
+            if (youtubeSrc)
+              return {
+                kind: "embed" as const,
+                id: note.id,
+                title: title ?? note.id,
+                description,
+                source,
+                src: youtubeSrc,
+                ratio: "video" as const,
+              };
+            // A channel or other non-video YouTube page can't be embedded.
+            if (origin === "other" || origin === "youtube")
               return {
                 kind: "link" as const,
                 id: note.id,
