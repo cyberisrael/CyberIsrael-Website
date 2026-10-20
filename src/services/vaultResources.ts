@@ -123,7 +123,12 @@ const typeFromUrl = (url: string): VaultNoteType | undefined => {
 };
 
 /** Where a link points, named by `resources.vault.source.<source>`. */
-export type VaultSource = "drive" | "instagram" | "youtube" | "other";
+export type VaultSource =
+  | "drive"
+  | "instagram"
+  | "youtube"
+  | "tiktok"
+  | "other";
 
 /** The source a link's host implies, for notes that leave `from` out. */
 export const sourceFromUrl = (url: string): VaultSource => {
@@ -138,7 +143,25 @@ export const sourceFromUrl = (url: string): VaultSource => {
   if (host === "instagram.com") return "instagram";
   if (host === "youtube.com" || host === "m.youtube.com" || host === "youtu.be")
     return "youtube";
+  if (host === "tiktok.com" || host.endsWith(".tiktok.com")) return "tiktok";
   return "other";
+};
+
+/**
+ * The player URL for a TikTok video (`tiktok.com/@user/video/<id>`). Short share links
+ * (`vm.tiktok.com/…`) only redirect to one, so they return `undefined` and stay a link.
+ */
+export const tiktokEmbedUrl = (url: string): string | undefined => {
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    return undefined;
+  }
+  const id = parsed.pathname.match(
+    /\/(?:video|embed(?:\/v2)?|player\/v1)\/(\d+)/,
+  )?.[1];
+  return id ? `https://www.tiktok.com/player/v1/${id}` : undefined;
 };
 
 /**

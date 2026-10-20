@@ -183,11 +183,13 @@ const en = {
         spreadsheets: "Spreadsheets",
         instagram: "Instagram",
         youtube: "YouTube",
+        tiktok: "TikTok",
       },
       source: {
         drive: "Drive",
         instagram: "Instagram",
         youtube: "YouTube",
+        tiktok: "TikTok",
         site: "CyberIsrael",
         other: "other",
       },

@@ -13,6 +13,7 @@ export const VAULT_ALLOWED_HOSTS = [
   "instagram.com",
   "youtube.com",
   "youtu.be",
+  "tiktok.com",
   "github.com",
 ] as const;
 

@@ -8,5 +8,9 @@
   "youtube": {
     "he": "יוטיוב",
     "match": [{ "host": "youtube.com" }, { "host": "m.youtube.com" }, { "host": "youtu.be" }]
+  },
+  "tiktok": {
+    "he": "טיקטוק",
+    "match": [{ "host": "tiktok.com" }, { "host": "m.tiktok.com" }, { "host": "vm.tiktok.com" }, { "host": "vt.tiktok.com" }]
   }
 }

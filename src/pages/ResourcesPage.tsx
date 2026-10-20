@@ -10,6 +10,7 @@ import {
   LuVideo,
   LuYoutube,
 } from "react-icons/lu";
+import { FaTiktok } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
 import { articles } from "@/services/articlesData";
 import type { IconType } from "react-icons";
@@ -20,6 +21,7 @@ import {
   embedRatio,
   sourceFromUrl,
   youtubeEmbedUrl,
+  tiktokEmbedUrl,
   VAULT_NOTE_TYPES,
   type VaultNoteType,
   type VaultResources,
@@ -77,6 +79,11 @@ const NOTE_TYPE_CONFIG: Record<
     folderId: "youtube",
     icon: LuYoutube,
     color: "#ef4444",
+  },
+  tiktok: {
+    folderId: "tiktok",
+    icon: FaTiktok,
+    color: "#2dd4bf",
   },
 };
 
@@ -153,8 +160,24 @@ const ResourcesPage: React.FC = () => {
                 src: youtubeSrc,
                 ratio: "video" as const,
               };
-            // A channel or other non-video YouTube page can't be embedded.
-            if (origin === "other" || origin === "youtube")
+            const tiktokSrc =
+              origin === "tiktok" ? tiktokEmbedUrl(note.url) : undefined;
+            if (tiktokSrc)
+              return {
+                kind: "embed" as const,
+                id: note.id,
+                title: title ?? note.id,
+                description,
+                source,
+                src: tiktokSrc,
+                ratio: "portrait" as const,
+              };
+            // A channel, profile or short share link can't be embedded.
+            if (
+              origin === "other" ||
+              origin === "youtube" ||
+              origin === "tiktok"
+            )
               return {
                 kind: "link" as const,
                 id: note.id,

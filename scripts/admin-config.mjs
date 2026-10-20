@@ -275,7 +275,7 @@ export function buildAdminConfig(root = process.cwd()) {
             label: 'קישור',
             widget: 'string',
             pattern: ['^https://', 'הקישור חייב להתחיל ב-https://'],
-            hint: 'מוצגים רק קישורים מאתרים מאושרים (Google Drive / Docs, Instagram, YouTube, GitHub).',
+            hint: 'מוצגים רק קישורים מאתרים מאושרים (Google Drive / Docs, Instagram, YouTube, TikTok, GitHub).',
           },
           {
             name: 'type',

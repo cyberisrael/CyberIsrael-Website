@@ -181,11 +181,13 @@ const he = {
         spreadsheets: "גיליונות",
         instagram: "אינסטגרם",
         youtube: "יוטיוב",
+        tiktok: "טיקטוק",
       },
       source: {
         drive: "דרייב",
         instagram: "אינסטגרם",
         youtube: "יוטיוב",
+        tiktok: "טיקטוק",
         site: "CyberIsrael",
         other: "אחר",
       },

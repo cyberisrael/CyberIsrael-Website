@@ -20,7 +20,7 @@ const toEmbedUrl = (url: string) => url.trim().replace("/edit", "/embed");
 const EmbedBody: React.FC<{
   src: string;
   title: string;
-  ratio: "video" | "page";
+  ratio: "video" | "portrait" | "page";
 }> = ({ src, title, ratio }) => {
   const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,11 @@ const EmbedBody: React.FC<{
   return (
     <div
       className={`relative w-full overflow-hidden rounded-lg border ${
-        ratio === "video" ? "aspect-video" : "flex-1 min-h-[480px]"
+        ratio === "video"
+          ? "aspect-video"
+          : ratio === "portrait"
+            ? "aspect-[9/16] max-w-[340px]"
+            : "flex-1 min-h-[480px]"
       } ${theme === "dark" ? "border-cyber-border/60" : "border-light-border"}`}
     >
       {loading && <IframeSkeleton />}

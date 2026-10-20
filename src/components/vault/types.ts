@@ -13,7 +13,7 @@ export type VaultNote =
   | (NoteBase & {
       kind: "embed";
       src: string;
-      ratio: "video" | "page";
+      ratio: "video" | "portrait" | "page";
     })
   | (NoteBase & { kind: "article"; article: Article })
   | (NoteBase & { kind: "instagram"; url: string })
