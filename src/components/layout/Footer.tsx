@@ -5,6 +5,7 @@ import { FaDiscord, FaWhatsapp, FaInstagram, FaTiktok, FaEnvelope, FaGoogleDrive
 import Logo from '@/components/ui/Logo'
 import { useTheme } from '@/context/ThemeContext'
 import { socialLinks } from '@/services/socialLinks'
+import { navLinks } from '@/services/navLinks'
 
 const socialItems = [
   { icon: FaDiscord, href: socialLinks.discord, label: 'Discord', color: '#5865F2' },
@@ -75,21 +76,16 @@ const Footer: React.FC = () => {
               {t('footer.links')}
             </h3>
             <ul className="space-y-2">
-              {[
-                { to: '/', label: t('nav.home') },
-                { to: '/articles', label: t('nav.articles') },
-                { to: '/impact', label: t('nav.impact') },
-                { to: '/collaborate', label: t('nav.collaborate') },
-              ].map(link => (
-                <li key={link.to}>
+              {navLinks.map(({ to, labelKey }) => (
+                <li key={to}>
                   <Link
-                    to={link.to}
+                    to={to}
                     className={`text-sm transition-colors duration-200 ${theme === 'dark'
                       ? 'text-slate-400 hover:text-cyber-green'
                       : 'text-light-muted hover:text-light-blue'
                       }`}
                   >
-                    {link.label}
+                    {t(labelKey)}
                   </Link>
                 </li>
               ))}

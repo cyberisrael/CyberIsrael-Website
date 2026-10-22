@@ -23,20 +23,24 @@ const timelineEvents = [
   },
   {
     year: "2024",
-    icon: "🎤",
+    icon: "🎯",
     color: "#FF0080",
   },
   {
-    year: "2024",
-    icon: "🔧",
+    year: "2025",
+    icon: "🎤",
     color: "#FFD700",
   },
   {
-    year: "2024",
-    icon: "🎯",
+    year: "2025",
+    icon: "🔧",
     color: "#8B5CF6",
   },
-
+  {
+    year: "2025",
+    icon: "🎯",
+    color: "#14B8A6",
+  },
   {
     year: "2025",
     icon: "🌟",
@@ -55,13 +59,12 @@ const timelineEvents = [
   {
     year: "2025",
     icon: "🎯",
-    color: "#8B5CF6",
+    color: "#FFD700",
   },
-
   {
     year: "2025",
     icon: "🚀",
-    color: "#00FF88",
+    color: "#8B5CF6",
   },
   {
     year: "2025",
@@ -71,27 +74,37 @@ const timelineEvents = [
   {
     year: "2026",
     icon: "📱",
-    color: "#00D4FF",
+    color: "#00FF88",
   },
   {
     year: "2026",
     icon: "🚀",
-    color: "#8B5CF6",
+    color: "#00D4FF",
   },
   {
     year: "2026",
     icon: "🏁",
-    color: "#FFD700",
+    color: "#FF0080",
   },
   {
     year: "2026",
     icon: "💎",
-    color: "#8B5CF6",
+    color: "#FFD700",
   },
   {
     year: "2026",
     icon: "🌟",
-    color: "#FF0080",
+    color: "#8B5CF6",
+  },
+  {
+    year: "2026",
+    icon: "🌐",
+    color: "#14B8A6",
+  },
+  {
+    year: "2026",
+    icon: "👥",
+    color: "#00FF88",
   },
 ] as const;
 

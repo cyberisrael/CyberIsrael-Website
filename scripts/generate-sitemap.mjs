@@ -1,6 +1,7 @@
 import { Readable } from "node:stream";
 import { SitemapStream, streamToPromise } from "sitemap";
 import { readArticles } from "./articles-index.mjs";
+import { readIndexedRoutes } from "./site-routes.mjs";
 
 /**
  * Always the production origin: search engines should only ever be pointed at the
@@ -8,19 +9,17 @@ import { readArticles } from "./articles-index.mjs";
  */
 export const SITE_URL = "https://cyberisrael.net";
 
-// /coming-soon is intentionally left out, as in robots.txt.
-const STATIC_ROUTES = [
-  { url: "/", changefreq: "weekly", priority: 1.0 },
-  { url: "/articles", changefreq: "weekly", priority: 0.9 },
-  { url: "/impact", changefreq: "monthly", priority: 0.7 },
-  { url: "/collaborate", changefreq: "monthly", priority: 0.7 },
-];
-
 /**
  * @param {string} root project root
  * @returns {Promise<string>} the sitemap XML
  */
 export async function buildSitemap(root = process.cwd()) {
+  const pages = readIndexedRoutes(root).map(({ path, indexed }) => ({
+    url: path,
+    changefreq: indexed.changefreq,
+    priority: indexed.priority,
+  }));
+
   const articles = readArticles(root).map((article) => ({
     url: `/articles/${article.href}`,
     lastmod: article.date,
@@ -30,7 +29,7 @@ export async function buildSitemap(root = process.cwd()) {
 
   const stream = new SitemapStream({ hostname: SITE_URL });
   const xml = await streamToPromise(
-    Readable.from([...STATIC_ROUTES, ...articles]).pipe(stream),
+    Readable.from([...pages, ...articles]).pipe(stream),
   );
   return xml.toString();
 }
