@@ -26,6 +26,17 @@
     "page": "ArticlePage"
   },
   {
+    "path": "/resources",
+    "page": "ResourcesPage",
+    "nav": "resources",
+    "indexed": {
+      "title": "Knowledge Vault",
+      "description": "Curated community resources: guides, tools, videos and notes",
+      "changefreq": "weekly",
+      "priority": 0.8
+    }
+  },
+  {
     "path": "/impact",
     "page": "ImpactPage",
     "nav": "impact",

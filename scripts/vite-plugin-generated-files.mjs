@@ -1,10 +1,12 @@
 import { buildAdminConfig } from "./admin-config.mjs";
 import { buildSitemap } from "./generate-sitemap.mjs";
 import { buildAgentsTxt } from "./generate-agents.mjs";
+import { buildKnowledgeVault } from "./vault-index.mjs";
 import { buildHeaders } from "./generate-headers.mjs";
 
 const GENERATED_FILES_CONFIG = {
   "admin/config.yml": { type: "text/yaml", build: buildAdminConfig },
+  "knowledge-vault.json": { type: "application/json", build: buildKnowledgeVault },
   "sitemap.xml": { type: "application/xml", build: buildSitemap },
   "agents.txt": { type: "text/markdown", build: buildAgentsTxt },
   _headers: {

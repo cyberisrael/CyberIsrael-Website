@@ -1,0 +1,16 @@
+{
+  "lecture": { "he": "הרצאה", "match": [] },
+  "roadmap": { "he": "מפת דרכים", "match": [] },
+  "slides": { "he": "מצגת", "match": [{ "host": "docs.google.com", "path": "presentation" }] },
+  "document": { "he": "מסמך", "match": [{ "host": "docs.google.com", "path": "document" }] },
+  "spreadsheet": { "he": "גיליון", "match": [{ "host": "docs.google.com", "path": "spreadsheets" }] },
+  "instagram": { "he": "אינסטגרם", "match": [{ "host": "instagram.com" }] },
+  "youtube": {
+    "he": "יוטיוב",
+    "match": [{ "host": "youtube.com" }, { "host": "m.youtube.com" }, { "host": "youtu.be" }]
+  },
+  "tiktok": {
+    "he": "טיקטוק",
+    "match": [{ "host": "tiktok.com" }, { "host": "m.tiktok.com" }, { "host": "vm.tiktok.com" }, { "host": "vt.tiktok.com" }]
+  }
+}

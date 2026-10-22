@@ -1,11 +1,36 @@
 import { dump } from 'js-yaml'
 import { readTaxonomy } from './taxonomy.mjs'
 import { ARTICLES_PATH, MEDIA_PATH, PUBLIC_MEDIA_PATH } from './articles-index.mjs'
+import {
+  VAULT_NOTES_PATH,
+  VAULT_FEATURED_PATH,
+  readVaultNoteTypes,
+  readVaultTargets,
+} from './vault-index.mjs'
 
 const HEADER = `# GENERATED FILE — do not edit.
 # Built by scripts/admin-config.mjs; categories and topics come from
-# src/services/articleTaxonomy.json, the same file the site reads.
+# src/services/articleTaxonomy.json and vault note types from
+# src/services/vaultNoteTypes.json, the same files the site reads.
 `
+
+/** An optional `{ he, en }` pair, which is how the vault stores every piece of text. */
+const localizedField = (name, label, widget = 'string', hint) => ({
+  name,
+  label,
+  widget: 'object',
+  required: false,
+  collapsed: false,
+  ...(hint && { hint }),
+  fields: [
+    { name: 'he', label: 'עברית', widget, required: false },
+    { name: 'en', label: 'אנגלית', widget, required: false },
+  ],
+})
+
+/** A vault title is a string or `{ he, en }`; prefer Hebrew, since the CMS is Hebrew. */
+const titleText = title =>
+  typeof title === 'string' ? title : title?.he ?? title?.en ?? undefined
 
 /**
  * Decap compares the sign-in popup's `event.origin` against `base_url` as a plain string
@@ -42,6 +67,11 @@ const BASE_URL = asOrigin(process.env.CMS_BASE_URL || 'https://cyberisrael.net')
 /** Decap CMS configuration, served at /admin/config.yml. */
 export function buildAdminConfig(root = process.cwd()) {
   const taxonomy = readTaxonomy(root)
+  const noteTypes = Object.entries(readVaultNoteTypes(root))
+  const featuredTargets = readVaultTargets(root).map(({ id, title }) => ({
+    label: titleText(title) ? `${titleText(title)} (${id})` : id,
+    value: id,
+  }))
 
   const config = {
     backend: {
@@ -124,6 +154,30 @@ export function buildAdminConfig(root = process.cwd()) {
               },
             ],
           },
+          {
+            name: 'vault_featured',
+            label: 'מומלצים בכספת הידע',
+            file: VAULT_FEATURED_PATH,
+            description: 'הפריטים שמסומנים כמומלצים בעמוד המשאבים, והעיצוב שלהם.',
+            fields: [
+              { name: 'emoji', label: 'אימוג׳י', widget: 'string', hint: 'מוצג ליד כל פריט מומלץ.' },
+              { name: 'graphColor', label: 'צבע בגרף', widget: 'color', allowInput: true },
+              localizedField('description', 'תיאור', 'string'),
+              {
+                name: 'items',
+                label: 'פריטים מומלצים',
+                label_singular: 'פריט',
+                widget: 'list',
+                hint: 'לפי סדר התצוגה. פריט שנוצר זה עתה בכספת יופיע ברשימה רק אחרי העלאת האתר הבאה.',
+                field: {
+                  name: 'id',
+                  label: 'פריט',
+                  widget: 'select',
+                  options: featuredTargets,
+                },
+              },
+            ],
+          },
         ],
       },
       {
@@ -191,6 +245,60 @@ export function buildAdminConfig(root = process.cwd()) {
           { name: 'featured', label: 'מאמר מודגש', widget: 'boolean', default: false, required: false, hint: 'מוצג בכרטיס רחב עם תווית "מומלץ".' },
           { name: 'homePreview', label: 'הצגה בדף הבית', widget: 'boolean', default: false, required: false },
           { name: 'body', label: 'תוכן המאמר', widget: 'markdown' },
+        ],
+      },
+      {
+        name: 'vault',
+        label: 'כספת הידע',
+        label_singular: 'פריט',
+        description: 'הקישורים שמוצגים בכספת הידע בעמוד המשאבים. כל פריט נשמר כקובץ משלו.',
+        folder: VAULT_NOTES_PATH,
+        // The file is named after the id, which the vault-id widget fills in on creation.
+        slug: '{{fields.id}}',
+        identifier_field: 'id',
+        extension: 'json',
+        format: 'json',
+        create: true,
+        summary: '{{fields.title.he}} · {{fields.type}} · {{fields.id}}',
+        sortable_fields: ['order', 'type', 'id'],
+        view_groups: [{ label: 'סוג', field: 'type' }],
+        fields: [
+          {
+            name: 'id',
+            label: 'מזהה',
+            // public/admin/vault.js: generates a unique id once, then shows it read-only.
+            widget: 'vault-id',
+            hint: 'נוצר אוטומטית ומשמש לקישור לפריט, למשל ברשימת המומלצים.',
+          },
+          {
+            name: 'url',
+            label: 'קישור',
+            widget: 'string',
+            pattern: ['^https://', 'הקישור חייב להתחיל ב-https://'],
+            hint: 'מוצגים רק קישורים מאתרים מאושרים (Google Drive / Docs, Instagram, YouTube, TikTok, GitHub).',
+          },
+          {
+            name: 'type',
+            label: 'סוג',
+            // public/admin/vault.js: a dropdown that picks a type from the URL until the
+            // author picks one themselves. Both lists come from vaultNoteTypes.json.
+            widget: 'vault-type',
+            options: noteTypes.map(([id, { he }]) => ({ label: he, value: id })),
+            url_rules: noteTypes.flatMap(([id, { match }]) => match.map(rule => ({ ...rule, type: id }))),
+            hint: 'קובע באיזו תיקייה הפריט יופיע. נבחר אוטומטית לפי הקישור, אפשר לשנות.',
+          },
+          localizedField('title', 'כותרת'),
+          localizedField('description', 'תיאור', 'text'),
+          localizedField('from', 'מקור', 'string', 'לא חובה. אם ריק, המקור נקבע לפי הקישור (למשל Drive או Instagram).'),
+          {
+            name: 'order',
+            label: 'סדר תצוגה',
+            widget: 'number',
+            value_type: 'int',
+            min: 1,
+            required: false,
+            hint: 'מספר נמוך מופיע קודם בתיקייה. ריק = בסוף.',
+          },
         ],
       },
     ],

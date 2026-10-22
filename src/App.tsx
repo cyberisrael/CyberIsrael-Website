@@ -37,7 +37,7 @@ const App: React.FC = () => {
         </AccessibilityProvider>
       </LangProvider>
     </ThemeProvider>
-  )
-}
+  );
+};
 
 export default App
